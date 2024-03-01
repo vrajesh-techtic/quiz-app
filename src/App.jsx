@@ -7,6 +7,8 @@ import OTPPage from './components/OTPPage';
 import ContextAPI from './components/ContextAPI';
 import { useState } from 'react';
 import OTPEmail from './components/OTPEmail';
+import DisplayQuiz from './components/DisplayQuiz';
+import Question from './components/Question';
 
 function App() {
 
@@ -14,12 +16,16 @@ function App() {
 
   return (
     <ContextAPI.Provider value={[useOTP, setuseOTP]}>
-      <div className="App flex flex-col items-center">
+      <div className="App">
         <Routes>
 
           <Route path='/' element={<LoginForm />} />
           <Route path='/authenticate' element={<OTPPage />} />
           <Route path='/email' element={<OTPEmail />} />
+          <Route path='/authenticate/display-quiz' element={<DisplayQuiz />} />
+          <Route path='/authenticate/display-quiz/question' element={<Question />} />
+
+
 
 
 

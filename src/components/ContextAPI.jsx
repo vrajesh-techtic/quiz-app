@@ -1,5 +1,8 @@
-import { createContext } from 'react'
+import { createContext } from "react";
 
-const ContextAPI = createContext(null);
+const ContextAPI = createContext({
+  questionObj: null,
+  setQuestionObj: null,
+});
 
-export default ContextAPI
+export default ContextAPI;

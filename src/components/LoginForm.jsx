@@ -1,127 +1,169 @@
-import React, { useState } from 'react'
-import { Button, Checkbox, Form, Input } from 'antd';
-import { MailOutlined, UserOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useContext, useState } from "react";
+import { Button, Checkbox, Form, Input, Spin, notification } from "antd";
+import { MailOutlined, UserOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import ContextAPI from "./ContextAPI";
 
 // import main from '../server/mailer';
 
 const LoginForm = () => {
+  const [api, contextHolder] = notification.useNotification();
+  const [spinning, setSpinning] = useState(false);
 
+  const openNotificationWithIcon = (type) => {
+    api[type]({
+      message: "User already exists!",
+    });
+  };
 
-    const [remember, setRemember] = useState(sessionStorage.length !== 0);
+  const [remember, setRemember] = useState(sessionStorage.length !== 0);
 
-    const onFinish = async (values) => {
+  const onFinish = async (values) => {
+    const userEmail = values.email;
+    const userName = values.name;
 
-        const randomOTP = Math.floor(Math.random() * (9999 - 1000) + 1000);
-
-        if (remember) {
-            sessionStorage.setItem(values.email, values.name)
-        }
-
-        console.log('randomOTP', randomOTP);
-        localStorage.clear()
-        localStorage.setItem(randomOTP, randomOTP);
-
-
-
-        // main(randomOTP);
-        let response = await axios.post("http://localhost:5000/send-email", { randomOTP });
-
-        console.log('response:', response);
-
-        navigate('/authenticate');
-
-        // console.log('Success:', values);
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
-    let savedName = '';
-    let savedEmail = '';
-
-
-    if (sessionStorage.length !== 0) {
-        savedEmail = sessionStorage.key(0);
-        savedName = sessionStorage.getItem(savedEmail);
+    if (remember) {
+      sessionStorage.setItem(userEmail, userName);
     }
 
+    try {
+      let addUser = await axios.post("http://localhost:5000/add-user", {
+        userName,
+        userEmail,
+      });
 
+      if (addUser.data !== "exist") {
+        openNotificationWithIcon("error");
+      } else {
+        const randomOTP = Math.floor(Math.random() * (9999 - 1000) + 1000);
+        let newObj = {
+          email: userEmail,
+          name: userName,
+          otp: randomOTP,
+        };
 
-    const navigate = useNavigate();
+        localStorage.clear();
+        localStorage.setItem("user", JSON.stringify(newObj));
+        console.log("randomOTP", randomOTP);
 
-    return (
-        <div className='flex w-full h-screen form-container items-center justify-center '>
-            <div className=" backdrop-blur-xl hover:shadow-xl	rounded-2xl flex flex-col items-center px-20 py-12">
+        let response = await axios.post("http://localhost:5000/send-email", {
+          randomOTP,
+          userEmail,
+        });
 
-                <p className='mb-8 mt-2 text-5xl'>Participant Login</p>
+        console.log("response:", response);
+        navigate("/authenticate");
+      }
 
-                <Form
-                    name="normal_login"
-                    className="login-form flex flex-col mx-8 items-center"
-                    size='large'
-                    initialValues={{
-                        name: savedName,
-                        email: savedEmail,
-                    }
-                    }
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
+      setSpinning(() => false);
+    } catch (error) {
+      setSpinning(() => false);
+      console.error(error);
+    }
+  };
 
-                >
-                    <Form.Item
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
 
-                        name="name"
-                        rules={[
-                            {
-                                type: 'string',
-                                required: true,
-                                message: 'Name is required !',
-                            },
-                        ]}
-                    >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} name='name' placeholder="Participant name" />
-                    </Form.Item>
-                    <Form.Item
-                        name="email"
-                        rules={[
-                            {
-                                type: 'email',
-                                required: true,
-                                message: 'Please enter correct email !',
-                            },
-                        ]}
-                    >
-                        <Input
-                            prefix={<MailOutlined className="site-form-item-icon" />}
-                            name='email'
-                            placeholder="Email address"
+  let savedName = "";
+  let savedEmail = "";
 
-                        />
-                    </Form.Item>
+  if (sessionStorage.length !== 0) {
+    savedEmail = sessionStorage.key(0);
+    savedName = sessionStorage.getItem(savedEmail);
+  }
 
-                    <Form.Item name="remember">
-                        <Checkbox className='text-lg' defaultChecked={remember} onChange={() => {
-                            setRemember((prev) => !prev);
+  const showLoader = () => {
+    setSpinning(true);
+    setTimeout(() => {
+      setSpinning(false);
+      navigate("/authenticate/display-quiz");
+    }, 2000);
+  };
 
-                        }}  >Remember me</Checkbox>
-                    </Form.Item>
+  const navigate = useNavigate();
 
-                    <Form.Item className='flex flex-col'>
-                        <Button type="primary" htmlType="submit" className="login-form-button bg-blue-500" >
-                            Log in
-                        </Button>
+  return (
+    <>
+      {contextHolder}
+      <div className="flex w-full h-screen form-container items-center justify-center ">
+        <div className=" backdrop-blur-xl hover:shadow-xl	rounded-2xl flex flex-col items-center px-20 py-12">
+          <p className="mb-8 mt-2 text-5xl">Participant Login</p>
 
-                    </Form.Item>
-                </Form>
-            </div>
+          <Form
+            name="normal_login"
+            className="login-form flex flex-col mx-8 items-center"
+            size="large"
+            initialValues={{
+              name: savedName,
+              email: savedEmail,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+          >
+            <Form.Item
+              name="name"
+              rules={[
+                {
+                  type: "string",
+                  required: true,
+                  message: "Name is required !",
+                },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                name="name"
+                placeholder="Participant name"
+              />
+            </Form.Item>
+            <Form.Item
+              name="email"
+              rules={[
+                {
+                  type: "email",
+                  required: true,
+                  message: "Please enter correct email !",
+                },
+              ]}
+            >
+              <Input
+                prefix={<MailOutlined className="site-form-item-icon" />}
+                name="email"
+                placeholder="Email address"
+              />
+            </Form.Item>
 
-        </div >
-    )
-}
+            <Form.Item name="remember">
+              <Checkbox
+                className="text-lg"
+                defaultChecked={remember}
+                onChange={() => {
+                  setRemember((prev) => !prev);
+                }}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
 
-export default LoginForm
+            <Form.Item className="flex flex-col">
+              <Button
+                type="primary"
+                onClick={() => setSpinning(() => true)}
+                htmlType="submit"
+                className="login-form-button bg-blue-500"
+              >
+                Send OTP
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+        <Spin spinning={spinning} size="large" tip="Loading ..." fullscreen />
+      </div>
+    </>
+  );
+};
 
-
+export default LoginForm;

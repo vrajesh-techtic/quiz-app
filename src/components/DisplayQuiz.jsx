@@ -1,103 +1,79 @@
-import React, { useState } from 'react';
-import {
-    DesktopOutlined,
-    FileOutlined,
-    PieChartOutlined,
-    TeamOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
-import logo from '../assets/banner-without-bg.png';
-import collapesLogo from '../assets/Collapsed Logo.png';
-import { useNavigate } from 'react-router-dom';
-import Question from './Question';
+import React, { useContext, useEffect, useState } from "react";
+import { Menu } from "antd";
+import CustomSideBar from "./CustomSideBar";
+import Question from "./Question";
+import axios from "axios";
+import ContextAPI from "./ContextAPI";
+import questionBank from "../questions/questionBank";
 
+const DisplayQuiz = ({ timer }) => {
+  //   console.log("Display Quiz");
+  // const { questionObj, setQuestionObj } = useContext(ContextAPI);
+  const [quesNum, setQuesNum] = useState(1);
+  const [modalOpen, setModalOpen] = useState(false);
 
-const { Header, Content, Footer, Sider } = Layout;
+  // useEffect(() => {
+  //   try {
+  //     const addQues = axios.post("http://localhost:5000/addQuestionBank", {
+  //       questionBank,
+  //     });
+  //     console.log(addQues);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, [questionObj]);
 
-const DisplayQuiz = ({ content }) => {
-    // Sider collapse feature 
-    const [collapsed, setCollapsed] = useState(false);
+  localStorage.removeItem("bank");
 
-    // background color 
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
+  function getItem(label, key, icon, children) {
+    return {
+      key,
+      icon,
+      children,
+      label,
+    };
+  }
+  const items = [
+    getItem("Question 1", "1"),
+    getItem("Question 2", "2"),
+    getItem("Question 3", "3"),
+    getItem("Question 4", "4"),
+    getItem("Question 5", "5"),
+  ];
 
-    const navigate = useNavigate();
+  const menu = (
+    <Menu
+      theme="dark"
+      onClick={(e) => setQuesNum(e.key)}
+      defaultSelectedKeys={["1"]}
+      mode="vertical"
+      items={items}
+    />
+  );
 
-    // function to add items in menubar 
-    function getItem(label, key, icon, children) {
-        return {
-            key,
-            icon,
-            children,
-            label,
-            onclick: () => {
-            }
-        };
-    }
+  const submitBtn = (
+    <button
+      className="bg-red-400 h-[40px] flex items-center text-lg text-white  rounded-lg px-2 "
+      onClick={() => {
+        setModalOpen((prev) => !prev);
+      }}
+    >
+      Submit Quiz
+    </button>
+  );
 
-    // object containing all items in menu 
-    const items = [
-        getItem('Option 1', '1', <PieChartOutlined />),
-        getItem('Option 2', '2', <DesktopOutlined />),
-        getItem('User', 'sub1', <UserOutlined />, [
-            getItem('Tom', '3'),
-            getItem('Bill', '4'),
-            getItem('Alex', '5'),
-        ]),
-        getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-        getItem('Files', '9', <FileOutlined />),
-    ];
-
-    return (
-        <Layout
-            style={{
-                minHeight: '100vh',
-            }}
-        >
-            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                <div className="demo-logo-vertical h-[100px] flex justify-center" >
-                    {!collapsed
-                        ? <img src={logo} alt='quizify-logo' className='h-full  z-10' />
-                        : <img src={collapesLogo} alt='quizify-logo' className='h-full  z-10' />}
-                </div>
-
-                <button className='bg-white' onclick={() => navigate('/authenticate/display-quiz/question')}>Question</button>
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-            </Sider>
-
-            {/* Right side layout  */}
-            <Layout>
-                <Header
-                    style={{
-                        padding: 0,
-                        background: colorBgContainer,
-                    }}
-                />
-                <Content
-                    style={{
-                        margin: '16px',
-                        padding: 24,
-                        height: "100%",
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG,
-                    }}
-                >
-
-                    {content}
-                </Content>
-                <Footer
-                    style={{
-                        textAlign: 'center',
-                        fontWeight: 'bold'
-                    }}
-                >
-                    Quizify ©{new Date().getFullYear()} Created by Quizify Pvt. Ltd.
-                </Footer>
-            </Layout>
-        </Layout >
-    );
+  return (
+    <>
+      <CustomSideBar
+        menu={menu}
+        timer={timer}
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        submitBtn={submitBtn}
+      >
+        <Question quesNo={quesNum} btnDisable={false} />
+      </CustomSideBar>
+    </>
+  );
 };
 export default DisplayQuiz;

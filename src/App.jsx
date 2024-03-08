@@ -1,38 +1,50 @@
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
 
-import { Route, Routes } from 'react-router-dom';
-import './App.css';
+import LoginForm from "./components/LoginForm";
+import OTPPage from "./components/OTPPage";
+import ContextAPI from "./components/ContextAPI";
 
-import LoginForm from './components/LoginForm';
-import OTPPage from './components/OTPPage';
-import ContextAPI from './components/ContextAPI';
-import { useState } from 'react';
-import OTPEmail from './components/OTPEmail';
-import DisplayQuiz from './components/DisplayQuiz';
-import Question from './components/Question';
+import OTPEmail from "./components/OTPEmail";
+import DisplayQuiz from "./components/DisplayQuiz";
+
+import ResultPage from "./components/ResultPage";
+
+import QuizTimer from "./components/QuizTimer";
+
+import { useState } from "react";
+import questionBank from "./questions/questionBank";
+import axios from "axios";
 
 function App() {
+  console.log("App");
 
-  const [useOTP, setuseOTP] = useState(0);
+  const timer = <QuizTimer />;
+
+  const [questionObj, setQuestionObj] = useState(questionBank);
 
   return (
-    <ContextAPI.Provider value={[useOTP, setuseOTP]}>
+    <ContextAPI.Provider
+      value={{
+        questionObj: questionObj,
+        setQuestionObj: setQuestionObj,
+      }}
+    >
       <div className="App">
         <Routes>
+          <Route path="/" element={<LoginForm />} />
+          <Route path="/authenticate" element={<OTPPage />} />
+          <Route path="/email" element={<OTPEmail />} />
 
-          <Route path='/' element={<LoginForm />} />
-          <Route path='/authenticate' element={<OTPPage />} />
-          <Route path='/email' element={<OTPEmail />} />
-          <Route path='/authenticate/display-quiz' element={<DisplayQuiz />} />
-          <Route path='/authenticate/display-quiz/question' element={<Question />} />
+          <Route
+            path="/authenticate/display-quiz"
+            element={<DisplayQuiz timer={timer} />}
+          />
 
-
-
-
-
-        </Routes >
+          <Route path="/result" element={<ResultPage />} />
+        </Routes>
       </div>
     </ContextAPI.Provider>
-
   );
 }
 

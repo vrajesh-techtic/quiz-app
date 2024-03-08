@@ -1,7 +1,7 @@
 
 // OtpInput.jsx
 
-import { notification } from "antd";
+import { Spin, notification } from "antd";
 import { useEffect, useRef, useState }
     from "react";
 
@@ -43,6 +43,7 @@ const OTPInput = ({ length = 4,
 
         if (isVerified) {
             openNotificationWithIcon('success');
+
         }
     }, [isVerified])
 
@@ -105,6 +106,7 @@ const OTPInput = ({ length = 4,
     return (
         <>
             {contextHolder}
+
             <div>
                 {otp.map((value, index) => {
                     return (
@@ -134,6 +136,8 @@ const OTPInput = ({ length = 4,
 
             </div>
             {/* {isVerified ? openNotificationWithIcon('success') : null} */}
+
+
         </>
 
     );

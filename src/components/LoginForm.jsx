@@ -11,9 +11,10 @@ const LoginForm = () => {
   const [api, contextHolder] = notification.useNotification();
   const [spinning, setSpinning] = useState(false);
 
-  const openNotificationWithIcon = (type) => {
+  const openNotificationWithIcon = (type, notifyMessage) => {
     api[type]({
-      message: "User already exists!",
+      // message: "User already exists!",
+      message: notifyMessage,
     });
   };
 
@@ -24,6 +25,7 @@ const LoginForm = () => {
     const userName = values.name;
 
     if (remember) {
+      sessionStorage.clear();
       sessionStorage.setItem(userEmail, userName);
     }
 
@@ -33,33 +35,19 @@ const LoginForm = () => {
         userEmail,
       });
 
-      if (addUser.data !== "exist") {
-        openNotificationWithIcon("error");
-      } else {
-        const randomOTP = Math.floor(Math.random() * (9999 - 1000) + 1000);
-        let newObj = {
-          email: userEmail,
-          name: userName,
-          otp: randomOTP,
-        };
-
-        localStorage.clear();
-        localStorage.setItem("user", JSON.stringify(newObj));
-        console.log("randomOTP", randomOTP);
-
-        let response = await axios.post("http://localhost:5000/send-email", {
-          randomOTP,
-          userEmail,
-        });
-
-        console.log("response:", response);
+      console.log(addUser.data.database);
+      if (addUser.data.database.statusCode === 200) {
         navigate("/authenticate");
+      } else if (addUser.data.database.statusCode === 11000) {
+        openNotificationWithIcon("error", addUser.data.database.message);
       }
 
       setSpinning(() => false);
     } catch (error) {
       setSpinning(() => false);
-      console.error(error);
+
+      if (error.message === "Network Error")
+        openNotificationWithIcon("error", "Server Down!");
     }
   };
 
@@ -94,7 +82,7 @@ const LoginForm = () => {
 
           <Form
             name="normal_login"
-            className="login-form flex flex-col mx-8 items-center"
+            className="login-form flex flex-col mx-8  items-center"
             size="large"
             initialValues={{
               name: savedName,
@@ -105,6 +93,7 @@ const LoginForm = () => {
           >
             <Form.Item
               name="name"
+              className="w-[400px]"
               rules={[
                 {
                   type: "string",
@@ -120,6 +109,7 @@ const LoginForm = () => {
               />
             </Form.Item>
             <Form.Item
+              className="w-[400px]"
               name="email"
               rules={[
                 {
@@ -138,7 +128,7 @@ const LoginForm = () => {
 
             <Form.Item name="remember">
               <Checkbox
-                className="text-lg"
+                className="text-xl"
                 defaultChecked={remember}
                 onChange={() => {
                   setRemember((prev) => !prev);
@@ -153,7 +143,7 @@ const LoginForm = () => {
                 type="primary"
                 onClick={() => setSpinning(() => true)}
                 htmlType="submit"
-                className="login-form-button bg-blue-500"
+                className="login-form-button w-[200px] text-lg flex justify-center items-center bg-blue-500"
               >
                 Send OTP
               </Button>

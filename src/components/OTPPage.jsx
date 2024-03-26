@@ -1,60 +1,63 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
-import OTPInput from './OTPInput';
-import { useNavigate } from 'react-router-dom';
-import { Spin } from 'antd';
-
+import OTPInput from "./OTPInput";
+import { useNavigate } from "react-router-dom";
+import { Spin } from "antd";
+import axios from "axios";
 
 const OTPPage = () => {
+  const [spinning, setSpinning] = useState(false);
 
-    const [spinning, setSpinning] = useState(false);
+  const showLoader = () => {
+    setSpinning(true);
+    setTimeout(() => {
+      setSpinning(false);
+      navigate("/authenticate/display-quiz");
+    }, 2000);
+  };
 
-    const showLoader = () => {
-        setSpinning(true);
-        setTimeout(() => {
-            setSpinning(false);
-            navigate('/authenticate/display-quiz');
-        }, 2000);
-    };
+  const navigate = useNavigate();
 
-    useEffect(() => {
+  let userEmail = Object.keys(sessionStorage)[0];
 
-    }, []);
+  async function verifyOTP(enteredOTP) {
+    try {
+      let verificationAPI = await axios.post(
+        "http://localhost:5000/verify-otp",
+        {
+          otp: parseInt(enteredOTP),
+          userEmail,
+        }
+      );
 
+      if (verificationAPI.data.message.statusCode === 500) {
+        return {
+          status: false,
+          message: verificationAPI.data.message.message,
+        };
+      } else if (verificationAPI.data.message.statusCode === 200) {
+        return {
+          status: true,
+          message: verificationAPI.data.message.message,
+        };
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-    const navigate = useNavigate();
+  return (
+    <>
+      <div className="flex w-full h-screen form-container items-center justify-center ">
+        <div className=" backdrop-blur-xl hover:shadow-xl	rounded-2xl flex flex-col items-center px-20 py-12">
+          <p className="mb-8 mt-2 text-5xl">OTP Authentication</p>
 
-    const userObj = JSON.parse(localStorage.getItem('user'));
-    let randomOTP = parseInt(userObj.otp);
+          <OTPInput onOtpSubmit={verifyOTP} showLoader={showLoader} />
+        </div>
+        <Spin spinning={spinning} size="large" tip="Loading ..." fullscreen />
+      </div>
+    </>
+  );
+};
 
-    return (
-        <>
-            <div className='flex w-full h-screen form-container items-center justify-center '>
-                <div className=" backdrop-blur-xl hover:shadow-xl	rounded-2xl flex flex-col items-center px-20 py-12">
-
-                    <p className='mb-8 mt-2 text-5xl'>OTP Authentication</p>
-
-                    <OTPInput onOtpSubmit={(userOTP) => {
-                        if (randomOTP === parseInt(userOTP)) {
-                            showLoader()
-
-                            console.log('OTP Verified !');
-                            return true;
-                        } else {
-                            console.log('Verification Unsuccessful!')
-                            return false;
-                        }
-
-                    }} />
-
-                </div>
-                <Spin spinning={spinning} size='large' tip="Loading ..." fullscreen />
-
-
-            </div>
-
-        </>
-    )
-}
-
-export default OTPPage
+export default OTPPage;

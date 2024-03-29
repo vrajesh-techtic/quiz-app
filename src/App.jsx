@@ -19,13 +19,14 @@ import QuizTimer from "./components/QuizTimer";
 
 import { useState } from "react";
 import questionBank from "./questions/questionBank";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useDispatch, useSelector } from "react-redux";
+import { demoActions } from "./store";
 
 function App() {
-  console.log("App");
-
   const timer = <QuizTimer />;
 
-  const [questionObj, setQuestionObj] = useState(questionBank);
+  console.log("App");
 
   const router = createBrowserRouter([
     {
@@ -44,16 +45,9 @@ function App() {
   ]);
 
   return (
-    <ContextAPI.Provider
-      value={{
-        questionObj: questionObj,
-        setQuestionObj: setQuestionObj,
-      }}
-    >
-      <div className="App">
-        <RouterProvider router={router} />
-      </div>
-    </ContextAPI.Provider>
+    <div className="App">
+      <RouterProvider router={router} />
+    </div>
   );
 }
 

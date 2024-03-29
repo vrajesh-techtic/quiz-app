@@ -23,15 +23,15 @@ const QuizTimer = () => {
   };
 
   function onFinish() {
-    const answerObj = questionBank.map((i) => i.selected);
-    setSpinning(() => true);
+    // const answerObj = questionBank.map((i) => i.selected);
+    // setSpinning(() => true);
 
-    setTimeout(() => {
-      setSpinning(() => false);
-      navigate("/result");
-    }, 1000);
-    console.log(JSON.stringify(answerObj)); 
-    localStorage.setItem("bank", JSON.stringify(answerObj));
+    // setTimeout(() => {
+    //   setSpinning(() => false);
+    //   navigate("/result");
+    // }, 1000);
+    // console.log(JSON.stringify(answerObj)); 
+    // localStorage.setItem("bank", JSON.stringify(answerObj));
   }
 
   return (
@@ -39,7 +39,7 @@ const QuizTimer = () => {
       {/* {isQuiz ? null : <SubmitModal modalOpen={true} setModalOpen={() => {}} />} */}
       <Countdown
         valueStyle={{ fontSize: "2rem", color: "#c989fe" }}
-        value={isQuiz ? Date.now() + 10 * 1000 : null}
+        value={isQuiz ? Date.now() + 100 * 1000 : null}
         onChange={onChange}
         onFinish={onFinish}
       />

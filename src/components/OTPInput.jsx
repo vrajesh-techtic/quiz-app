@@ -4,6 +4,7 @@ import { Spin, notification } from "antd";
 import { useEffect, useRef, useState } from "react";
 
 const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
+  console.log("OTP Input");
   const [otp, setOtp] = useState(new Array(length).fill(""));
 
   const inputRefs = useRef([]);

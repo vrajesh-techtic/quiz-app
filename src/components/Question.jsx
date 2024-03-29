@@ -3,36 +3,20 @@ import React, { useContext, useEffect, useState } from "react";
 import questionBank from "../questions/questionBank";
 import OptionsContainer from "./OptionsContainer";
 import ContextAPI from "./ContextAPI";
-const Question = ({ quesNo = 1, btnDisable, userAns, correctAns }) => {
+const Question = ({ ansArr, quesNo }) => {
   // console.log('Question Called!')
 
-  // Getting main object of Questions JSON file
+  const questionList = questionBank;
 
-  // const [questionObj, setQuestionObj] = useState(questionBank);
-  const { questionObj, setQuestionObj } = useContext(ContextAPI);
-
-  const [selectedAns, setselectedAns] = useState(
-    questionObj.at(quesNo).selected
-  );
-
-  // Obtaining Question
-  const ques = questionObj.at(quesNo).ques;
-  // Obtaining all four options
-  const optionsArr = questionObj.at(quesNo).options;
-
-  useEffect(() => {
-    setQuestionObj((prev) => {
-      prev.at(quesNo).selected = selectedAns;
-      return prev;
-    });
-  }, [selectedAns]);
+  const optionsArr = questionList[quesNo].options;
 
   return (
     <div className="question-box bg-gray-200 rounded-lg h-full">
       {/* Question Container  */}
       <div className="top-container  h-[40%] flex justify-center items-center ">
         <span className="text-4xl ms-5">
-          {quesNo}. {ques}
+          {/* {quesNo}. {ques} */}
+          {quesNo}. {questionList[quesNo].ques}
         </span>
       </div>
 
@@ -40,7 +24,9 @@ const Question = ({ quesNo = 1, btnDisable, userAns, correctAns }) => {
       <div className="below-container  h-[60%] flex  ">
         {/* Options Container  */}
 
-        <OptionsContainer
+        <OptionsContainer optionsArr={optionsArr} ansArr={ansArr} quesNo={quesNo} />
+
+        {/* <OptionsContainer
           optionsArr={optionsArr}
           questionObj={questionObj}
           setQuestionObj={setQuestionObj}
@@ -50,7 +36,7 @@ const Question = ({ quesNo = 1, btnDisable, userAns, correctAns }) => {
           btnDisable={btnDisable}
           userAns={userAns}
           correctAns={correctAns}
-        />
+        /> */}
       </div>
     </div>
   );

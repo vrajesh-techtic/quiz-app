@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import OTPInput from "./OTPInput";
 import { useNavigate } from "react-router-dom";
 import { Spin } from "antd";
 import axios from "axios";
+import ContextAPI from "./ContextAPI";
 
 const OTPPage = () => {
+  console.log("OTP Page");
+
   const [spinning, setSpinning] = useState(false);
+  const { isUserAuth, setisUserAuth } = useContext(ContextAPI);
 
   const showLoader = () => {
     setSpinning(true);
@@ -30,15 +34,17 @@ const OTPPage = () => {
         }
       );
 
-      if (verificationAPI.data.message.statusCode === 500) {
+      if (verificationAPI.data.statusCode === 500) {
         return {
           status: false,
-          message: verificationAPI.data.message.message,
+          message: verificationAPI.data.message,
         };
-      } else if (verificationAPI.data.message.statusCode === 200) {
+      } else if (verificationAPI.data.statusCode === 200) {
+        setisUserAuth(() => true);
+
         return {
           status: true,
-          message: verificationAPI.data.message.message,
+          message: verificationAPI.data.message,
         };
       }
     } catch (error) {

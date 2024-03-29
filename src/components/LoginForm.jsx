@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Checkbox, Form, Input, Spin, notification } from "antd";
 import { MailOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -35,11 +35,15 @@ const LoginForm = () => {
         userEmail,
       });
 
-      console.log(addUser.data.database);
-      if (addUser.data.database.statusCode === 200) {
-        navigate("/authenticate");
-      } else if (addUser.data.database.statusCode === 11000) {
-        openNotificationWithIcon("error", addUser.data.database.message);
+      console.log(addUser.data);
+      if (addUser.data.statusCode === 200) {
+        setSpinning(true);
+        setTimeout(() => {
+          setSpinning(false);
+          navigate("/authenticate");
+        }, 2000);
+      } else if (addUser.data.statusCode === 11000) {
+        openNotificationWithIcon("error", addUser.data.message);
       }
 
       setSpinning(() => false);

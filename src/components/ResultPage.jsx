@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import questionBank from "../questions/questionBank";
 import { Menu } from "antd";
 import CustomSideBar from "./CustomSideBar";
 import Question from "./Question";
 import { useNavigate } from "react-router-dom";
 import ResultModal from "./ResultModal";
+import ContextAPI from "./ContextAPI";
 
 const ResultPage = () => {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
-
+  const { setisUserAuth } = useContext(ContextAPI);
   const userAns = JSON.parse(localStorage.getItem("bank"));
   const correctAns = questionBank.map((i) => i.answer);
-  
+
   const [quesNum, setQuesNum] = useState(1);
 
   // console.log(questionBank);
@@ -54,6 +55,7 @@ const ResultPage = () => {
     <button
       className="bg-red-400 h-[40px] flex items-center text-lg text-white  rounded-lg px-2 "
       onClick={() => {
+        setisUserAuth(false);
         navigate("/");
       }}
     >

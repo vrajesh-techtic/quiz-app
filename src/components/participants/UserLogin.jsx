@@ -37,7 +37,7 @@ const UserLogin = () => {
     setSpinning(true);
 
     openNotificationWithIcon("success", "Successfully Logged In!");
-
+    // Trial
     setTimeout(() => {
       setSpinning(false);
       navigate("/participants/display-quiz");

@@ -1,17 +1,14 @@
 import { Spin, Statistic } from "antd";
-import React, { useState } from "react";
-import { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ContextAPI from "./ContextAPI";
-import SubmitModal from "./SubmitModal";
-import { useEffect } from "react";
-import questionBank from "../questions/questionBank";
 
 const QuizTimer = () => {
   const { Countdown } = Statistic;
   const navigate = useNavigate();
   const [isQuiz, setIsQuiz] = useState(true);
   const [spinning, setSpinning] = useState(false);
+  const [userAns, questionBank] = useContext(ContextAPI);
 
   // const [modalOpen, setModalOpen] = useState(false);
 
@@ -23,15 +20,12 @@ const QuizTimer = () => {
   };
 
   function onFinish() {
-    // const answerObj = questionBank.map((i) => i.selected);
     // setSpinning(() => true);
-
     // setTimeout(() => {
     //   setSpinning(() => false);
+    //   localStorage.setItem("userAns", JSON.stringify(userAns));
     //   navigate("/result");
     // }, 1000);
-    // console.log(JSON.stringify(answerObj)); 
-    // localStorage.setItem("bank", JSON.stringify(answerObj));
   }
 
   return (

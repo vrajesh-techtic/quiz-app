@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ContextAPI from "./ContextAPI";
+import ContextAPI from "./participants/ContextAPI";
 
 const ProtectedRoute = ({ Component }) => {
   const navigate = useNavigate();

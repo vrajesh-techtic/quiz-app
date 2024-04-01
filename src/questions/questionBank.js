@@ -35,6 +35,12 @@ const questionBank = [
     selected: null,
     answer: "Library",
   },
+  {
+    ques: "What is capital of India ?",
+    options: ["Gujarat", "Karnataka", "New Delhi", "Rajasthan"],
+    selected: null,
+    answer: "New Delhi",
+  },
 ];
 
 export default questionBank;

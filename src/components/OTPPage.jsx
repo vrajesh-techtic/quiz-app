@@ -4,7 +4,7 @@ import OTPInput from "./OTPInput";
 import { useNavigate } from "react-router-dom";
 import { Spin } from "antd";
 import axios from "axios";
-import ContextAPI from "./ContextAPI";
+import ContextAPI from "./participants/ContextAPI";
 
 const OTPPage = () => {
   console.log("OTP Page");

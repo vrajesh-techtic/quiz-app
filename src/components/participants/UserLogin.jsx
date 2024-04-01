@@ -1,13 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Checkbox, Form, Input, Spin, notification } from "antd";
-import { MailOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  MailOutlined,
+  UserOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import ContextAPI from "./participants/ContextAPI";
+import ContextAPI from "./ContextAPI";
 
 // import main from '../server/mailer';
 
-const LoginForm = () => {
+const UserLogin = () => {
   const [api, contextHolder] = notification.useNotification();
   const [spinning, setSpinning] = useState(false);
 
@@ -18,41 +22,51 @@ const LoginForm = () => {
     });
   };
 
-  const [remember, setRemember] = useState(sessionStorage.length !== 0);
-
   const onFinish = async (values) => {
     const userEmail = values.email;
     const userName = values.name;
+    const quizCode = values.quizCode.toUpperCase();
 
-    if (remember) {
-      sessionStorage.clear();
-      sessionStorage.setItem(userEmail, userName);
-    }
+    const userDetails = {
+      email: userEmail,
+      name: userName,
+      quizCode: quizCode,
+    };
 
-    try {
-      let addUser = await axios.post("http://localhost:5000/add-user", {
-        userName,
-        userEmail,
-      });
+    console.log("User details :::: ", userDetails);
+    setSpinning(true);
 
-      console.log(addUser.data);
-      if (addUser.data.statusCode === 200) {
-        setSpinning(true);
-        setTimeout(() => {
-          setSpinning(false);
-          navigate("/authenticate");
-        }, 2000);
-      } else if (addUser.data.statusCode === 11000) {
-        openNotificationWithIcon("error", addUser.data.message);
-      }
+    openNotificationWithIcon("success", "Successfully Logged In!");
 
-      setSpinning(() => false);
-    } catch (error) {
-      setSpinning(() => false);
+    setTimeout(() => {
+      setSpinning(false);
+      navigate("/participants/display-quiz");
+    }, 1000);
 
-      if (error.message === "Network Error")
-        openNotificationWithIcon("error", "Server Down!");
-    }
+    // try {
+    //   let addUser = await axios.post("http://localhost:5000/add-user", {
+    //     userName,
+    //     userEmail,
+    //   });
+
+    //   console.log(addUser.data);
+    //   if (addUser.data.statusCode === 200) {
+    //     setSpinning(true);
+    //     setTimeout(() => {
+    //       setSpinning(false);
+    //       navigate("/authenticate");
+    //     }, 2000);
+    //   } else if (addUser.data.statusCode === 11000) {
+    //     openNotificationWithIcon("error", addUser.data.message);
+    //   }
+
+    //   setSpinning(() => false);
+    // } catch (error) {
+    //   setSpinning(() => false);
+
+    //   if (error.message === "Network Error")
+    //     openNotificationWithIcon("error", "Server Down!");
+    // }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -67,13 +81,13 @@ const LoginForm = () => {
     savedName = sessionStorage.getItem(savedEmail);
   }
 
-  const showLoader = () => {
-    setSpinning(true);
-    setTimeout(() => {
-      setSpinning(false);
-      navigate("/authenticate/display-quiz");
-    }, 2000);
-  };
+  // const showLoader = () => {
+  //   setSpinning(true);
+  //   setTimeout(() => {
+  //     setSpinning(false);
+  //     navigate("/authenticate/display-quiz");
+  //   }, 2000);
+  // };
 
   const navigate = useNavigate();
 
@@ -130,7 +144,27 @@ const LoginForm = () => {
               />
             </Form.Item>
 
-            <Form.Item name="remember">
+            <Form.Item
+              name="quizCode"
+              className="w-[400px]"
+              rules={[
+                {
+                  type: "string",
+                  required: true,
+                  message: "Quiz Code is required !",
+                },
+              ]}
+            >
+              <Input
+                prefix={
+                  <QuestionCircleOutlined className="site-form-item-icon" />
+                }
+                name="quizCode"
+                placeholder="Quiz Code"
+              />
+            </Form.Item>
+
+            {/* <Form.Item name="remember">
               <Checkbox
                 className="text-xl"
                 defaultChecked={remember}
@@ -140,16 +174,15 @@ const LoginForm = () => {
               >
                 Remember me
               </Checkbox>
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item className="flex flex-col">
               <Button
                 type="primary"
-                onClick={() => setSpinning(() => true)}
                 htmlType="submit"
                 className="login-form-button w-[200px] text-lg flex justify-center items-center bg-blue-500"
               >
-                Send OTP
+                Start Quiz
               </Button>
             </Form.Item>
           </Form>
@@ -160,4 +193,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default UserLogin;

@@ -1,36 +1,32 @@
-import {
-  Route,
-  RouterProvider,
-  Routes,
-  createBrowserRouter,
-} from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
-
 import LoginForm from "./components/LoginForm";
 import OTPPage from "./components/OTPPage";
-import ContextAPI from "./components/ContextAPI";
-
-import OTPEmail from "./components/OTPEmail";
-import DisplayQuiz from "./components/DisplayQuiz";
-
-import ResultPage from "./components/ResultPage";
-
-import QuizTimer from "./components/QuizTimer";
-
-import { useState } from "react";
+import ContextAPI from "./components/participants/ContextAPI";
+import DisplayQuiz from "./components/participants/DisplayQuiz";
+import ResultPage from "./components/participants/ResultPage";
+import QuizTimer from "./components/participants/QuizTimer";
 import questionBank from "./questions/questionBank";
-import ProtectedRoute from "./components/ProtectedRoute";
-import { useDispatch, useSelector } from "react-redux";
-import { demoActions } from "./store";
+import UserLogin from "./components/participants/UserLogin";
 
 function App() {
   const timer = <QuizTimer />;
+
+  let newArr = {};
+
+  for (let i = 0; i < questionBank.length; i++) {
+    newArr[i] = null;
+  }
 
   console.log("App");
 
   const router = createBrowserRouter([
     {
       path: "/",
+      element: <UserLogin />,
+    },
+    {
+      path: "/admin-login",
       element: <LoginForm />,
     },
     {
@@ -38,16 +34,18 @@ function App() {
       element: <OTPPage />,
     },
     {
-      path: "/authenticate/display-quiz",
+      path: "/participants/display-quiz",
       element: <DisplayQuiz timer={timer} />,
     },
     { path: "/result", element: <ResultPage /> },
   ]);
 
   return (
-    <div className="App">
-      <RouterProvider router={router} />
-    </div>
+    <ContextAPI.Provider value={[newArr, questionBank]}>
+      <div className="App">
+        <RouterProvider router={router} />
+      </div>
+    </ContextAPI.Provider>
   );
 }
 

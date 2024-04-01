@@ -1,33 +1,30 @@
 import { Radio } from "antd";
 import React, { useEffect, useState } from "react";
-import questionBank from "../questions/questionBank";
 
-const OptionsContainer = ({ optionsArr, ansArr, quesNo }) => {
-  console.log(optionsArr);
+const OptionsContainer = ({ optionsArr, ansArr, setansArr, quesNo }) => {
+  const [selectedAns, setSelectedAns] = useState(ansArr[quesNo]);
 
-  console.log(ansArr[quesNo]);
-  // console.log('Options called!')
   return (
     <div className="options-container  w-full flex flex-col  justify-center">
       <Radio.Group
-        // value={btnDisable ? null : selectedAns}
-        // onChange={
-        //   !btnDisable
-        //     ? (e) => {
-        //         setselectedAns(e.target.value);
-
-        //         questionObj.at(quesNo).selected = e.target.value;
-        //         console.log("e", e.target.value);
-        //       }
-        //     : null
-        // }
+        value={ansArr[quesNo]}
         optionType="button"
+        onChange={(e) => {
+          setSelectedAns(e.target.value);
+        }}
         buttonStyle
         className="flex flex-col h-[90%]  px-5 py-5"
       >
         <div className="flex text-center h-full my-3 w-full">
           {/* 1st option  */}
           <Radio
+            onClick={() =>
+              setansArr((prev) => {
+                let newObj = prev;
+                newObj[quesNo] = optionsArr[0];
+                return newObj;
+              })
+            }
             value={optionsArr[0]}
             className="flex mx-3 h-full rounded-lg hover:shadow-xl items-center text-2xl bg-yellow-300 w-1/2 justify-center px-5"
           >
@@ -36,6 +33,13 @@ const OptionsContainer = ({ optionsArr, ansArr, quesNo }) => {
 
           {/* 2nd Option  */}
           <Radio
+            onClick={() =>
+              setansArr((prev) => {
+                let newObj = prev;
+                newObj[quesNo] = optionsArr[1];
+                return newObj;
+              })
+            }
             value={optionsArr[1]}
             className="flex mx-3 h-full rounded-lg hover:shadow-xl items-center text-2xl bg-red-300 w-1/2 justify-center px-5"
           >
@@ -44,6 +48,13 @@ const OptionsContainer = ({ optionsArr, ansArr, quesNo }) => {
 
           {/* 3rd option  */}
           <Radio
+            onClick={() =>
+              setansArr((prev) => {
+                let newObj = prev;
+                newObj[quesNo] = optionsArr[2];
+                return newObj;
+              })
+            }
             value={optionsArr[2]}
             className="flex mx-3 h-full rounded-lg hover:shadow-xl items-center text-2xl bg-blue-300 w-1/2 justify-center px-5"
           >
@@ -52,6 +63,13 @@ const OptionsContainer = ({ optionsArr, ansArr, quesNo }) => {
 
           {/* 4th option  */}
           <Radio
+            onClick={() =>
+              setansArr((prev) => {
+                let newObj = prev;
+                newObj[quesNo] = optionsArr[3];
+                return newObj;
+              })
+            }
             value={optionsArr[3]}
             className="flex mx-3 h-full rounded-lg hover:shadow-xl items-center text-2xl bg-green-300 w-1/2 justify-center px-5"
           >

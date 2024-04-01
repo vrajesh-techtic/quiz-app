@@ -1,7 +1,7 @@
 import { Modal, Spin } from "antd";
 import React, { useState } from "react";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import questionBank from "../questions/questionBank";
+import questionBank from "../../questions/questionBank";
 
 const ResultModal = ({ modalOpen, setModalOpen, userAns, correctAns }) => {
   function countPoints(userAns, correctAns, n) {

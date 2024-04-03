@@ -1,14 +1,14 @@
 import { Spin, Statistic } from "antd";
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ContextAPI from "./ContextAPI";
+import React, { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import ContextAPI from "./ContextAPI";
 
 const QuizTimer = () => {
   const { Countdown } = Statistic;
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isQuiz, setIsQuiz] = useState(true);
   const [spinning, setSpinning] = useState(false);
-  const [userAns, questionBank] = useContext(ContextAPI);
+  // const [userAns, questionBank] = useContext(ContextAPI);
 
   // const [modalOpen, setModalOpen] = useState(false);
 

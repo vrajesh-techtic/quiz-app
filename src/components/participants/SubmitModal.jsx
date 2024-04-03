@@ -2,7 +2,6 @@ import { Modal, Spin } from "antd";
 import React, { useContext, useState } from "react";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import questionBank from "../../questions/questionBank";
 import ContextAPI from "./ContextAPI";
 
 function calculateAttempted(userAns) {
@@ -44,7 +43,7 @@ const SubmitModal = ({ modalOpen, setModalOpen }) => {
           setTimeout(() => {
             setSpinning(() => false);
             localStorage.setItem("userAns", JSON.stringify(userAns));
-            navigate("/result");
+            navigate("/participant/result");
           }, 1000);
         }}
         okButtonProps={{

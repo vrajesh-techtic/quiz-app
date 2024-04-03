@@ -19,7 +19,8 @@ const DisplayQuiz = ({ timer }) => {
   console.log(quesNum);
   const questionList = questionBank;
 
-  const userData = JSON.parse(localStorage.getItem("user"));
+  // const userData = JSON.parse(localStorage.getItem("user"));
+  const userData = { name: "Vraj", email: "vd@gmail.com" };
 
   const [ansArr, setansArr] = useState(userAns);
   const [selectedAns, setSelectedAns] = useState();

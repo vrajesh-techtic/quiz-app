@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
 import ContextAPI from "./ContextAPI";
 import {
-  CircularProgressbar,
   CircularProgressbarWithChildren,
   buildStyles,
 } from "react-circular-progressbar";
@@ -28,6 +27,7 @@ const ResultPage = () => {
   const unAttempted = resultDetails.unAttempted;
 
   console.log("unAttempted", unAttempted);
+  localStorage.removeItem("login");
   const percentage = ((score / (totalQues - unAttempted)) * 100).toFixed(2);
 
   return (

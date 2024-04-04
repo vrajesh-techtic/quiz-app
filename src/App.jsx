@@ -10,14 +10,18 @@ import questionBank from "./questions/questionBank";
 import UserLogin from "./components/participants/UserLogin";
 import ProtectedRoute from "./components/participants/ParticipantsProtectedRoute";
 import AdminProtectedRoute from "./components/admin/AdminProtectedRoute";
-
 import AdminLogin from "./components/admin/AdminLoginForm";
 import AdminDashboard from "./components/admin/AdminDashboard";
-
 import AdminProfile from "./components/admin/AdminProfile";
 import HomePage from "./components/HomePage";
+import AdminLibrary from "./components/admin/AdminLibrary";
+import CreateQuizPage from "./components/admin/CreateQuizPage";
+import AdminContextAPI from "./components/admin/AdminContextAPI";
+import { dataAdmin } from "./components/admin/DataAdmin";
 
 function App() {
+  const adminData = dataAdmin;
+
   const timer = <QuizTimer />;
 
   let newArr = {};
@@ -45,10 +49,17 @@ function App() {
       path: "/admin/dashboard",
       element: <AdminProtectedRoute Component={<AdminDashboard />} />,
     },
-
+    {
+      path: "/admin/library",
+      element: <AdminProtectedRoute Component={<AdminLibrary />} />,
+    },
     {
       path: "/admin/profile",
       element: <AdminProtectedRoute Component={<AdminProfile />} />,
+    },
+    {
+      path: "/admin/create-quiz",
+      element: <AdminProtectedRoute Component={<CreateQuizPage />} />,
     },
 
     {
@@ -63,11 +74,13 @@ function App() {
   ]);
 
   return (
-    <ContextAPI.Provider value={[newArr, questionBank]}>
-      <div className="App">
-        <RouterProvider router={router} />
-      </div>
-    </ContextAPI.Provider>
+    <AdminContextAPI.Provider value={adminData}>
+      <ContextAPI.Provider value={[newArr, questionBank]}>
+        <div className="App">
+          <RouterProvider router={router} />
+        </div>
+      </ContextAPI.Provider>
+    </AdminContextAPI.Provider>
   );
 }
 

@@ -27,10 +27,12 @@ const quesList = [
   },
 ];
 
-const CreateSider = () => {
-  const [currQues, setCurrQues] = useState(1);
+const CreateSider = ({ quesList, currQues, setCurrQues }) => {
+  console.log("Sider");
+  console.log("quesList", quesList);
+
   return (
-    <div className="w-[200px] text-white flex flex-col items-center bg-[#001529] h-[91%]">
+    <div className="w-[230px] flex flex-col items-center bg-gray-100 h-full">
       <div className="mt-4">
         <span className="text-2xl my-3 font-medium">Question List</span>
       </div>
@@ -38,17 +40,30 @@ const CreateSider = () => {
       {/* Question List  */}
       <div className="flex flex-col items-center mt-5 w-full">
         <ul className="w-[90%] mx-3 ">
-          {quesList.map((i, key) => (
+          {quesList.length === 0 ? (
             <li
               style={{
-                backgroundColor: currQues === key + 1 ? "#ca89fd" : "#04c1cc",
+                backgroundColor: "#ca89fd",
               }}
-              onClick={() => setCurrQues(key + 1)}
+              // onClick={() => setCurrQues(key + 1)}
               className="cursor-pointer rounded-lg  my-2 p-2 text-center w-full"
             >
-              Question {key + 1}{" "}
+              Question 1
             </li>
-          ))}
+          ) : (
+            quesList.map((i, key) => (
+              <li
+                key={key}
+                style={{
+                  backgroundColor: currQues === key + 1 ? "#ca89fd" : "#04c1cc",
+                }}
+                onClick={() => setCurrQues(key + 1)}
+                className="cursor-pointer rounded-lg  my-2 p-2 text-center w-full"
+              >
+                Question {key + 1}{" "}
+              </li>
+            ))
+          )}
         </ul>
       </div>
     </div>

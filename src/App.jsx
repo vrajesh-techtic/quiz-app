@@ -16,11 +16,17 @@ import AdminProfile from "./components/admin/AdminProfile";
 import HomePage from "./components/HomePage";
 import AdminLibrary from "./components/admin/AdminLibrary";
 import CreateQuizPage from "./components/admin/CreateQuizPage";
-import AdminContextAPI from "./components/admin/AdminContextAPI";
+import AdminContextAPI, {
+  QuestionContextAPI,
+} from "./components/admin/AdminContextAPI";
 import { dataAdmin } from "./components/admin/DataAdmin";
+import { useState } from "react";
+import CreateCustomSider from "./components/admin/CreateCustomSider";
 
 function App() {
   const adminData = dataAdmin;
+
+  const [quesList, setquesList] = useState([]);
 
   const timer = <QuizTimer />;
 
@@ -59,7 +65,7 @@ function App() {
     },
     {
       path: "/admin/create-quiz",
-      element: <AdminProtectedRoute Component={<CreateQuizPage />} />,
+      element: <AdminProtectedRoute Component={<CreateCustomSider />} />,
     },
 
     {
@@ -74,13 +80,15 @@ function App() {
   ]);
 
   return (
-    <AdminContextAPI.Provider value={adminData}>
-      <ContextAPI.Provider value={[newArr, questionBank]}>
-        <div className="App">
-          <RouterProvider router={router} />
-        </div>
-      </ContextAPI.Provider>
-    </AdminContextAPI.Provider>
+    <QuestionContextAPI.Provider value={{ quesList, setquesList }}>
+      <AdminContextAPI.Provider value={adminData}>
+        <ContextAPI.Provider value={[newArr, questionBank]}>
+          <div className="App">
+            <RouterProvider router={router} />
+          </div>
+        </ContextAPI.Provider>
+      </AdminContextAPI.Provider>
+    </QuestionContextAPI.Provider>
   );
 }
 

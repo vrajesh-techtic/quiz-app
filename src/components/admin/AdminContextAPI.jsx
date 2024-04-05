@@ -13,4 +13,9 @@ const AdminContextAPI = createContext({
   "recent-quiz": null,
 });
 
-export default AdminContextAPI;
+const QuestionContextAPI = createContext({
+  quesList: [],
+  setquesList: () => {},
+});
+
+export { AdminContextAPI as default, QuestionContextAPI };

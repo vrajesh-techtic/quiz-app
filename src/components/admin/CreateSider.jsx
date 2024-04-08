@@ -1,35 +1,37 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { QuestionContextAPI } from "./AdminContextAPI";
 
-const quesList = [
-  {
-    id: 1,
-    content: "What is Capital of India ?",
-    options: ["Gujarat", "Rajasthan", "New Delhi", "Mumbai"],
-    correctAns: "New Delhi",
-  },
-  {
-    id: 2,
-    content: "What is Capital of Pakistan ?",
-    options: ["Islamabad", "Karachi", "Kargil", "Lahore"],
-    correctAns: "Islamabad",
-  },
-  {
-    id: 3,
-    content: "What is Capital of China ?",
-    options: ["Beijing", "Shanghai", "Wuhan", "Korea"],
-    correctAns: "Beijing",
-  },
-  {
-    id: 4,
-    content: "What is Capital of USA ?",
-    options: ["Washington DC", "Toronto", "Chicago", "Texas"],
-    correctAns: "Washington DC",
-  },
-];
+// const quesList = [
+//   {
+//     id: 1,
+//     content: "What is Capital of India ?",
+//     options: ["Gujarat", "Rajasthan", "New Delhi", "Mumbai"],
+//     correctAns: "New Delhi",
+//   },
+//   {
+//     id: 2,
+//     content: "What is Capital of Pakistan ?",
+//     options: ["Islamabad", "Karachi", "Kargil", "Lahore"],
+//     correctAns: "Islamabad",
+//   },
+//   {
+//     id: 3,
+//     content: "What is Capital of China ?",
+//     options: ["Beijing", "Shanghai", "Wuhan", "Korea"],
+//     correctAns: "Beijing",
+//   },
+//   {
+//     id: 4,
+//     content: "What is Capital of USA ?",
+//     options: ["Washington DC", "Toronto", "Chicago", "Texas"],
+//     correctAns: "Washington DC",
+//   },
+// ];
 
-const CreateSider = ({ quesList, currQues, setCurrQues }) => {
+const CreateSider = ({ currQues, setCurrQues }) => {
   console.log("Sider");
-  console.log("quesList", quesList);
+  // console.log("currQues", currQues);
+  const { quesList, setquesList } = useContext(QuestionContextAPI);
 
   return (
     <div className="w-[230px] flex flex-col items-center bg-gray-100 h-full">
@@ -40,7 +42,7 @@ const CreateSider = ({ quesList, currQues, setCurrQues }) => {
       {/* Question List  */}
       <div className="flex flex-col items-center mt-5 w-full">
         <ul className="w-[90%] mx-3 ">
-          {quesList.length === 0 ? (
+          {quesList === null || quesList.length === 0 ? (
             <li
               style={{
                 backgroundColor: "#ca89fd",

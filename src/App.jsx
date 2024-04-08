@@ -26,7 +26,13 @@ import CreateCustomSider from "./components/admin/CreateCustomSider";
 function App() {
   const adminData = dataAdmin;
 
-  const [quesList, setquesList] = useState([]);
+  const [quesList, setquesList] = useState([
+    {
+      quesId: -1,
+      content: "",
+      options: ["", "", "", ""],
+    },
+  ]);
 
   const timer = <QuizTimer />;
 

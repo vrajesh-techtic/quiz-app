@@ -1,53 +1,93 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CreateCustomSider from "./CreateCustomSider";
 import { QuestionContextAPI } from "./AdminContextAPI";
 
-const CreateQuizPage = ({ currQues, setCurrQues }) => {
-  const [quesText, setQuesText] = useState("");
-  const [optionsArr, setOptionsArr] = useState([null, null, null, null]);
-
+const CreateQuizPage = ({ quesData }) => {
   const { quesList, setquesList } = useContext(QuestionContextAPI);
 
-  console.log("create quiz page", currQues);
+  const [quesText, setquesText] = useState(quesData.content);
+  const [optionsArr, setOptionsArr] = useState(["", "", "", ""]);
 
-  // console.log(quesList[currQues-1].options[0]);
+  console.log("quesData.options", quesData.options);
+  // const [currData, setCurrData] = useState(quesData);
+
+  useEffect(() => {
+    // setCurrData({ ...quesData, quesId: quesList.length + 1 });
+    setOptionsArr(quesData.options);
+  }, [quesData.options]);
+
+  // console.log("{currData.content}", currData.content);
 
   function onQuesChange(e) {
-    setQuesText(e.target.value);
+    setquesText(e.target.value);
   }
 
   function onOptionChange(e, key) {
-    setOptionsArr((prev) => {
-      let newArr = prev;
-      newArr[key] = e.target.value.trim();
-      return newArr;
-    });
-  }
+    let newArr = optionsArr;
+    // newArr[key] = e.target.value.trim();
+    newArr.splice(key, 1, e.target.value);
+    console.log(newArr);
 
+    setOptionsArr(newArr);
+
+    // console.log("key", key);
+
+    // let newOptions = optionsArr;
+
+    // setOptionsArr(newOptions);
+  }
   function onSave() {
-    if (quesText.trim() === "") {
-      alert("Please enter question!");
-    } else {
-      let isEmpty = false;
-      for (let i = 0; i < optionsArr.length; i++) {
-        if (optionsArr[i] === null || optionsArr[i].trim() === "") {
-          isEmpty = true;
-        }
-      }
-      if (isEmpty) {
-        alert("Please enter all options correctly!");
-      } else {
-        alert("Questions added successfully!");
+    let obj = {
+      content: quesText,
+      options: optionsArr,
+    };
 
-        const obj = {
-          content: quesText,
-          options: optionsArr,
-        };
+    setquesList((prev) => {
+      let arr = prev;
+      arr.push(obj);
+      return arr;
+    });
 
-        setquesList((prev) => [...prev, obj]);
-      }
-    }
+    // if (quesList.findIndex((i) => i.quesId === currData.quesId) === -1) {
+    //   setquesList([
+    //     { ...currData, options: optionsArr },
+    //     ...quesList.map((x) => {
+    //       if (x?.quesId == -1) {
+    //         x.options = [null, null, null, null];
+    //       }
+    //       return x;
+    //     }),
+    //   ]);
+    //   setOptionsArr(["", "", "", ""]);
+    // } else {
+    //   console.log("Updated");
+    // }
+    // setquesList([{ ...currData, quesId: quesList.length + 1 }, ...quesList]);
   }
+
+  console.log("quesList", quesList);
+
+  // function onSave() {
+  //   let isEmpty = false;
+  //   for (let i = 0; i < optionsArr.length; i++) {
+  //     if (optionsArr[i] === null || optionsArr[i].trim() === "") {
+  //       isEmpty = true;
+  //     }
+  //   }
+  //   if (isEmpty) {
+  //     alert("Please enter all options correctly!");
+  //   } else {
+  //     alert("Questions added successfully!");
+
+  //     const obj = {
+  //       quesId: quesList.length,
+  //       content: quesText,
+  //       options: optionsArr,
+  //     };
+
+  //     setquesList((prev) => [obj, ...prev]);
+  //   }
+  // }
 
   return (
     <div className="flex flex-col h-full items-center">
@@ -56,9 +96,7 @@ const CreateQuizPage = ({ currQues, setCurrQues }) => {
         <div className="w-[90%] h-[80%] rounded-lg flex justify-center border-2 border-black text-3xl items-center ">
           <textarea
             placeholder="Enter your Question here"
-            defaultValue={
-              quesList.length !== 0 ? quesList[currQues - 1].content : ""
-            }
+            value={quesText}
             onChange={(e) => onQuesChange(e)}
             style={{ resize: "none" }}
             className="w-full h-full flex justify-center text-center pt-20 items-center bg-purple-300 rounded-lg"
@@ -73,42 +111,34 @@ const CreateQuizPage = ({ currQues, setCurrQues }) => {
             <textarea
               placeholder="Option 1"
               onChange={(e) => onOptionChange(e, 0)}
-              defaultValue={
-                quesList.length !== 0 ? quesList[currQues - 1].options[0] : ""
-              }
+              value={optionsArr[0]}
               style={{ resize: "none" }}
               className="w-full text-center h-full pt-20 px-3 block align-middle  bg-blue-300 rounded-lg "
             ></textarea>
           </div>
           <div className=" w-[200px] h-[200px] rounded-lg border-2 border-black flex justify-center items-center text-xl">
             <textarea
-              defaultValue={
-                quesList.length !== 0 ? quesList[currQues - 1].options[1] : ""
-              }
               placeholder="Option 2"
               onChange={(e) => onOptionChange(e, 1)}
+              value={optionsArr[1]}
               style={{ resize: "none" }}
               className="w-full text-center h-full pt-20 px-3 block align-middle  bg-red-300 rounded-lg "
             ></textarea>
           </div>
           <div className=" w-[200px] h-[200px] rounded-lg border-2 border-black flex justify-center items-center text-xl">
             <textarea
-              defaultValue={
-                quesList.length !== 0 ? quesList[currQues - 1].options[2] : ""
-              }
               placeholder="Option 3"
               onChange={(e) => onOptionChange(e, 2)}
+              value={optionsArr[2]}
               style={{ resize: "none" }}
               className="w-full text-center h-full pt-20 px-3 block align-middle  bg-green-300 rounded-lg "
             ></textarea>
           </div>
           <div className=" w-[200px] h-[200px] rounded-lg border-2 border-black flex justify-center items-center text-xl">
             <textarea
-              defaultValue={
-                quesList.length !== 0 ? quesList[currQues - 1].options[3] : ""
-              }
               placeholder="Option 4"
               onChange={(e) => onOptionChange(e, 3)}
+              value={optionsArr[3]}
               style={{ resize: "none" }}
               className="w-full text-center h-full pt-20 px-3 block align-middle  bg-yellow-300 rounded-lg "
             ></textarea>

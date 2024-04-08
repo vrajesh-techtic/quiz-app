@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Button, Checkbox, Form, Input, Spin, notification } from "antd";
+import React, { useState } from "react";
+import { Button, Form, Input, Spin, notification } from "antd";
 import {
   MailOutlined,
   UserOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import ContextAPI from "./ContextAPI";
+// import axios from "axios";
 
 // import main from '../server/mailer';
 
@@ -40,7 +39,8 @@ const UserLogin = () => {
     // Trial
     setTimeout(() => {
       setSpinning(false);
-      navigate("/participants/display-quiz");
+      localStorage.setItem("login", true);
+      navigate("/participant/display-quiz");
     }, 1000);
 
     // try {
@@ -94,8 +94,8 @@ const UserLogin = () => {
   return (
     <>
       {contextHolder}
-      <div className="flex w-full h-screen form-container items-center justify-center ">
-        <div className=" backdrop-blur-xl hover:shadow-xl	rounded-2xl flex flex-col items-center px-20 py-12">
+      <div className="flex w-full h-screen bg-blue-300 items-center justify-center ">
+        <div className=" backdrop-blur-xl hover:shadow-xl bg-green-300	rounded-2xl flex flex-col items-center px-20 py-12">
           <p className="mb-8 mt-2 text-5xl">Participant Login</p>
 
           <Form

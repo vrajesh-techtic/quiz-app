@@ -1,0 +1,21 @@
+.dept-list::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  
+  .dept-list::-webkit-scrollbar-thumb {
+    /* background: linear-gradient(13deg, #7bcfeb 14%, #e685d3 64%); */
+    background: rgb(207, 206, 206);
+    border-radius: 10px;
+  }
+  
+  .dept-list::-webkit-scrollbar-thumb:hover {
+    background: gray
+  }
+  
+  .dept-list::-webkit-scrollbar-track {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: inset 7px 10px 12px #f0f0f0;
+  }
+  

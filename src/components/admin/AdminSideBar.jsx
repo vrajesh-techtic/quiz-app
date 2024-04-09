@@ -65,17 +65,16 @@ const AdminSideBar = ({ children, selectedKeys = 1 }) => {
             <img src={logo} alt="quizify-logo" className="h-full  z-10" />
           </div>
 
-          <button
-            onClick={() => {
-              navigate("/admin/create-quiz");
-            }}
+          <a
+            href="/admin/create-quiz"
+            target="_blank"
             style={{
               boxShadow: "4px 4px 0px #04c1cc",
             }}
-            className="flex justify-center p-3 text-xl bg-[#ca89fd] text-white font-medium  mb-12 mt-4 mx-auto rounded-xl"
+            className="flex justify-center w-[150px] p-3 text-xl bg-[#ca89fd] text-white font-medium  mb-12 mt-4 mx-auto rounded-xl"
           >
             Create Quiz
-          </button>
+          </a>
 
           <Menu
             theme="dark"

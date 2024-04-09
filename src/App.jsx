@@ -29,8 +29,10 @@ function App() {
   const [quesList, setquesList] = useState([
     {
       quesId: -1,
-      content: "",
+      ques: "",
       options: ["", "", "", ""],
+      isSaved: false,
+      answer: 0,
     },
   ]);
 

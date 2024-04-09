@@ -8,11 +8,12 @@ import { FaSave } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 let index = 0;
 
-const CreateNavbar = () => {
+const CreateNavbar = ({ onPublish }) => {
   const [titleEdit, settitleEdit] = useState(false);
-  const data = useContext(AdminContextAPI);
+  const data = JSON.parse(localStorage.getItem("quizData")) || [];
+
   const navigate = useNavigate();
-  const deptList = data["dept-quiz-list"].map((i) => i["dept-name"]);
+  const deptList = data.map((i) => i["dept-name"]);
   const [quizTitle, setQuizTitle] = useState("Untitled-1");
   const [quizDept, setQuizDept] = useState("");
   const [items, setItems] = useState(deptList);
@@ -25,26 +26,40 @@ const CreateNavbar = () => {
   const addItem = (e) => {
     e.preventDefault();
     setItems([...items, name || `New item ${index++}`]);
+
+    const findDept = data.findIndex((i) => i["dept-name"] === quizDept);
+    if (data.length > 0 && findDept !== -1) {
+    } else {
+      const newDept = {
+        "dept-name": name,
+        "quiz-list": [],
+      };
+      data.push(newDept);
+
+      console.log("data", data);
+      localStorage.setItem("quizData", JSON.stringify(data));
+    }
+
     setName("");
     setTimeout(() => {
       inputRef.current?.focus();
     }, 0);
   };
 
-  function onPublish() {
-    if (quizDept === "") {
-      alert("Please select a department!");
-    } else {
-      console.log("Title :::::: ", quizTitle);
-      console.log("Dept :::::: ", quizDept);
+  // function onPublish() {
+  //   if (quizDept === "") {
+  //     alert("Please select a department!");
+  //   } else {
+  //     console.log("Title :::::: ", quizTitle);
+  //     console.log("Dept :::::: ", quizDept);
 
-      let res = window.confirm("Are you sure you want to publish the Quiz?");
-      if (res) {
-        alert("Quiz Publish Successfully");
-        navigate("/admin/dashboard");
-      }
-    }
-  }
+  //     let res = window.confirm("Are you sure you want to publish the Quiz?");
+  //     if (res) {
+  //       alert("Quiz Publish Successfully");
+  //       navigate("/admin/dashboard");
+  //     }
+  //   }
+  // }
 
   // Filter `option.label` match the user type `input`
   const filterOption = (input, option) =>
@@ -146,7 +161,7 @@ const CreateNavbar = () => {
       {/* Publish Button  */}
       <div className="flex me-16 ">
         <button
-          onClick={onPublish}
+          onClick={() => onPublish(quizDept, quizTitle)}
           style={{
             boxShadow: "3px 3px 0px #04c1cc",
           }}

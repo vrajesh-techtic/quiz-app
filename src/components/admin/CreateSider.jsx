@@ -29,9 +29,15 @@ import { QuestionContextAPI } from "./AdminContextAPI";
 // ];
 
 const CreateSider = ({ currQues, setCurrQues }) => {
-  console.log("Sider");
-  // console.log("currQues", currQues);
   const { quesList, setquesList } = useContext(QuestionContextAPI);
+
+  quesList.sort((a, b) => {
+    if (a.quesId === -1 || b.quesId === -1) {
+      return 1;
+    } else {
+      return a.quesId - b.quesId;
+    }
+  });
 
   return (
     <div className="w-[230px] flex flex-col items-center bg-gray-100 h-full">
@@ -40,9 +46,9 @@ const CreateSider = ({ currQues, setCurrQues }) => {
       </div>
 
       {/* Question List  */}
-      <div className="flex flex-col items-center mt-5 w-full">
-        <ul className="w-[90%] mx-3 ">
-          {quesList === null || quesList.length === 0 ? (
+      <div className="create-ques-list  overflow-auto flex flex-col items-center  mt-5 w-full">
+        <ul className="w-[80%] h-full mx-3 ">
+          {quesList === null || quesList.length === 1 ? (
             <li
               style={{
                 backgroundColor: "#ca89fd",
@@ -50,7 +56,7 @@ const CreateSider = ({ currQues, setCurrQues }) => {
               // onClick={() => setCurrQues(key + 1)}
               className="cursor-pointer rounded-lg  my-2 p-2 text-center w-full"
             >
-              Question 1
+              Create Question
             </li>
           ) : (
             quesList.map((i, key) => (
@@ -62,7 +68,9 @@ const CreateSider = ({ currQues, setCurrQues }) => {
                 onClick={() => setCurrQues(key + 1)}
                 className="cursor-pointer rounded-lg  my-2 p-2 text-center w-full"
               >
-                Question {key + 1}{" "}
+                {i.ques.trim().length === 0
+                  ? "Create Question"
+                  : `Question ${key + 1}`}{" "}
               </li>
             ))
           )}

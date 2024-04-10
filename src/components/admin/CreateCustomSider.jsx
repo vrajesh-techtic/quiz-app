@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import CreateNavbar from "./CreateNavbar";
 import CreateSider from "./CreateSider";
@@ -10,16 +10,17 @@ import Toastify from "toastify-js";
 import CreateQuizPage from "./CreateQuizPage";
 import { QuestionContextAPI } from "./AdminContextAPI";
 
-const displayToast = (message) => {
+const displayToast = (message, color) => {
   Toastify({
     text: message,
-    duration: 2000,
+    duration: 1000,
     close: false,
     gravity: "top", // `top` or `bottom`
     position: "center", // `left`, `center` or `right`
     stopOnFocus: true, // Prevents dismissing of toast on hover
     style: {
-      background: "linear-gradient(to right, #00b09b, #96c93d)",
+      background: color,
+      borderRadius: "10px",
     },
   }).showToast();
 };
@@ -29,24 +30,38 @@ const CreateCustomSider = () => {
   //   return "Data will be lost if you leave the page, are you sure?";
   // };
 
+  const { dept, quiz } = useParams();
+
+  const existQuizData =
+    dept && quiz
+      ? JSON.parse(localStorage.getItem("quizData"))
+          ?.find((i) => i["dept-name"] === dept)
+          ["quiz-list"]?.find((j) => j.quizCode === quiz)
+      : [];
+  console.log("existQuizData", existQuizData);
+
   const navigate = useNavigate();
 
   const { quesList, setquesList } = useContext(QuestionContextAPI);
 
   const [currQues, setCurrQues] = useState(1);
 
-  useEffect(() => {
-    setquesData(quesList[currQues - 1]);
-    setquesText(quesList[currQues - 1].ques);
-    setOptionsArr(quesList[currQues - 1].options);
-    setcorrAns(quesList[currQues - 1].answer);
-  }, [currQues]);
-
   const [quesData, setquesData] = useState({ ...quesList[currQues - 1] });
 
-  const [quesText, setquesText] = useState(quesData.ques);
-  const [optionsArr, setOptionsArr] = useState([...quesData.options]);
+  const [quesText, setquesText] = useState(quesData?.ques);
+  const [optionsArr, setOptionsArr] = useState([...quesData?.options]);
   const [corrAns, setcorrAns] = useState(1);
+  // quizCode.trim().length === 0 ? false : true
+  console.log("quesData", quesData);
+
+  useEffect(() => {
+    // console.log("currQues", currQues);
+
+    setquesData(quesList[currQues - 1]);
+    setquesText(quesList[currQues - 1]?.ques);
+    setOptionsArr(quesList[currQues - 1]?.options);
+    setcorrAns(quesList[currQues - 1]?.answer);
+  }, [currQues]);
 
   function onSave(obj) {
     const quesIndex = quesList.findIndex((i) => i.quesId === obj.quesId);
@@ -61,19 +76,26 @@ const CreateCustomSider = () => {
       setquesText("");
       setOptionsArr(["", "", "", ""]);
       setcorrAns(0);
-      displayToast("Question added successfully!");
+      displayToast(
+        "Question added successfully!",
+        "linear-gradient(to right, #00b09b, #96c93d)"
+      );
     } else {
       setquesList((prev) => {
         let arr = [...prev];
         arr[quesIndex] = obj;
         // arr.push(obj);
+        console.log("arr", arr);
         return arr;
       });
       // setCurrQues(obj.quesId);
       setquesText(obj.ques);
       setOptionsArr(obj.options);
       setcorrAns(obj.answer);
-      displayToast("Question updated successfully!");
+      displayToast(
+        "Question updated successfully!",
+        "linear-gradient(to right, #00b09b, #96c93d)"
+      );
     }
   }
 
@@ -93,11 +115,15 @@ const CreateCustomSider = () => {
     setcorrAns(quesList[currQues].answer);
   }
 
-  function onPublish(quizDept, quizTitle) {
-    if (quizDept === "") {
-      displayToast("Please select a department!");
+  function onPublish(quizDept, quizTitle, quizCode) {
+    if (quizTitle === "") {
+      displayToast("Please enter Quiz Title!", "red");
+    } else if (quizCode === "") {
+      displayToast("Please enter Quiz Code!", "red");
+    } else if (quizDept === "") {
+      displayToast("Please select a department!", "red");
     } else if (quesList.length <= 1) {
-      displayToast("Please add a question");
+      displayToast("Please add a question", "red");
     } else {
       let res = window.confirm("Are you sure you want to publish the Quiz?");
       if (res) {
@@ -107,6 +133,7 @@ const CreateCustomSider = () => {
             {
               quizTitle: quizTitle,
               questions: quesList,
+              quizCode: quizCode,
             },
           ],
         };
@@ -118,15 +145,19 @@ const CreateCustomSider = () => {
           data[findDept]["quiz-list"].push({
             quizTitle: quizTitle,
             questions: quesList,
+            quizCode: quizCode,
           });
         } else {
           data.push(publishData);
         }
-        console.log("publishData", publishData);
+        // console.log("publishData", publishData);
 
         localStorage.setItem("quizData", JSON.stringify(data));
 
-        displayToast("Quiz Published Successfully!");
+        displayToast(
+          "Quiz Published Successfully!",
+          "linear-gradient(to right, #00b09b, #96c93d)"
+        );
         navigate("/admin/dashboard");
       }
     }
@@ -134,11 +165,19 @@ const CreateCustomSider = () => {
 
   return (
     <div className="h-screen">
-      <CreateNavbar onPublish={onPublish} />
+      <CreateNavbar
+        onPublish={onPublish}
+        dept={dept}
+        existQuizData={existQuizData}
+      />
 
       {/* Sider & Content Container  */}
       <div className="flex h-[82%]">
-        <CreateSider currQues={currQues} setCurrQues={setCurrQues} />
+        <CreateSider
+          currQues={currQues}
+          setCurrQues={setCurrQues}
+          existQuizData={existQuizData}
+        />
         {/* Content  */}
         <div className=" h-full p-5 w-full">
           <div className="bg-gray-100 h-full rounded-lg ">

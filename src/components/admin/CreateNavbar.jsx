@@ -8,18 +8,20 @@ import { FaSave } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 let index = 0;
 
-const CreateNavbar = ({ onPublish }) => {
-  const [titleEdit, settitleEdit] = useState(false);
+const CreateNavbar = ({ onPublish, existQuizData, dept }) => {
   const data = JSON.parse(localStorage.getItem("quizData")) || [];
-
+  const [quizCode, setQuizCode] = useState(existQuizData.quizCode || "");
   const navigate = useNavigate();
   const deptList = data.map((i) => i["dept-name"]);
-  const [quizTitle, setQuizTitle] = useState("Untitled-1");
-  const [quizDept, setQuizDept] = useState("");
+  const [quizTitle, setQuizTitle] = useState(existQuizData.quizTitle || "");
+  const [quizDept, setQuizDept] = useState(dept || "");
   const [items, setItems] = useState(deptList);
   const [name, setName] = useState("");
   const inputRef = useRef(null);
   const titleRef = useRef(null);
+
+  // console.log("existingquizData", existingquizData);
+
   const onNameChange = (event) => {
     setName(event.target.value);
   };
@@ -36,7 +38,6 @@ const CreateNavbar = ({ onPublish }) => {
       };
       data.push(newDept);
 
-      console.log("data", data);
       localStorage.setItem("quizData", JSON.stringify(data));
     }
 
@@ -46,20 +47,9 @@ const CreateNavbar = ({ onPublish }) => {
     }, 0);
   };
 
-  // function onPublish() {
-  //   if (quizDept === "") {
-  //     alert("Please select a department!");
-  //   } else {
-  //     console.log("Title :::::: ", quizTitle);
-  //     console.log("Dept :::::: ", quizDept);
-
-  //     let res = window.confirm("Are you sure you want to publish the Quiz?");
-  //     if (res) {
-  //       alert("Quiz Publish Successfully");
-  //       navigate("/admin/dashboard");
-  //     }
-  //   }
-  // }
+  const onChangeQuizCode = (e) => {
+    setQuizCode(e.target.value.toUpperCase());
+  };
 
   // Filter `option.label` match the user type `input`
   const filterOption = (input, option) =>
@@ -81,12 +71,12 @@ const CreateNavbar = ({ onPublish }) => {
             ref={titleRef}
             value={quizTitle}
             onChange={(e) => setQuizTitle(e.target.value)}
-            disabled={titleEdit ? false : true}
-            className="p-2 rounded-lg mx-3"
+            // disabled={titleEdit ? false : true}
+            className="p-1 text-center rounded-lg mx-3"
             type="text"
-            placeholder="Untitled - 1"
+            placeholder="Quiz Title"
           />
-          <RiEdit2Fill
+          {/* <RiEdit2Fill
             onClick={() => settitleEdit(true)}
             style={{
               display: titleEdit ? "none" : "block",
@@ -108,7 +98,7 @@ const CreateNavbar = ({ onPublish }) => {
             }}
           >
             Save
-          </button>
+          </button> */}
         </div>
 
         {/* Department Input  */}
@@ -117,6 +107,7 @@ const CreateNavbar = ({ onPublish }) => {
             style={{
               width: 300,
             }}
+            defaultValue={quizDept}
             onSelect={(e) => setQuizDept(e)}
             showSearch
             optionFilterProp="children"
@@ -158,10 +149,23 @@ const CreateNavbar = ({ onPublish }) => {
         </div>
       </div>
 
+      <div>
+        <span className="text-white text-xl">Quiz Code :</span>
+        <input
+          onChange={(e) => onChangeQuizCode(e)}
+          value={quizCode}
+          maxLength={6}
+          minLength={6}
+          className="p-1 text-center w-[120px]  rounded-lg mx-3"
+          type="text"
+          placeholder="E.g. 'ABCD12' "
+        />
+      </div>
+
       {/* Publish Button  */}
       <div className="flex me-16 ">
         <button
-          onClick={() => onPublish(quizDept, quizTitle)}
+          onClick={() => onPublish(quizDept, quizTitle, quizCode)}
           style={{
             boxShadow: "3px 3px 0px #04c1cc",
           }}

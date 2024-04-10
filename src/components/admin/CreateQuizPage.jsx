@@ -36,9 +36,20 @@ const CreateQuizPage = ({
     setcorrAns(e.target.value);
   };
 
-  const { quesList, setquesList } = useContext(QuestionContextAPI);
+  console.log("quesText", quesText);
 
-  const existQuesId = quesList[currQues - 1].quesId;
+  let { quesList, setquesList } = useContext(QuestionContextAPI);
+
+  // if (isEdit) {
+  //   console.log("quesList", quesList);
+
+  //   quesList = existingquizData.quizData.questions;
+
+  //   console.log("quesList", quesList);
+  //   console.log("existingquizData", existingquizData);
+  // }
+
+  const existQuesId = quesList[currQues - 1]?.quesId || -1;
 
   function onQuesChange(e) {
     setquesText(e.target.value);
@@ -79,7 +90,7 @@ const CreateQuizPage = ({
   }
 
   return (
-    <div className="flex flex-col bg-black rounded-lg text-white h-full items-center">
+    <div className="flex flex-col  rounded-lg  h-full items-center">
       {/* Question Container  */}
       <div className=" flex justify-center  items-center w-full h-[45%] ">
         <div className="w-[90%] h-[80%] rounded-lg flex justify-center  border-2 border-black text-3xl items-center ">
@@ -88,7 +99,7 @@ const CreateQuizPage = ({
             value={quesText}
             onChange={(e) => onQuesChange(e)}
             style={{ resize: "none" }}
-            className="w-full h-full flex justify-center text-center pt-20 items-center bg-gray-500 text-white rounded-lg"
+            className="w-full h-full flex justify-center text-center pt-20 items-center bg-violet-300  rounded-lg"
           ></textarea>
         </div>
       </div>
@@ -115,7 +126,7 @@ const CreateQuizPage = ({
               onChange={(e) => onOptionChange(e, 0)}
               value={optionsArr[0]}
               style={{ resize: "none" }}
-              className="w-full text-center h-full pt-20 px-3 block align-middle  bg-blue-500 rounded-lg "
+              className="w-full text-center h-full pt-20 px-3 block align-middle  bg-blue-300 rounded-lg "
             ></textarea>
           </div>
           <div className=" w-[200px] h-[200px] rounded-lg border-2 border-black flex justify-center items-center text-xl">
@@ -124,7 +135,7 @@ const CreateQuizPage = ({
               onChange={(e) => onOptionChange(e, 1)}
               value={optionsArr[1]}
               style={{ resize: "none" }}
-              className="w-full text-center h-full pt-20 px-3 block align-middle  bg-red-500 rounded-lg "
+              className="w-full text-center h-full pt-20 px-3 block align-middle  bg-red-300 rounded-lg "
             ></textarea>
           </div>
           <div className=" w-[200px] h-[200px] rounded-lg border-2 border-black flex justify-center items-center text-xl">
@@ -133,7 +144,7 @@ const CreateQuizPage = ({
               onChange={(e) => onOptionChange(e, 2)}
               value={optionsArr[2]}
               style={{ resize: "none" }}
-              className="w-full text-center h-full pt-20 px-3 block align-middle  bg-green-500 rounded-lg "
+              className="w-full text-center h-full pt-20 px-3 block align-middle  bg-green-300 rounded-lg "
             ></textarea>
           </div>
           <div className=" w-[200px] h-[200px] rounded-lg border-2 border-black flex justify-center items-center text-xl">
@@ -142,7 +153,7 @@ const CreateQuizPage = ({
               onChange={(e) => onOptionChange(e, 3)}
               value={optionsArr[3]}
               style={{ resize: "none" }}
-              className="w-full text-center h-full pt-20 px-3 block align-middle  bg-yellow-500 rounded-lg "
+              className="w-full text-center h-full pt-20 px-3 block align-middle  bg-yellow-300 rounded-lg "
             ></textarea>
           </div>
         </div>

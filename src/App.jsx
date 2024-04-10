@@ -75,6 +75,10 @@ function App() {
       path: "/admin/create-quiz",
       element: <AdminProtectedRoute Component={<CreateCustomSider />} />,
     },
+    {
+      path: "/admin/edit-quiz/:dept/:quiz",
+      element: <AdminProtectedRoute Component={<CreateCustomSider />} />,
+    },
 
     {
       path: "/participant",

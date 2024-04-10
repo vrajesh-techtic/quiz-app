@@ -28,9 +28,9 @@ import { QuestionContextAPI } from "./AdminContextAPI";
 //   },
 // ];
 
-const CreateSider = ({ currQues, setCurrQues }) => {
+const CreateSider = ({ currQues, setCurrQues, existQuizData }) => {
   const { quesList, setquesList } = useContext(QuestionContextAPI);
-
+console.log(existQuizData);
   quesList.sort((a, b) => {
     if (a.quesId === -1 || b.quesId === -1) {
       return 1;

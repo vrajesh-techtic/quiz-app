@@ -1,10 +1,26 @@
 import React, { useContext, useState } from "react";
 import AdminContextAPI from "./AdminContextAPI";
+import { useEffect } from "react";
+import axios from "axios";
+import { demoActions } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
 
 const QuizList = () => {
   const [deptNo, setdeptNo] = useState(0);
 
-  const data = JSON.parse(localStorage.getItem("quizData")) || [];
+  const dispatch = useDispatch();
+  const { setDeptList } = demoActions;
+  const data = useSelector((state) => state.deptList) || [];
+  console.log("data", data);
+  useEffect(() => {
+    const fetchDeptList = async () => {
+      const fetchData = await axios.get("http://localhost:5000/get-dept-list");
+
+      dispatch(setDeptList(fetchData.data.data));
+    };
+
+    fetchDeptList();
+  }, []);
 
   return (
     <>
@@ -18,7 +34,7 @@ const QuizList = () => {
 
         {/* List Container  */}
 
-        {data.length ? (
+        {data ? (
           <div className=" h-[500px] mt-8  rounded-lg mx-auto w-[95%] flex justify-start ">
             {/* Department List  */}
             <div className="flex justify-center bg-gray-100 rounded-lg p-2 w-[25%]">
@@ -34,7 +50,7 @@ const QuizList = () => {
                     key={index}
                     className=" my-1 text-lg text-white font-medium  rounded-lg cursor-pointer w-full text-center p-2 "
                   >
-                    {i["dept-name"]}
+                    {i}
                   </li>
                 ))}
               </ul>
@@ -42,7 +58,7 @@ const QuizList = () => {
 
             {/* Quiz List  */}
             <div className="quiz-list-container  bg-gray-100  mx-2 rounded-lg p-4 w-[75%]">
-              <ul className=" dept-list flex flex-col px-2 items-center h-full overflow-auto ">
+              {/* <ul className=" dept-list flex flex-col px-2 items-center h-full overflow-auto ">
                 {data &&
                   data[deptNo] &&
                   data[deptNo]["quiz-list"]?.map((i, index) => (
@@ -53,7 +69,7 @@ const QuizList = () => {
                       {i.quizTitle}
                     </li>
                   ))}
-              </ul>
+              </ul> */}
             </div>
           </div>
         ) : (

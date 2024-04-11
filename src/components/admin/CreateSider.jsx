@@ -1,5 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { QuestionContextAPI } from "./AdminContextAPI";
+import api from "../../database/apiCall";
+import { useDispatch, useSelector } from "react-redux";
+import { demoActions } from "../../store";
+import { all } from "axios";
 
 // const quesList = [
 //   {
@@ -28,16 +32,15 @@ import { QuestionContextAPI } from "./AdminContextAPI";
 //   },
 // ];
 
-const CreateSider = ({ currQues, setCurrQues, existQuizData }) => {
-  const { quesList, setquesList } = useContext(QuestionContextAPI);
-console.log(existQuizData);
-  quesList.sort((a, b) => {
-    if (a.quesId === -1 || b.quesId === -1) {
-      return 1;
-    } else {
-      return a.quesId - b.quesId;
-    }
-  });
+const CreateSider = ({ allQues, currQues, setCurrQues }) => {
+  // console.log(existQuizData);
+  // quesList.sort((a, b) => {
+  //   if (a.quesId === -1 || b.quesId === -1) {
+  //     return 1;
+  //   } else {
+  //     return a.quesId - b.quesId;
+  //   }
+  // });
 
   return (
     <div className="w-[230px] flex flex-col items-center bg-gray-100 h-full">
@@ -48,7 +51,7 @@ console.log(existQuizData);
       {/* Question List  */}
       <div className="create-ques-list  overflow-auto flex flex-col items-center  mt-5 w-full">
         <ul className="w-[80%] h-full mx-3 ">
-          {quesList === null || quesList.length === 1 ? (
+          {allQues.length === 0 ? (
             <li
               style={{
                 backgroundColor: "#ca89fd",
@@ -59,7 +62,7 @@ console.log(existQuizData);
               Create Question
             </li>
           ) : (
-            quesList.map((i, key) => (
+            allQues.map((i, key) => (
               <li
                 key={key}
                 style={{
@@ -68,9 +71,9 @@ console.log(existQuizData);
                 onClick={() => setCurrQues(key + 1)}
                 className="cursor-pointer rounded-lg  my-2 p-2 text-center w-full"
               >
-                {i.ques.trim().length === 0
-                  ? "Create Question"
-                  : `Question ${key + 1}`}{" "}
+                {key < allQues.length - 1
+                  ? `Question ${key + 1}`
+                  : "Create Question"}
               </li>
             ))
           )}

@@ -3,6 +3,7 @@ import CreateCustomSider from "./CreateCustomSider";
 import { QuestionContextAPI } from "./AdminContextAPI";
 import Toastify from "toastify-js";
 import { Radio } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 
 const displayToast = (message) => {
   Toastify({
@@ -19,75 +20,53 @@ const displayToast = (message) => {
   }).showToast();
 };
 
-const CreateQuizPage = ({
-  currQues,
-  quesText,
-  setquesText,
-  optionsArr,
-  setOptionsArr,
-  onSave,
-  isSaved,
-  onDelete,
-  corrAns,
-  setcorrAns,
-}) => {
-  // const [value, setValue] = useState(1);
-  const onCorrectOption = (e) => {
+const CreateQuizPage = ({ quesData, quizDept, onQuestionSave }) => {
+  // console.log("quesData", quesData);
+
+  const [quesText, setquesText] = useState(quesData?.ques || "");
+  const [optionArr, setoptionArr] = useState(quesData?.options || []);
+  const [corrAns, setcorrAns] = useState(quesData?.correctAns || 0);
+  const quizCode = useSelector((state) => state.quizData.quizCode);
+
+  useEffect(() => {
+    setquesText(quesData?.ques || "");
+    setoptionArr(quesData?.options || []);
+    setcorrAns(quesData?.correctAns || 0);
+  }, [quesData]);
+
+  const onQuesChange = (e) => {
+    setquesText(e.target.value);
+  };
+
+  const onAnsChange = (e) => {
     setcorrAns(e.target.value);
   };
 
-  console.log("quesText", quesText);
+  const onOptionChange = (e, key) => {
+    let prev = [...optionArr];
+    prev[key] = e.target.value;
+    setoptionArr(prev);
+  };
 
-  let { quesList, setquesList } = useContext(QuestionContextAPI);
-
-  // if (isEdit) {
-  //   console.log("quesList", quesList);
-
-  //   quesList = existingquizData.quizData.questions;
-
-  //   console.log("quesList", quesList);
-  //   console.log("existingquizData", existingquizData);
-  // }
-
-  const existQuesId = quesList[currQues - 1]?.quesId || -1;
-
-  function onQuesChange(e) {
-    setquesText(e.target.value);
-  }
-
-  function onOptionChange(e, key) {
-    let newArr = [...optionsArr];
-    const newval = e.target.value;
-    newArr[key] = newval;
-    setOptionsArr(() => newArr);
-  }
-
-  function verifySave() {
-    if (quesText.trim() === "") {
-      // alert("Please enter question correctly!");
-      displayToast("Please enter question correctly!");
+  const verifySave = () => {
+    if (quizDept === "") {
+      displayToast("Please select a department!", "red");
+    } else if (quesText.trim() === "") {
+      displayToast("Please enter a question!", "red");
     } else if (corrAns === 0) {
-      displayToast("Select correct answer!");
-    } else if (optionsArr.findIndex((i) => i.trim() === "") !== -1) {
-      // alert("Please enter all options correctly!");
-      displayToast("Please enter all options correctly!");
+      displayToast("Please select correct option!", "red");
+    } else if (optionArr.findIndex((i) => i.trim() === "") !== -1) {
+      displayToast("Please enter all options!", "red");
     } else {
-      onSave({
-        quesId: existQuesId !== -1 ? existQuesId : currQues,
+      onQuestionSave({
+        quesId: quesData._id,
+        quizCode: quizCode,
         ques: quesText,
-        options: optionsArr,
-        isSaved: true,
-        answer: corrAns,
+        correctAns: corrAns,
+        options: optionArr,
       });
     }
-  }
-
-  function verifyDelete() {
-    const res = window.confirm("Are you sure you want to delete the question?");
-    if (res) {
-      onDelete(existQuesId);
-    }
-  }
+  };
 
   return (
     <div className="flex flex-col  rounded-lg  h-full items-center">
@@ -108,8 +87,8 @@ const CreateQuizPage = ({
         <span className="text-xl">Choose correct answer</span>
         <Radio.Group
           className="w-full flex justify-evenly"
-          onChange={onCorrectOption}
-          value={corrAns}
+          onChange={(e) => onAnsChange(e)}
+          value={parseInt(corrAns)}
         >
           <Radio className="w-[200px] flex justify-center" value={1}></Radio>
           <Radio className="w-[200px] flex justify-center" value={2}></Radio>
@@ -124,7 +103,7 @@ const CreateQuizPage = ({
             <textarea
               placeholder="Option 1"
               onChange={(e) => onOptionChange(e, 0)}
-              value={optionsArr[0]}
+              value={optionArr[0]}
               style={{ resize: "none" }}
               className="w-full text-center h-full pt-20 px-3 block align-middle  bg-blue-300 rounded-lg "
             ></textarea>
@@ -133,7 +112,7 @@ const CreateQuizPage = ({
             <textarea
               placeholder="Option 2"
               onChange={(e) => onOptionChange(e, 1)}
-              value={optionsArr[1]}
+              value={optionArr[1]}
               style={{ resize: "none" }}
               className="w-full text-center h-full pt-20 px-3 block align-middle  bg-red-300 rounded-lg "
             ></textarea>
@@ -142,7 +121,7 @@ const CreateQuizPage = ({
             <textarea
               placeholder="Option 3"
               onChange={(e) => onOptionChange(e, 2)}
-              value={optionsArr[2]}
+              value={optionArr[2]}
               style={{ resize: "none" }}
               className="w-full text-center h-full pt-20 px-3 block align-middle  bg-green-300 rounded-lg "
             ></textarea>
@@ -151,7 +130,7 @@ const CreateQuizPage = ({
             <textarea
               placeholder="Option 4"
               onChange={(e) => onOptionChange(e, 3)}
-              value={optionsArr[3]}
+              value={optionArr[3]}
               style={{ resize: "none" }}
               className="w-full text-center h-full pt-20 px-3 block align-middle  bg-yellow-300 rounded-lg "
             ></textarea>
@@ -169,16 +148,16 @@ const CreateQuizPage = ({
             Save
           </button>
 
-          {isSaved && existQuesId !== -1 ? (
-            <button
-              onClick={verifyDelete}
-              className="bg-[#04c1cc] w-[70px] p-2 mx-3 rounded-lg font-medium"
-            >
-              Delete
-            </button>
-          ) : (
+          {/* {isSaved && existQuesId !== -1 ? ( */}
+          <button
+            // onClick={verifyDelete}
+            className="bg-[#04c1cc] w-[70px] p-2 mx-3 rounded-lg font-medium"
+          >
+            Delete
+          </button>
+          {/* ) : (
             ""
-          )}
+          )} */}
         </div>
       </div>
     </div>

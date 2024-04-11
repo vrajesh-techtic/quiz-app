@@ -28,7 +28,7 @@ const displayToast = (message, color) => {
 const CreateCustomSider = ({ isEdit }) => {
   const generateQuizCode = () => {
     const quizCodeArr = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 6; i++) {
       quizCodeArr.push(Math.ceil(65 + Math.random() * 25));
     }
 
@@ -37,12 +37,13 @@ const CreateCustomSider = ({ isEdit }) => {
       quizCodeArr[1],
       quizCodeArr[2],
       quizCodeArr[3],
-      quizCodeArr[4]
+      quizCodeArr[4],
+      quizCodeArr[5]
     );
 
     return quizCode;
   };
-  console.log("Custom Sider");
+  // console.log("Custom Sider");
   const dispatch = useDispatch();
   const { setQuestions, setCurrQuesData, setQuizCode } = demoActions;
   const [quizTitle, setquizTitle] = useState("");
@@ -68,6 +69,7 @@ const CreateCustomSider = ({ isEdit }) => {
         quizCode: "",
         options: ["", "", "", ""],
         correctAns: 0,
+        isSaved: false,
       });
       dispatch(setQuestions(resp.data));
       dispatch(setQuizCode(genquizCode));
@@ -100,10 +102,24 @@ const CreateCustomSider = ({ isEdit }) => {
           updateQues.message,
           "linear-gradient(to right, #00b09b, #96c93d)"
         );
-
+        setcurrQues(currQues + 1);
         await fetchAllQuestions();
       } else {
         displayToast(updateQues.message, "red");
+      }
+    } else {
+      const addQues = await api
+        .post("/add-question", obj)
+        .then((res) => res.data);
+      if (addQues.status) {
+        displayToast(
+          addQues.message,
+          "linear-gradient(to right, #00b09b, #96c93d)"
+        );
+        setcurrQues(currQues + 1);
+        await fetchAllQuestions();
+      } else {
+        displayToast(addQues.message, "red");
       }
     }
   };

@@ -34,7 +34,7 @@ const QuizList = () => {
 
         {/* List Container  */}
 
-        {data ? (
+        {data && data.length ? (
           <div className=" h-[500px] mt-8  rounded-lg mx-auto w-[95%] flex justify-start ">
             {/* Department List  */}
             <div className="flex justify-center bg-gray-100 rounded-lg p-2 w-[25%]">

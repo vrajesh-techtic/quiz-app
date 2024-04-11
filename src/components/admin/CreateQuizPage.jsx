@@ -64,6 +64,7 @@ const CreateQuizPage = ({ quesData, quizDept, onQuestionSave }) => {
         ques: quesText,
         correctAns: corrAns,
         options: optionArr,
+        isSaved: true,
       });
     }
   };
@@ -149,12 +150,14 @@ const CreateQuizPage = ({ quesData, quizDept, onQuestionSave }) => {
           </button>
 
           {/* {isSaved && existQuesId !== -1 ? ( */}
-          <button
-            // onClick={verifyDelete}
-            className="bg-[#04c1cc] w-[70px] p-2 mx-3 rounded-lg font-medium"
-          >
-            Delete
-          </button>
+          {quesData?.isSaved === false ? null : (
+            <button
+              // onClick={verifyDelete}
+              className="bg-[#04c1cc] w-[70px] p-2 mx-3 rounded-lg font-medium"
+            >
+              Delete
+            </button>
+          )}
           {/* ) : (
             ""
           )} */}

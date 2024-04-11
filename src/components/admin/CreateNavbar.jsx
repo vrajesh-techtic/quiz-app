@@ -171,7 +171,7 @@ const CreateNavbar = ({
         </span>
       </div>
 
-      {/* Publish Button  */}
+      {/* Save Button  */}
       <div className="flex me-16 ">
         <button
           // onClick={() => onPublish(quizDept, quizTitle, quizCode)}
@@ -181,7 +181,7 @@ const CreateNavbar = ({
           className="flex items-center p-2 w-[125px] text-white rounded-lg justify-between bg-[#ca89fd]"
         >
           <FaSave />
-          Publish Quiz
+          Save Quiz
         </button>
       </div>
     </div>

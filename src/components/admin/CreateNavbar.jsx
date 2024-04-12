@@ -11,6 +11,7 @@ import { demoActions } from "../../store";
 import axios from "axios";
 import Toastify from "toastify-js";
 import api from "../../database/apiCall";
+import { quizActions } from "../../store/quizReducers";
 // import localhost from "../../database/apiCall";
 
 const displayToast = (message, color) => {
@@ -38,7 +39,7 @@ const CreateNavbar = ({
   setquizDept,
 }) => {
   const dispatch = useDispatch();
-  const { setDeptList, addDept } = demoActions;
+  const { setDeptList, addDept } = quizActions;
   const quizCode = useSelector((state) => state.quizData.quizCode);
 
   const deptList = useSelector((state) => state.deptList) || [];

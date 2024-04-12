@@ -145,7 +145,7 @@ function MainNavBar() {
               </button>
               <button
                 className=" bg-[#04c1cc] flex font-medium mx-2 p-2 rounded-md items-center"
-                onClick={() => navigate("/admin")}
+                onClick={() => navigate("/admin/signup")}
               >
                 <UserOutlined />
                 <span className="ms-1">Admin</span>

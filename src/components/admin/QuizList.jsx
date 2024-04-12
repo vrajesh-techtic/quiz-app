@@ -4,12 +4,13 @@ import { useEffect } from "react";
 import axios from "axios";
 import { demoActions } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
+import { quizActions } from "../../store/quizReducers";
 
 const QuizList = () => {
   const [deptNo, setdeptNo] = useState(0);
 
   const dispatch = useDispatch();
-  const { setDeptList } = demoActions;
+  const { setDeptList } = quizActions;
   const data = useSelector((state) => state.deptList) || [];
   console.log("data", data);
   useEffect(() => {

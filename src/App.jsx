@@ -22,6 +22,7 @@ import AdminContextAPI, {
 import { dataAdmin } from "./components/admin/DataAdmin";
 import { useState } from "react";
 import CreateCustomSider from "./components/admin/CreateCustomSider";
+import AdminSignUp from "./components/admin/AdminSignUp";
 
 function App() {
   const adminData = dataAdmin;
@@ -52,8 +53,12 @@ function App() {
       element: <HomePage />,
     },
     {
-      path: "/admin",
+      path: "/admin/login",
       element: <AdminLogin />,
+    },
+    {
+      path: "/admin/signup",
+      element: <AdminSignUp />,
     },
     {
       path: "/admin/authenticate",

@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import api from "../../database/apiCall";
 import { demoActions } from "../../store";
 import CreateQuizPage from "./CreateQuizPage";
+import { quizActions } from "../../store/quizReducers";
 
 const displayToast = (message, color) => {
   Toastify({
@@ -45,7 +46,7 @@ const CreateCustomSider = ({ isEdit }) => {
   };
   // console.log("Custom Sider");
   const dispatch = useDispatch();
-  const { setQuestions, setCurrQuesData, setQuizCode } = demoActions;
+  const { setQuestions, setCurrQuesData, setQuizCode } = quizActions;
   const [quizTitle, setquizTitle] = useState("");
   const [quizDept, setquizDept] = useState("");
   const [currQues, setcurrQues] = useState(1);

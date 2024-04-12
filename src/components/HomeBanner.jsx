@@ -21,7 +21,7 @@ const HomeBanner = () => {
         <div className="flex  w-[760px] ms-8 mt-8">
           <div>
             <button
-              onClick={() => navigate("/admin")}
+              onClick={() => navigate("/admin/signup")}
               style={{ boxShadow: "4px 4px 0px 2px black" }}
               className=" bg-[#ca89fd] w-[150px] text-xl text-white justify-center flex font-medium mx-6 px-4 py-3 rounded-md items-center"
             >

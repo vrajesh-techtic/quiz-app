@@ -105,7 +105,7 @@ const VerifiedAdminLogin = () => {
             htmlType="submit"
             className="login-form-button w-[200px] text-lg flex justify-center items-center bg-blue-500"
           >
-           Sign Up
+            Sign Up
           </Button>
         </Form.Item>
       </Form>

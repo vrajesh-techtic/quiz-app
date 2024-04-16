@@ -1,7 +1,7 @@
 import React from "react";
 
-import MainNavBar from "./MainNavBar";
-import HomeBanner from "./HomeBanner";
+import MainNavBar from "../components/MainNavBar";
+import HomeBanner from "../components/HomeBanner";
 
 function ResponsiveAppBar() {
   return (

@@ -6,10 +6,24 @@ import { BiRename } from "react-icons/bi";
 // import { Formik, Field, ErrorMessage } from "formik";
 
 import { RiLockPasswordLine } from "react-icons/ri";
+import axios from "axios";
 
 const VerifiedAdminLogin = () => {
-  const onFinish = () => {
-    console.log("Correct data");
+  const navigate = useNavigate();
+
+  const onFinish = async (data) => {
+    const email = JSON.parse(localStorage.getItem("adminEmail")).email;
+    console.log("data", data);
+
+    const api = await axios
+      .post("http://localhost:5000/add-admin", { ...data, email })
+      .then((res) => res.data);
+
+    console.log("api", api);
+
+    // localStorage.setItem("adminEmail", JSON.stringify(obj));
+
+    // navigate("/admin/dashboard");
   };
 
   const onFinishFailed = () => {
@@ -54,7 +68,7 @@ const VerifiedAdminLogin = () => {
             {
               type: "string",
               required: true,
-              message: "Name is required !",
+              message: "Username is required !",
             },
           ]}
         >
@@ -67,9 +81,9 @@ const VerifiedAdminLogin = () => {
           name="password"
           rules={[
             {
-              type: "password",
+              type: "string",
               required: true,
-              message: "Please enter correct email !",
+              message: "Please enter password !",
             },
           ]}
         >
@@ -86,9 +100,9 @@ const VerifiedAdminLogin = () => {
           name="confirmPassword"
           rules={[
             {
-              type: "password",
+              type: "string",
               required: true,
-              message: "Please enter correct email !",
+              message: "Please enter confirm password !",
             },
           ]}
         >

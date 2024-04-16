@@ -3,6 +3,7 @@ import { Button, Checkbox, Form, Input, Spin, notification } from "antd";
 import { MailOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import WithoutAuth from "../auth/WithoutAuth";
 
 // import main from '../server/mailer';
 
@@ -169,4 +170,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default WithoutAuth(AdminLogin);

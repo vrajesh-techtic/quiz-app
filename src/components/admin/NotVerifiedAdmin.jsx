@@ -3,12 +3,15 @@ import { Button, Checkbox, Form, Input, Spin, notification } from "antd";
 import { MailOutlined, UserOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { adminActions } from "../../store/adminReducers";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const NotVerifiedAdmin = ({ setSpinning }) => {
+const NotVerifiedAdmin = ({ setSpinning, setIsVerified }) => {
   const prevData = useSelector((state) => state.adminReducers.adminData);
   const [adminData, setadminData] = useState(prevData || {});
   const dispatch = useDispatch();
   const { setAdminData } = adminActions;
+  const navigate = useNavigate();
 
   useEffect(() => {
     setadminData(prevData);
@@ -19,11 +22,28 @@ const NotVerifiedAdmin = ({ setSpinning }) => {
     }
   }, [adminData]);
 
-  const onFinish = (data) => {
+  const onFinish = async (data) => {
     console.log("onfinish");
 
+    const api = await axios
+      .post("http://localhost:5000/send-otp", {
+        email: data.email,
+      })
+      .then((res) => res);
+
+    console.log("api", await api);
+
+    const obj = { email: data.email, verified: false };
+
+    localStorage.setItem("adminEmail", JSON.stringify(obj));
+
     dispatch(setAdminData(data));
-    // setSpinning(() => true);
+    setSpinning(() => true);
+    setTimeout(() => {
+      setSpinning(false);
+      localStorage.setItem("adminOTP", 1234);
+      navigate("/admin/authenticate");
+    }, 1000);
   };
 
   const onFinishFailed = () => {

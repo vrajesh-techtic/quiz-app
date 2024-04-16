@@ -5,48 +5,67 @@ import { useNavigate } from "react-router-dom";
 import { Spin } from "antd";
 import axios from "axios";
 import ContextAPI from "../participants/ContextAPI";
+import WithoutAuth from "../../auth/WithoutAuth";
 
 const OTPPage = () => {
   console.log("OTP Page");
+  const obj = JSON.parse(localStorage.getItem("adminEmail"));
+  let email = obj?.email || "";
+  const navigate = useNavigate();
+
+  // if (obj?.verified) {
+  //   navigate("/admin/dashboard");
+  // }
+
+  // useEffect(() => {
+  //   async function isUserValid() {
+  //     const api = await axios
+  //       .post("http://localhost:5000/verify-otp", {
+  //         otp: "4567",
+  //         email,
+  //       })
+  //       .then((res) => res.data);
+
+  //     console.log("api", api);
+
+  //     if (api.status) {
+  //       obj.verified = true;
+  //       localStorage.setItem("adminEmail", JSON.stringify(obj));
+  //     }
+  //   }
+
+  //   isUserValid();
+  // }, []);
 
   const [spinning, setSpinning] = useState(false);
-  const { isUserAuth, setisUserAuth } = useContext(ContextAPI);
+  // const { isUserAuth, setisUserAuth } = useContext(ContextAPI);
 
   const showLoader = () => {
     setSpinning(true);
     setTimeout(() => {
       setSpinning(false);
-      navigate("/admin/create-quiz");
+      navigate("/admin/signup");
     }, 2000);
   };
 
-  const navigate = useNavigate();
-
-  let userEmail = Object.keys(sessionStorage)[0];
+  // let userEmail = Object.keys(sessionStorage)[0];
 
   async function verifyOTP(enteredOTP) {
     try {
-      let verificationAPI = await axios.post(
-        "http://localhost:5000/verify-otp",
-        {
+      const verificationAPI = await axios
+        .post("http://localhost:5000/verify-otp", {
           otp: parseInt(enteredOTP),
-          userEmail,
-        }
-      );
+          email,
+        })
+        .then((res) => res);
 
-      if (verificationAPI.data.statusCode === 500) {
-        return {
-          status: false,
-          message: verificationAPI.data.message,
-        };
-      } else if (verificationAPI.data.statusCode === 200) {
-        setisUserAuth(() => true);
-
-        return {
-          status: true,
-          message: verificationAPI.data.message,
-        };
+      console.log("verificationAPI", verificationAPI.data);
+      if (verificationAPI.data.status) {
+        // obj.verified = true;
+        // localStorage.setItem("adminEmail", JSON.stringify(obj));
       }
+
+      return verificationAPI.data;
     } catch (error) {
       console.log(error);
     }
@@ -66,4 +85,4 @@ const OTPPage = () => {
   );
 };
 
-export default OTPPage;
+export default WithoutAuth(OTPPage);

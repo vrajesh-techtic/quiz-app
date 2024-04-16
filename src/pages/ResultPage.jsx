@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 
-import ContextAPI from "./ContextAPI";
+import ContextAPI from "../components/participants/ContextAPI";
 import {
   CircularProgressbarWithChildren,
   buildStyles,
 } from "react-circular-progressbar";
+import ParticipantWithAuth from "../auth/ParticipantWithAuth";
 
 function calculateResult(finalAns, correctAnsArr) {
   let score = 0;
@@ -27,7 +28,7 @@ const ResultPage = () => {
   const unAttempted = resultDetails.unAttempted;
 
   console.log("unAttempted", unAttempted);
-  localStorage.removeItem("login");
+  localStorage.removeItem("participantEmail");
   const percentage = ((score / (totalQues - unAttempted)) * 100).toFixed(2);
 
   return (
@@ -101,4 +102,4 @@ const ResultPage = () => {
   );
 };
 
-export default ResultPage;
+export default ParticipantWithAuth(ResultPage);

@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import ContextAPI from "./ContextAPI";
+import ParticipantWithAuth from "../../auth/ParticipantWithAuth";
 
 function calculateAttempted(userAns) {
   let totalQues = Object.entries(userAns).length - 1;
@@ -81,4 +82,4 @@ const SubmitModal = ({ modalOpen, setModalOpen }) => {
   );
 };
 
-export default SubmitModal;
+export default ParticipantWithAuth(SubmitModal);

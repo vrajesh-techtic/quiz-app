@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import CreateNavbar from "./CreateNavbar";
-import CreateSider from "./CreateSider";
-import Footer from "./Footer";
+import CreateNavbar from "../components/admin/CreateNavbar";
+import CreateSider from "../components/admin/CreateSider";
+import Footer from "../components/admin/Footer";
 import Toastify from "toastify-js";
 
 import { useDispatch, useSelector } from "react-redux";
-import api from "../../database/apiCall";
-import { demoActions } from "../../store";
-import CreateQuizPage from "./CreateQuizPage";
-import { quizActions } from "../../store/quizReducers";
+import api from "../database/apiCall";
+import { demoActions } from "../store";
+import CreateQuizPage from "../components/admin/CreateQuizPage";
+import { quizActions } from "../store/quizReducers";
+import WithAuth from "../auth/WithAuth";
 
 const displayToast = (message, color) => {
   Toastify({
@@ -158,4 +159,4 @@ const CreateCustomSider = ({ isEdit }) => {
   );
 };
 
-export default CreateCustomSider;
+export default WithAuth(CreateCustomSider);

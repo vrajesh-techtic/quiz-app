@@ -15,9 +15,9 @@ const QuizList = () => {
   console.log("data", data);
   useEffect(() => {
     const fetchDeptList = async () => {
-      const fetchData = await axios.get("http://localhost:5000/get-dept-list");
+      // const fetchData = await axios.get("http://localhost:5000/get-dept-list");
 
-      dispatch(setDeptList(fetchData.data.data));
+      // dispatch(setDeptList(fetchData.data.data));
     };
 
     fetchDeptList();

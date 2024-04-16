@@ -2,6 +2,7 @@ import { Modal, Spin } from "antd";
 import React, { useState } from "react";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import questionBank from "../../questions/questionBank";
+import ParticipantWithAuth from "../../auth/ParticipantWithAuth";
 
 const ResultModal = ({ modalOpen, setModalOpen, userAns, correctAns }) => {
   function countPoints(userAns, correctAns, n) {
@@ -70,4 +71,4 @@ const ResultModal = ({ modalOpen, setModalOpen, userAns, correctAns }) => {
   );
 };
 
-export default ResultModal;
+export default ParticipantWithAuth(ResultModal);

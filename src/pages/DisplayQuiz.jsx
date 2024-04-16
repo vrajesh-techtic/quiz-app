@@ -1,14 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import Question from "./Question";
-import questionBank from "../../questions/questionBank";
+import Question from "../components/participants/Question";
+import questionBank from "../questions/questionBank";
 
 import { Layout, Menu, theme } from "antd";
-import logo from "../../assets/banner-without-bg.png";
-import SubmitModal, { showPromiseConfirm } from "./SubmitModal";
+import logo from "../assets/banner-without-bg.png";
+import SubmitModal, {
+  showPromiseConfirm,
+} from "../components/participants/SubmitModal";
 import Sider from "antd/es/layout/Sider";
 import { Content, Footer, Header } from "antd/es/layout/layout";
-import ContextAPI from "./ContextAPI";
+import ContextAPI from "../components/participants/ContextAPI";
+import ParticipantWithAuth from "../auth/ParticipantWithAuth";
 
 const DisplayQuiz = ({ timer }) => {
   console.log("Display Quiz");
@@ -177,4 +180,4 @@ const DisplayQuiz = ({ timer }) => {
     </>
   );
 };
-export default DisplayQuiz;
+export default ParticipantWithAuth(DisplayQuiz);

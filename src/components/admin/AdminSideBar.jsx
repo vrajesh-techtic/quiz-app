@@ -12,6 +12,7 @@ import {
 } from "@ant-design/icons";
 import { Box, MenuItem, Typography } from "@mui/material";
 import AdminContextAPI from "./AdminContextAPI";
+import WithAuth from "../../auth/WithAuth";
 
 const AdminSideBar = ({ children, selectedKeys = 1 }) => {
   const navigate = useNavigate();
@@ -45,11 +46,8 @@ const AdminSideBar = ({ children, selectedKeys = 1 }) => {
   const [currItem, setcurrItem] = useState(1);
 
   function logOut() {
-    let res = window.confirm("Are you sure you want to logout?");
-    if (res) {
-      localStorage.removeItem("admin");
-      navigate("/admin");
-    }
+    localStorage.removeItem("adminEmail");
+    navigate("/");
   }
 
   return (
@@ -224,4 +222,4 @@ const AdminSideBar = ({ children, selectedKeys = 1 }) => {
   );
 };
 
-export default AdminSideBar;
+export default WithAuth(AdminSideBar);

@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import CreateCustomSider from "./CreateCustomSider";
+import CreateCustomSider from "../../pages/CreateCustomSider";
 import { QuestionContextAPI } from "./AdminContextAPI";
 import Toastify from "toastify-js";
 import { Radio } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import WithAuth from "../../auth/WithAuth";
 
 const displayToast = (message) => {
   Toastify({
@@ -167,4 +168,4 @@ const CreateQuizPage = ({ quesData, quizDept, onQuestionSave }) => {
   );
 };
 
-export default CreateQuizPage;
+export default WithAuth(CreateQuizPage);

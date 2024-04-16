@@ -1,28 +1,25 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
-
 import OTPPage from "./components/admin/OTPPage";
 import ContextAPI from "./components/participants/ContextAPI";
-import DisplayQuiz from "./components/participants/DisplayQuiz";
-import ResultPage from "./components/participants/ResultPage";
-import QuizTimer from "./components/participants/QuizTimer";
+import DisplayQuiz from "./pages/DisplayQuiz";
+import ResultPage from "./pages/ResultPage";
+import QuizTimer from "./components/QuizTimer";
 import questionBank from "./questions/questionBank";
-import UserLogin from "./components/participants/UserLogin";
-import ProtectedRoute from "./components/participants/ParticipantsProtectedRoute";
-import AdminProtectedRoute from "./components/admin/AdminProtectedRoute";
-import AdminLogin from "./components/admin/AdminLoginForm";
-import AdminDashboard from "./components/admin/AdminDashboard";
-import AdminProfile from "./components/admin/AdminProfile";
-import HomePage from "./components/HomePage";
-import AdminLibrary from "./components/admin/AdminLibrary";
+import UserLogin from "./pages/UserLogin";
+import AdminLogin from "./pages/AdminLoginForm";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminProfile from "./pages/AdminProfile";
+import HomePage from "./pages/HomePage";
+import AdminLibrary from "./pages/AdminLibrary";
 import CreateQuizPage from "./components/admin/CreateQuizPage";
 import AdminContextAPI, {
   QuestionContextAPI,
 } from "./components/admin/AdminContextAPI";
 import { dataAdmin } from "./components/admin/DataAdmin";
 import { useState } from "react";
-import CreateCustomSider from "./components/admin/CreateCustomSider";
-import AdminSignUp from "./components/admin/AdminSignUp";
+import CreateCustomSider from "./pages/CreateCustomSider";
+import AdminSignUp from "./pages/AdminSignUp";
 
 function App() {
   const adminData = dataAdmin;
@@ -62,40 +59,36 @@ function App() {
     },
     {
       path: "/admin/authenticate",
-      element: <AdminProtectedRoute Component={<OTPPage />} />,
+      element: <OTPPage />,
     },
     {
       path: "/admin/dashboard",
-      element: <AdminProtectedRoute Component={<AdminDashboard />} />,
+      element: <AdminDashboard />,
     },
     {
       path: "/admin/library",
-      element: <AdminProtectedRoute Component={<AdminLibrary />} />,
+      element: <AdminLibrary />,
     },
     {
       path: "/admin/profile",
-      element: <AdminProtectedRoute Component={<AdminProfile />} />,
+      element: <AdminProfile />,
     },
     {
       path: "/admin/create-quiz",
-      element: (
-        <AdminProtectedRoute Component={<CreateCustomSider isEdit={false} />} />
-      ),
+      element: <CreateCustomSider isEdit={false} />,
     },
     {
       path: "/admin/edit-quiz/:dept/:quiz",
-      element: (
-        <AdminProtectedRoute Component={<CreateCustomSider isEdit={true} />} />
-      ),
+      element: <CreateCustomSider isEdit={true} />,
     },
 
     {
-      path: "/participant",
+      path: "/participant/login",
       element: <UserLogin />,
     },
     {
       path: "/participant/display-quiz",
-      element: <ProtectedRoute Component={<DisplayQuiz timer={timer} />} />,
+      element: <DisplayQuiz timer={timer} />,
     },
     { path: "/participant/result", element: <ResultPage /> },
   ]);

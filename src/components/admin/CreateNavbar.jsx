@@ -12,6 +12,7 @@ import axios from "axios";
 import Toastify from "toastify-js";
 import api from "../../database/apiCall";
 import { quizActions } from "../../store/quizReducers";
+import WithAuth from "../../auth/WithAuth";
 // import localhost from "../../database/apiCall";
 
 const displayToast = (message, color) => {
@@ -189,4 +190,4 @@ const CreateNavbar = ({
   );
 };
 
-export default CreateNavbar;
+export default WithAuth(CreateNavbar);

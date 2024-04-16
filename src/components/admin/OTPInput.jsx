@@ -1,12 +1,13 @@
 // OtpInput.jsx
 
-import { Spin, notification } from "antd";
+import { Spin, message, notification } from "antd";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
   console.log("OTP Input");
   const [otp, setOtp] = useState(new Array(length).fill(""));
-
+  const navigate = useNavigate();
   const inputRefs = useRef([]);
 
   const [displayMsg, setDisplayMsg] = useState(true);
@@ -35,12 +36,16 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (isVerified.status) {
-      openNotificationWithIcon("success");
-      showLoader();
-    }
-  }, [isVerified]);
+  // useEffect(() => {
+  //   return () => {
+  //     if (isVerified?.status) {
+  //       openNotificationWithIcon("success");
+  //       showLoader();
+  //     } else {
+  //       openNotificationWithIcon("error");
+  //     }
+  //   };
+  // }, [isVerified]);
 
   const handleChange = async (index, e) => {
     const value = e.target.value;
@@ -55,6 +60,15 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
     combinedOtp = newOtp.join("");
     if (combinedOtp.length === length) {
       const apiData = await onOtpSubmit(combinedOtp);
+
+      if (apiData.status) {
+        openNotificationWithIcon("success");
+
+        showLoader();
+      } else {
+        openNotificationWithIcon("error");
+      }
+
       setisVerified(() => apiData);
     }
 
@@ -108,14 +122,14 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
       </div>
 
       <div className=" bg-white  py-2 rounded-lg w-[500px] h-[70px] flex items-center justify-center text-red-400  mt-8 text-xl ">
-        {displayMsg ? (
-          <span className="text-center">
-            Please Check your e-mail address. You have might received an OTP for
-            Verification.
-          </span>
-        ) : isVerified.status === false ? (
+        <span className="text-center">
+          Please Check your e-mail address. You have might received an OTP for
+          Verification.
+        </span>
+        {/* {displayMsg ? (
+        ) : isVerified?.status === false ? (
           <span className="text-center">Please Enter correct OTP !</span>
-        ) : null}
+        ) : null} */}
       </div>
     </>
   );

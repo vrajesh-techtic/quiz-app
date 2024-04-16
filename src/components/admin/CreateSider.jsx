@@ -4,6 +4,7 @@ import api from "../../database/apiCall";
 import { useDispatch, useSelector } from "react-redux";
 import { demoActions } from "../../store";
 import { all } from "axios";
+import WithAuth from "../../auth/WithAuth";
 
 // const quesList = [
 //   {
@@ -83,4 +84,4 @@ const CreateSider = ({ allQues, currQues, setCurrQues }) => {
   );
 };
 
-export default CreateSider;
+export default WithAuth(CreateSider);

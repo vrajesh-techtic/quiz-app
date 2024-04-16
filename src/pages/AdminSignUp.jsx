@@ -6,9 +6,12 @@ import { BiRename } from "react-icons/bi";
 // import { Formik, Field, ErrorMessage } from "formik";
 
 import { RiLockPasswordLine } from "react-icons/ri";
-import logo from "../../assets/banner-without-bg.png";
-import VerifiedAdminLogin from "./VerifiedAdminLogin";
-import NotVerifiedAdmin from "./NotVerifiedAdmin";
+import logo from "../assets/banner-without-bg.png";
+import VerifiedAdminLogin from "../components/admin/VerifiedAdminLogin";
+import NotVerifiedAdmin from "../components/admin/NotVerifiedAdmin";
+import WithAuth from "../auth/WithAuth";
+import WithoutAuth from "../auth/WithoutAuth";
+import axios from "axios";
 
 // import main from '../server/mailer';
 
@@ -23,15 +26,31 @@ const AdminSignUp = () => {
     });
   };
 
-  const [remember, setRemember] = useState(sessionStorage.length !== 0);
+  const email = JSON.parse(localStorage.getItem("adminEmail"))?.email;
 
-  const showLoader = () => {
-    setSpinning(true);
-    setTimeout(() => {
-      setSpinning(false);
-      navigate("/authenticate/display-quiz");
-    }, 2000);
-  };
+  useEffect(() => {
+    async function fetchAPI() {
+      const isUserVerified = await axios
+        .post("http://localhost:5000/verify-user", {
+          email,
+        })
+        .then((res) => res.data);
+
+      if (isUserVerified.status) {
+        setIsVerified(true);
+      }
+    }
+
+    fetchAPI();
+  }, []);
+
+  // const showLoader = () => {
+  //   setSpinning(true);
+  //   setTimeout(() => {
+  //     setSpinning(false);
+  //     navigate("/authenticate/display-quiz");
+  //   }, 2000);
+  // };
 
   const navigate = useNavigate();
 
@@ -42,13 +61,16 @@ const AdminSignUp = () => {
         <div className="  w-[300px]">
           <img src={logo} style={{ width: "100%" }} alt="" />
         </div>
-        <div className=" backdrop-blur-xl hover:shadow-xl bg-pink-200	rounded-2xl flex flex-col items-center px-20 py-8">
+        <div className=" backdrop-blur-xl hover:shadow-xl bg-[#04c1cc]	rounded-2xl flex flex-col items-center px-20 py-8">
           <p className="mb-8 mt-2 text-3xl">Admin Signup</p>
 
-          {!isVerified ? (
+          {isVerified ? (
             <VerifiedAdminLogin />
           ) : (
-            <NotVerifiedAdmin setSpinning={setSpinning} />
+            <NotVerifiedAdmin
+              setSpinning={setSpinning}
+              setIsVerified={setIsVerified}
+            />
           )}
 
           {/* <Form.Item name="remember">
@@ -69,4 +91,4 @@ const AdminSignUp = () => {
   );
 };
 
-export default AdminSignUp;
+export default WithoutAuth(AdminSignUp);

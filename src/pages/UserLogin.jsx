@@ -6,9 +6,9 @@ import {
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import ParticipantWithoutAuth from "../auth/ParticipantWithoutAuth";
 // import axios from "axios";
-
-// import main from '../server/mailer';
+import logo from "../assets/banner-without-bg.png";
 
 const UserLogin = () => {
   const [api, contextHolder] = notification.useNotification();
@@ -39,7 +39,10 @@ const UserLogin = () => {
     // Trial
     setTimeout(() => {
       setSpinning(false);
-      localStorage.setItem("login", true);
+      localStorage.setItem(
+        "participantEmail",
+        JSON.stringify({ email: userEmail, verified: true })
+      );
       navigate("/participant/display-quiz");
     }, 1000);
 
@@ -94,8 +97,11 @@ const UserLogin = () => {
   return (
     <>
       {contextHolder}
-      <div className="flex w-full h-screen bg-blue-300 items-center justify-center ">
-        <div className=" backdrop-blur-xl hover:shadow-xl bg-green-300	rounded-2xl flex flex-col items-center px-20 py-12">
+      <div className="flex flex-col w-full h-screen bg-gray-800 items-center ">
+        <div className="  w-[300px]">
+          <img src={logo} style={{ width: "100%" }} alt="" />
+        </div>
+        <div className=" backdrop-blur-xl hover:shadow-xl bg-[#ca89fd]	rounded-2xl flex flex-col items-center px-20 py-12">
           <p className="mb-8 mt-2 text-5xl">Participant Login</p>
 
           <Form
@@ -164,18 +170,6 @@ const UserLogin = () => {
               />
             </Form.Item>
 
-            {/* <Form.Item name="remember">
-              <Checkbox
-                className="text-xl"
-                defaultChecked={remember}
-                onChange={() => {
-                  setRemember((prev) => !prev);
-                }}
-              >
-                Remember me
-              </Checkbox>
-            </Form.Item> */}
-
             <Form.Item className="flex flex-col">
               <Button
                 type="primary"
@@ -193,4 +187,4 @@ const UserLogin = () => {
   );
 };
 
-export default UserLogin;
+export default ParticipantWithoutAuth(UserLogin);

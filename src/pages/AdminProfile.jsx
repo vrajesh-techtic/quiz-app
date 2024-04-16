@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import AdminSideBar from "./AdminSideBar";
+import AdminSideBar from "../components/admin/AdminSideBar";
 
 import { useNavigate } from "react-router-dom";
 import { DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useContext } from "react";
-import AdminContextAPI from "./AdminContextAPI";
+import AdminContextAPI from "../components/admin/AdminContextAPI";
+import WithAuth from "../auth/WithAuth";
 
 const AdminProfile = () => {
   const navigate = useNavigate();
@@ -138,4 +139,4 @@ const AdminProfile = () => {
   );
 };
 
-export default AdminProfile;
+export default WithAuth(AdminProfile);

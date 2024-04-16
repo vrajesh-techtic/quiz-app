@@ -41,9 +41,9 @@ const CreateNavbar = ({
 }) => {
   const dispatch = useDispatch();
   const { setDeptList, addDept } = quizActions;
-  const quizCode = useSelector((state) => state.quizData.quizCode);
+  const quizCode = useSelector((state) => state?.quizData?.quizCode) || "";
 
-  const deptList = useSelector((state) => state.deptList) || [];
+  const deptList = useSelector((state) => state?.deptList) || [];
 
   if (isEdit) {
     quizCode = "Fetch Code";

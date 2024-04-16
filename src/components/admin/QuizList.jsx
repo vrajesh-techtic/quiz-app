@@ -5,6 +5,7 @@ import axios from "axios";
 import { demoActions } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { quizActions } from "../../store/quizReducers";
+import { dataAdmin } from "./DataAdmin";
 
 const QuizList = () => {
   const [deptNo, setdeptNo] = useState(0);
@@ -12,11 +13,11 @@ const QuizList = () => {
   const dispatch = useDispatch();
   const { setDeptList } = quizActions;
   const data = useSelector((state) => state.deptList) || [];
+  // const data = dataAdmin["dept-quiz-list"];
   console.log("data", data);
   useEffect(() => {
     const fetchDeptList = async () => {
       // const fetchData = await axios.get("http://localhost:5000/get-dept-list");
-
       // dispatch(setDeptList(fetchData.data.data));
     };
 

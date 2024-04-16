@@ -58,8 +58,8 @@ const CreateCustomSider = ({ isEdit }) => {
     correctAns: 0,
   });
 
-  const allQues = useSelector((state) => state.quizData.questions) || [];
-  let currQuesData = useSelector((state) => state.currQuesData);
+  const allQues = useSelector((state) => state?.quizData?.questions) || [];
+  let currQuesData = useSelector((state) => state?.currQuesData);
 
   let genquizCode = useMemo(() => generateQuizCode(), []);
   async function fetchAllQuestions() {

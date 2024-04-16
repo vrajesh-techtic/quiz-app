@@ -65,7 +65,7 @@ const AdminSignUp = () => {
           <p className="mb-8 mt-2 text-3xl">Admin Signup</p>
 
           {isVerified ? (
-            <VerifiedAdminLogin />
+            <VerifiedAdminLogin setSpinning={setSpinning} />
           ) : (
             <NotVerifiedAdmin
               setSpinning={setSpinning}

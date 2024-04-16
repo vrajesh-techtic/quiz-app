@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import logo from "../../assets/banner-without-bg.png";
 
 import OTPInput from "./OTPInput";
 import { useNavigate } from "react-router-dom";
@@ -73,8 +74,11 @@ const OTPPage = () => {
 
   return (
     <>
-      <div className="flex w-full h-screen form-container items-center justify-center ">
-        <div className=" backdrop-blur-xl hover:shadow-xl	rounded-2xl flex flex-col items-center px-20 py-12">
+      <div className="flex flex-col w-full bg-black h-screen form-container items-center  ">
+        <div className=" w-[300px]">
+          <img src={logo} style={{ width: "100%" }} alt="" />
+        </div>
+        <div className=" backdrop-blur-xl bg-[#ca89fd] hover:shadow-xl	rounded-2xl flex flex-col items-center px-20 py-12">
           <p className="mb-8 mt-2 text-5xl">OTP Authentication</p>
 
           <OTPInput onOtpSubmit={verifyOTP} showLoader={showLoader} />

@@ -27,7 +27,7 @@ const CreateQuizPage = ({ quesData, quizDept, onQuestionSave }) => {
   const [quesText, setquesText] = useState(quesData?.ques || "");
   const [optionArr, setoptionArr] = useState(quesData?.options || []);
   const [corrAns, setcorrAns] = useState(quesData?.correctAns || 0);
-  const quizCode = useSelector((state) => state.quizData.quizCode);
+  const quizCode = useSelector((state) => state?.quizData?.quizCode);
 
   useEffect(() => {
     setquesText(quesData?.ques || "");
@@ -141,7 +141,7 @@ const CreateQuizPage = ({ quesData, quizDept, onQuestionSave }) => {
       </div>
 
       {/* Save & delete button container  */}
-      <div className="w-full flex justify-end items-center h-[9%]">
+      <div className="w-full flex justify-end items-center mt-8 h-[9%]">
         <div className="me-8 flex justify-center">
           <button
             onClick={verifySave}

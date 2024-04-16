@@ -57,7 +57,11 @@ const HomeBanner = () => {
       </div>
 
       <div className="right-gif-container">
-        <img src={bannerImage} alt="" />
+        <img
+          src={bannerImage}
+          style={{ width: "100%", height: "100%" }}
+          alt=""
+        />
       </div>
     </div>
   );

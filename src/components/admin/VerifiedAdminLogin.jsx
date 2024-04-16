@@ -8,18 +8,37 @@ import { BiRename } from "react-icons/bi";
 import { RiLockPasswordLine } from "react-icons/ri";
 import axios from "axios";
 
-const VerifiedAdminLogin = () => {
+const VerifiedAdminLogin = ({ setSpinning }) => {
   const navigate = useNavigate();
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type, message) => {
+    api[type]({
+      message: message,
+    });
+  };
 
   const onFinish = async (data) => {
-    const email = JSON.parse(localStorage.getItem("adminEmail")).email;
-    console.log("data", data);
+    const obj = JSON.parse(localStorage.getItem("adminEmail"));
+    const email = obj.email;
 
     const api = await axios
       .post("http://localhost:5000/add-admin", { ...data, email })
       .then((res) => res.data);
 
     console.log("api", api);
+    if (!api.status) {
+      openNotificationWithIcon("error", api.message);
+    } else if (api.status) {
+      setSpinning(true);
+      openNotificationWithIcon("success", api.message);
+
+      setTimeout(() => {
+        obj.verified = true;
+        localStorage.setItem("adminEmail", JSON.stringify(obj));
+        navigate("/admin/dashboard");
+        setSpinning(false);
+      }, 1000);
+    }
 
     // localStorage.setItem("adminEmail", JSON.stringify(obj));
 
@@ -32,6 +51,8 @@ const VerifiedAdminLogin = () => {
 
   return (
     <>
+      {contextHolder}
+
       <Form
         name="normal_login"
         className="login-form flex flex-col mx-8  items-center"

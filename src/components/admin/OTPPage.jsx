@@ -75,11 +75,11 @@ const OTPPage = () => {
   return (
     <>
       <div className="flex flex-col w-full bg-black h-screen form-container items-center  ">
-        <div className=" w-[300px]">
+        <div className="auth-logo w-[300px]">
           <img src={logo} style={{ width: "100%" }} alt="" />
         </div>
-        <div className=" backdrop-blur-xl bg-[#ca89fd] hover:shadow-xl	rounded-2xl flex flex-col items-center px-20 py-12">
-          <p className="mb-8 mt-2 text-5xl">OTP Authentication</p>
+        <div className="otp-container backdrop-blur-xl bg-[#ca89fd] hover:shadow-xl	rounded-2xl flex flex-col items-center px-20 py-12">
+          <p className="otp-title mb-8 mt-2 text-5xl">OTP Authentication</p>
 
           <OTPInput onOtpSubmit={verifyOTP} showLoader={showLoader} />
         </div>

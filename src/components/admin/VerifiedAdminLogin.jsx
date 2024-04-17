@@ -35,6 +35,7 @@ const VerifiedAdminLogin = ({ setSpinning }) => {
       setTimeout(() => {
         obj.verified = true;
         localStorage.setItem("adminEmail", JSON.stringify(obj));
+        sessionStorage.setItem("token", api.token);
         navigate("/admin/dashboard");
         setSpinning(false);
       }, 1000);
@@ -55,7 +56,7 @@ const VerifiedAdminLogin = ({ setSpinning }) => {
 
       <Form
         name="normal_login"
-        className="login-form flex flex-col mx-8  items-center"
+        className="login-form flex flex-col  items-center"
         size="large"
         initialValues={{
           email: "",
@@ -66,7 +67,7 @@ const VerifiedAdminLogin = ({ setSpinning }) => {
         {/* Admin Full Name  */}
         <Form.Item
           name="name"
-          className="w-[400px]"
+          className="form-inputs w-[400px]"
           rules={[
             {
               type: "string",
@@ -84,7 +85,7 @@ const VerifiedAdminLogin = ({ setSpinning }) => {
         {/* Admin Username  */}
         <Form.Item
           name="username"
-          className="w-[400px]"
+          className="form-inputs w-[400px]"
           rules={[
             {
               type: "string",
@@ -98,7 +99,7 @@ const VerifiedAdminLogin = ({ setSpinning }) => {
 
         {/* Password  */}
         <Form.Item
-          className="w-[400px]"
+          className="form-inputs w-[400px]"
           name="password"
           rules={[
             {
@@ -117,7 +118,7 @@ const VerifiedAdminLogin = ({ setSpinning }) => {
 
         {/* Confirm Password  */}
         <Form.Item
-          className="w-[400px]"
+          className="form-inputs w-[400px]"
           name="confirmPassword"
           rules={[
             {

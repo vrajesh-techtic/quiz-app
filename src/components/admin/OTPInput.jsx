@@ -3,6 +3,7 @@
 import { Spin, message, notification } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useToast from "../NotificationPopup";
 
 const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
   console.log("OTP Input");
@@ -14,19 +15,25 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
 
   const [isVerified, setisVerified] = useState({ status: false, message: "" });
 
-  const [api, contextHolder] = notification.useNotification();
+  const { contextHolder, showToast } = useToast();
 
-  const openNotificationWithIcon = (type) => {
-    if (type === "success")
-      api[type]({
-        message: "OTP Verified Successfully!",
-      });
-    else if (type === "error") {
-      api[type]({
-        message: "Invalid OTP!",
-      });
-    }
-  };
+  // const openNotificationWithIcon = (type) => {
+  //   if (type === "success")
+  //     api[type]({
+  //       message: "OTP Verified Successfully!",
+  //       style: {
+  //         width: 200,
+  //       },
+  //     });
+  //   else if (type === "error") {
+  //     api[type]({
+  //       message: "Invalid OTP!",
+  //       style: {
+  //         width: 200,
+  //       },
+  //     });
+  //   }
+  // };
 
   let combinedOtp = "";
 
@@ -62,11 +69,11 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
       const apiData = await onOtpSubmit(combinedOtp);
 
       if (apiData.status) {
-        openNotificationWithIcon("success");
+        showToast("success", "OTP Verified Successfully!");
 
         showLoader();
       } else {
-        openNotificationWithIcon("error");
+        showToast("error", "Invalid OTP!");
       }
 
       setisVerified(() => apiData);
@@ -103,7 +110,6 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
   return (
     <>
       {contextHolder}
-
       <div>
         {otp.map((value, index) => {
           return (
@@ -121,7 +127,7 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
         })}
       </div>
 
-      <div className=" bg-white  py-2 rounded-lg w-[500px] h-[70px] flex items-center justify-center text-red-400  mt-8 text-xl ">
+      <div className=" bg-white otp-msg-container  py-2 rounded-lg w-[500px] h-[70px] flex items-center justify-center text-red-400  mt-8 text-xl ">
         <span className="text-center">
           Please Check your e-mail address. You have might received an OTP for
           Verification.

@@ -15,32 +15,32 @@ const StatisticDashboard = () => {
       </div>
 
       {/* Cards Container  */}
-      <div className=" flex h-[25%] items-center   justify-evenly">
+      <div className=" flex flex-wrap items-center  ">
         {/* Total Quizzes Card  */}
         <div
           style={{ boxShadow: "4px 4px 0px 2px black" }}
-          className="flex flex-col bg-yellow-200 w-fit p-4 rounded-lg"
+          className="stats-card bg-yellow-200 "
         >
-          <span className="text-xl">Total Quizzes</span>
-          <span className="text-4xl font-medium">{data["total-quizzes"]}</span>
+          <span className="stats-card-title">Total Quizzes</span>
+          <span className="stats-card-data">{data["total-quizzes"]}</span>
         </div>
 
         {/* Total Departments Card  */}
         <div
           style={{ boxShadow: "4px 4px 0px 2px black" }}
-          className="flex flex-col bg-blue-200 w-fit p-4 rounded-lg"
+          className="stats-card bg-blue-200 "
         >
-          <span className="text-xl">Total Departments</span>
-          <span className="text-4xl font-medium">{data["total-dept"]}</span>
+          <span className="stats-card-title">Total Departments</span>
+          <span className="stats-card-data">{data["total-dept"]}</span>
         </div>
 
         {/* Total Participant Card  */}
         <div
           style={{ boxShadow: "4px 4px 0px 2px black" }}
-          className="flex flex-col bg-green-200 w-fit p-4 rounded-lg"
+          className="stats-card bg-green-200 "
         >
-          <span className="text-xl">Total Participants</span>
-          <span className="text-4xl font-medium">
+          <span className="stats-card-title">Total Participants</span>
+          <span className="stats-card-data">
             {data["total-all-participants"]}
           </span>
         </div>
@@ -48,10 +48,10 @@ const StatisticDashboard = () => {
         {/* Live Quizzes Card  */}
         <div
           style={{ boxShadow: "4px 4px 0px 2px black" }}
-          className="flex flex-col bg-red-200 w-fit p-4 rounded-lg"
+          className="stats-card bg-red-200 "
         >
-          <span className="text-xl">Live Quizzes</span>
-          <span className="text-4xl font-medium">{data["live-quizzes"]}</span>
+          <span className="stats-card-title">Live Quizzes</span>
+          <span className="stats-card-data">{data["live-quizzes"]}</span>
         </div>
       </div>
     </>

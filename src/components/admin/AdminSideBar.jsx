@@ -101,7 +101,7 @@ const AdminSideBar = ({ children, selectedKeys = 1 }) => {
               justifyContent: "end",
             }}
           >
-            <div className="flex w-[15%] me-12 items-center justify-between">
+            <div className="flex w-[200px] me-12 items-center justify-between">
               <button
                 onClick={() => {
                   navigate("/participant");

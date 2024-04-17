@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminSideBar from "../components/admin/AdminSideBar";
 
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useContext } from "react";
 import AdminContextAPI from "../components/admin/AdminContextAPI";
 import WithAuth from "../auth/WithAuth";
+import axios from "axios";
 
 const AdminProfile = () => {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ const AdminProfile = () => {
   const data = useContext(AdminContextAPI);
 
   const [isEdit, setIsEdit] = useState(false);
+
+  const [adminData, setAdminData] = useState({});
 
   function deleteAccount() {
     let res = window.confirm("Do you want to delete your account permanently?");
@@ -23,6 +26,24 @@ const AdminProfile = () => {
     }
   }
 
+  useEffect(() => {
+    async function fetchData() {
+      let token = sessionStorage.getItem("token");
+
+      const profileData = await axios
+        .post("http://localhost:5000/get-admin", { token })
+        .then((res) => res.data);
+
+      if (profileData.status) {
+        setAdminData(profileData.data);
+      } else {
+        console.log(profileData.message);
+      }
+    }
+
+    fetchData();
+  }, []);
+console.log('adminData', adminData)
   return (
     <AdminSideBar selectedKeys={3}>
       <div className=" h-[100%] rounded-lg  flex flex-col items-center ">
@@ -40,10 +61,10 @@ const AdminProfile = () => {
             </div>
 
             <div className="text-2xl flex flex-col items-center">
-              <span>{data["admin-name"]}</span>
+              <span>{adminData.name}</span>
 
               <span className="text-xl text-[#04c1cc] cursor-pointer font-medium">
-                @{data["admin-username"]}
+                @{adminData.username}
               </span>
             </div>
 
@@ -51,13 +72,13 @@ const AdminProfile = () => {
             <div className="flex mt-5">
               <div className="bg-[#d7a9fb] w-[170px] rounded-xl justify-center mx-2 text-center h-[80px]  flex flex-col">
                 <span className="text-3xl font-medium">
-                  {data["total-quizzes"]}
+                  {adminData.totalQuizzes}
                 </span>
                 <span className="text-lg">Quizzes</span>
               </div>
               <div className="bg-[#04c1cc] w-[170px] rounded-xl justify-center mx-2 text-center h-[80px]  flex flex-col">
                 <span className="text-3xl font-medium">
-                  {data["total-dept"]}
+                  {adminData.totalDepartments}
                 </span>
                 <span className="text-lg">Departments</span>
               </div>
@@ -85,7 +106,7 @@ const AdminProfile = () => {
                         className="px-2 ms-4 bg-red-300  py-1 rounded-lg"
                         type="email"
                         name="admin-email"
-                        defaultValue={data["admin-email"]}
+                        defaultValue={adminData.email}
                       />
                     </td>
                   </tr>
@@ -100,7 +121,7 @@ const AdminProfile = () => {
                         className="px-2 ms-4 bg-blue-300  py-1 rounded-lg"
                         type="text"
                         name="admin-name"
-                        defaultValue={data["admin-name"]}
+                        defaultValue={adminData.name}
                       />
                     </td>
                   </tr>
@@ -115,7 +136,7 @@ const AdminProfile = () => {
                         className="px-2 ms-4 bg-green-300 py-1 rounded-lg"
                         type="text"
                         name="admin-username"
-                        defaultValue={data["admin-username"]}
+                        defaultValue={adminData.username}
                       />
                     </td>
                   </tr>

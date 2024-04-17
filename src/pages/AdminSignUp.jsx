@@ -58,11 +58,11 @@ const AdminSignUp = () => {
     <>
       {contextHolder}
       <div className="flex flex-col w-full h-screen bg-gray-800 items-center ">
-        <div className="  w-[300px]">
+        <div className=" auth-logo w-[300px]">
           <img src={logo} style={{ width: "100%" }} alt="" />
         </div>
-        <div className=" backdrop-blur-xl hover:shadow-xl bg-[#04c1cc]	rounded-2xl flex flex-col items-center px-20 py-8">
-          <p className="mb-8 mt-2 text-3xl">Admin Signup</p>
+        <div className="auth-form-container backdrop-blur-xl hover:shadow-xl bg-[#04c1cc]	rounded-2xl flex flex-col items-center ">
+          <p className="form-title mb-8 mt-2 ">Admin Signup</p>
 
           {isVerified ? (
             <VerifiedAdminLogin setSpinning={setSpinning} />

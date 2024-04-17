@@ -30,10 +30,10 @@ const RecentQuiz = () => {
 
       {/* Quiz Details  */}
       <div className="mt-3">
-        <div className="flex items-center">
+        <div className="flex items-center ">
           {/* Quiz & Department Title */}
           <div className="flex flex-col">
-            <span className="text-3xl font-medium">
+            <span className="md:text-2xl lg:text-3xl font-medium">
               {data["recent-quiz"]["quiz-name"]}
             </span>
             <span className="text-lg ">{data["recent-quiz"]["dept-name"]}</span>
@@ -57,14 +57,15 @@ const RecentQuiz = () => {
           </button>
         </div>
 
-        <div className=" flex h-[25%] items-center mt-7  justify-evenly">
+        {/* Cards Container  */}
+        <div className=" flex flex-wrap  items-center mt-7  ">
           {/* Total Questions Card  */}
           <div
             style={{ boxShadow: "4px 4px 0px 2px black" }}
-            className="flex flex-col bg-orange-200 w-fit p-4 rounded-lg"
+            className="stats-card  bg-orange-200 "
           >
-            <span className="text-xl">Total Questions</span>
-            <span className="text-4xl font-medium">
+            <span className="stats-card-title ">Total Questions</span>
+            <span className="stats-card-data">
               {data["recent-quiz"]["total-ques"]}
             </span>
           </div>
@@ -72,20 +73,20 @@ const RecentQuiz = () => {
           {/* Time Remaining Card  */}
           <div
             style={{ boxShadow: "4px 4px 0px 2px black" }}
-            className="flex flex-col bg-violet-200 w-fit p-4 rounded-lg"
+            className="stats-card  bg-violet-200 "
           >
             <Countdown
               title={
-                <span className="text-xl text-black flex items-center">
+                <span className="stats-card-title  text-black flex items-center">
                   Time Remaining
-                  <div className="w-[30px]">
+                  {/* <div className="w-[10px]">
                     <img style={{ width: "100%" }} src={timerIcon} alt="" />
-                  </div>
+                  </div> */}
                 </span>
               }
               valueStyle={{
-                fontSize: "2.25rem",
-                lineHeight: "2.5rem",
+                fontSize: window.innerWidth === 768 ? "30px" : "2.25rem",
+                lineHeight: window.innerWidth === 768 ? "40px" : "2.5rem",
                 fontWeight: "500",
               }}
               value={deadline}
@@ -96,10 +97,10 @@ const RecentQuiz = () => {
           {/* Total Participants Card  */}
           <div
             style={{ boxShadow: "4px 4px 0px 2px black" }}
-            className="flex flex-col bg-[#FFF455] w-fit p-4 rounded-lg"
+            className="stats-card  bg-[#FFF455] "
           >
-            <span className="text-xl">Total Participants</span>
-            <span className="text-4xl font-medium">
+            <span className="stats-card-title ">Total Participants</span>
+            <span className="stats-card-data ">
               {data["recent-quiz"]["total-participants"]}
             </span>
           </div>
@@ -107,10 +108,10 @@ const RecentQuiz = () => {
           {/* Submissions Card  */}
           <div
             style={{ boxShadow: "4px 4px 0px 2px black" }}
-            className="flex flex-col bg-[#87A922] w-fit p-4 rounded-lg"
+            className="stats-card bg-[#87A922] "
           >
-            <span className="text-xl">Submissions</span>
-            <span className="text-4xl font-medium">
+            <span className="stats-card-title ">Submissions</span>
+            <span className="stats-card-data ">
               {data["recent-quiz"]["submissions"]}
             </span>
           </div>
@@ -118,10 +119,10 @@ const RecentQuiz = () => {
           {/* Highest Score Card  */}
           <div
             style={{ boxShadow: "4px 4px 0px 2px black" }}
-            className="flex flex-col bg-[#EE99C2] w-fit p-4 rounded-lg"
+            className="stats-card  bg-[#EE99C2] "
           >
-            <span className="text-xl">Highest Score</span>
-            <span className="text-4xl font-medium">
+            <span className="stats-card-title ">Highest Score</span>
+            <span className="stats-card-data ">
               {data["recent-quiz"]["highest-score"]}
             </span>
           </div>

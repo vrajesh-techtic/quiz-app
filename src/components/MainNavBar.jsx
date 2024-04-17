@@ -39,9 +39,10 @@ function MainNavBar() {
   };
 
   return (
-    <AppBar position="static" className="h-[13%]">
-      <Container maxWidth="xl" className="bg-black">
-        <Toolbar disableGutters>
+    <AppBar position="static" className="">
+      <Container maxWidth="xl" className="bg-black flex justify-between">
+        <Toolbar className="flex justify-between" disableGutters>
+          {/* Quizify Logo  */}
           <Typography
             variant="h6"
             noWrap
@@ -116,7 +117,9 @@ function MainNavBar() {
           >
             <img src={logo} alt="quizify-logo" className="h-full" />
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+
+          {/* About, Documentation, help  */}
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "none" } }}>
             {pages.map((page) => (
               <Button
                 key={page}

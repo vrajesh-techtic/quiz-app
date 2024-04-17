@@ -31,7 +31,7 @@ const NotVerifiedAdmin = ({ setSpinning, setIsVerified }) => {
       })
       .then((res) => res);
 
-    console.log("api", await api);
+    console.log("api", api);
 
     const obj = { email: data.email, verified: false };
 
@@ -54,7 +54,7 @@ const NotVerifiedAdmin = ({ setSpinning, setIsVerified }) => {
     <>
       <Form
         name="normal_login"
-        className="login-form flex flex-col mx-8  items-center"
+        className="login-form flex flex-col mx-0  items-center"
         size="large"
         initialValues={{
           email: "",
@@ -64,7 +64,7 @@ const NotVerifiedAdmin = ({ setSpinning, setIsVerified }) => {
       >
         {/* Admin Email address  */}
         <Form.Item
-          className="w-[400px]"
+          className="form-inputs w-[400px]"
           name="email"
           rules={[
             {

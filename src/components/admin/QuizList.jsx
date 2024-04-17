@@ -6,8 +6,11 @@ import { demoActions } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { quizActions } from "../../store/quizReducers";
 import { dataAdmin } from "./DataAdmin";
+import DepartmentModal from "./DepartmentModal";
 
 const QuizList = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const [deptNo, setdeptNo] = useState(0);
 
   const dispatch = useDispatch();
@@ -26,6 +29,7 @@ const QuizList = () => {
 
   return (
     <>
+      <DepartmentModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
       <div className="flex flex-col  w-full h-full p-5">
         {/* My Library Heading  */}
         <div className="flex items-center">
@@ -34,10 +38,19 @@ const QuizList = () => {
           <div className="border-2 border-gray-400 h-0 w-full"></div>
         </div>
 
+        <div className="w-[95%]  mx-auto flex justify-end my-4">
+          <button
+            className="bg-blue-500 text-white p-2 rounded-md"
+            onClick={() => setModalOpen(true)}
+          >
+            Add Department
+          </button>
+        </div>
+
         {/* List Container  */}
 
         {data && data.length ? (
-          <div className=" h-[500px] mt-8  rounded-lg mx-auto w-[95%] flex justify-start ">
+          <div className=" h-[400px] rounded-lg mx-auto w-[95%] flex justify-start ">
             {/* Department List  */}
             <div className="flex justify-center bg-gray-100 rounded-lg p-2 w-[25%]">
               <ul className=" dept-list w-full flex flex-col px-2 items-center  overflow-auto ">
@@ -75,7 +88,7 @@ const QuizList = () => {
             </div>
           </div>
         ) : (
-          <div className=" bg-gray-100  p-4 mt-8 h-[500px] rounded-lg mx-auto w-[95%] items-center flex justify-center ">
+          <div className=" bg-gray-100   h-[400px] rounded-lg mx-auto w-[95%] items-center flex justify-center ">
             <span className="text-6xl">No Quiz found!</span>
           </div>
         )}

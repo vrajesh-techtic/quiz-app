@@ -46,6 +46,7 @@ const AdminSideBar = ({ children, selectedKeys = 1 }) => {
   const [currItem, setcurrItem] = useState(1);
 
   function logOut() {
+    sessionStorage.removeItem("token");
     localStorage.removeItem("adminEmail");
     navigate("/");
   }

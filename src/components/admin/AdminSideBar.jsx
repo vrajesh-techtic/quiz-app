@@ -17,6 +17,7 @@ import WithAuth from "../../auth/WithAuth";
 const AdminSideBar = ({ children, selectedKeys = 1 }) => {
   const navigate = useNavigate();
   const data = useContext(AdminContextAPI);
+  const token = sessionStorage.getItem("token");
 
   const [anchorElUser, setAnchorElUser] = React.useState(false);
 
@@ -67,8 +68,12 @@ const AdminSideBar = ({ children, selectedKeys = 1 }) => {
           <a
             href="/admin/create-quiz"
             target="_blank"
+            rel="noreferrer"
             style={{
               boxShadow: "4px 4px 0px #04c1cc",
+            }}
+            onClick={() => {
+              localStorage.setItem("token", token);
             }}
             className="flex justify-center w-[150px] p-3 text-xl bg-[#ca89fd] text-white font-medium  mb-12 mt-4 mx-auto rounded-xl"
           >

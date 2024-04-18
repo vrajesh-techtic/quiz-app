@@ -11,6 +11,9 @@ import { demoActions } from "../store";
 import CreateQuizPage from "../components/admin/CreateQuizPage";
 import { quizActions } from "../store/quizReducers";
 import WithAuth from "../auth/WithAuth";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import useToast from "../components/NotificationPopup";
 
 const displayToast = (message, color) => {
   Toastify({
@@ -60,7 +63,8 @@ const CreateCustomSider = ({ isEdit }) => {
 
   const allQues = useSelector((state) => state?.quizData?.questions) || [];
   let currQuesData = useSelector((state) => state?.currQuesData);
-
+  const token = sessionStorage.getItem("token");
+  const { contextHolder, showToast } = useToast();
   let genquizCode = useMemo(() => generateQuizCode(), []);
   async function fetchAllQuestions() {
     const resp = await api.post("/get-all-questions").then((res) => res.data);
@@ -90,40 +94,56 @@ const CreateCustomSider = ({ isEdit }) => {
     setQuesData(currQuesData);
   }, [currQuesData]);
 
-  const onQuestionSave = async (obj) => {
-    const findQues = await api
-      .post("/find-question", { _id: obj.quesId })
-      .then((res) => res.data.status);
+  // const onQuestionSave = async (obj) => {
+  //   const findQues = await api
+  //     .post("/find-question", { _id: obj.quesId })
+  //     .then((res) => res.data.status);
 
-    if (findQues) {
-      const updateQues = await api
-        .post("/update-question", obj)
-        .then((res) => res.data);
-      if (updateQues.status) {
-        displayToast(
-          updateQues.message,
-          "linear-gradient(to right, #00b09b, #96c93d)"
-        );
-        setcurrQues(currQues + 1);
-        await fetchAllQuestions();
-      } else {
-        displayToast(updateQues.message, "red");
-      }
-    } else {
-      const addQues = await api
-        .post("/add-question", obj)
-        .then((res) => res.data);
-      if (addQues.status) {
-        displayToast(
-          addQues.message,
-          "linear-gradient(to right, #00b09b, #96c93d)"
-        );
-        setcurrQues(currQues + 1);
-        await fetchAllQuestions();
-      } else {
-        displayToast(addQues.message, "red");
-      }
-    }
+  //   if (findQues) {
+  //     const updateQues = await api
+  //       .post("/update-question", obj)
+  //       .then((res) => res.data);
+  //     if (updateQues.status) {
+  //       displayToast(
+  //         updateQues.message,
+  //         "linear-gradient(to right, #00b09b, #96c93d)"
+  //       );
+  //       setcurrQues(currQues + 1);
+  //       await fetchAllQuestions();
+  //     } else {
+  //       displayToast(updateQues.message, "red");
+  //     }
+  //   } else {
+  //     const addQues = await api
+  //       .post("/add-question", obj)
+  //       .then((res) => res.data);
+  //     if (addQues.status) {
+  //       displayToast(
+  //         addQues.message,
+  //         "linear-gradient(to right, #00b09b, #96c93d)"
+  //       );
+  //       setcurrQues(currQues + 1);
+  //       await fetchAllQuestions();
+  //     } else {
+  //       displayToast(addQues.message, "red");
+  //     }
+  //   }
+  // };
+
+  const onQuestionSave = async (obj) => {
+    const data = obj;
+    data["quizCode"] = genquizCode;
+
+    console.log("data", data);
+
+    const quesAPI = await axios
+      .post("http://localhost:5000/add-question", {
+        data,
+        token,
+      })
+      .then((res) => res.data);
+
+    return quesAPI;
   };
 
   return (
@@ -134,6 +154,7 @@ const CreateCustomSider = ({ isEdit }) => {
         quizDept={quizDept}
         setquizDept={setquizDept}
         isEdit={isEdit}
+        code={genquizCode}
       />
 
       <div className="flex h-[82%]">

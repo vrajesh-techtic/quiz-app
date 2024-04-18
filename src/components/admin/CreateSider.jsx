@@ -43,6 +43,8 @@ const CreateSider = ({ allQues, currQues, setCurrQues }) => {
   //   }
   // });
 
+  const [quesList, setquesList] = useState([]);
+
   return (
     <div className="w-[230px] flex flex-col items-center bg-gray-100 h-full">
       <div className="mt-4">

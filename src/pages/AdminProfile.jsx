@@ -48,7 +48,7 @@ const AdminProfile = () => {
         .post("http://localhost:5000/get-admin", { token })
         .then((res) => res.data);
 
-      // console.log("profileData", profileData);
+      console.log("profileData", profileData);
       if (profileData.status) {
         setAdminData(() => profileData.data);
       } else {

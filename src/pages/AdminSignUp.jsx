@@ -73,6 +73,13 @@ const AdminSignUp = () => {
             />
           )}
 
+          <button
+            onClick={() => navigate("/admin/login")}
+            className="text-blue-800 text-lg mt-8  underline "
+          >
+            Already a user? Login
+          </button>
+
           {/* <Form.Item name="remember">
               <Checkbox
                 className="text-xl"

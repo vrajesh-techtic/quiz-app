@@ -1,26 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
-import CreateCustomSider from "../../pages/CreateCustomSider";
-import { QuestionContextAPI } from "./AdminContextAPI";
-import Toastify from "toastify-js";
+import React, { useState } from "react";
 import { Radio } from "antd";
-import { useDispatch, useSelector } from "react-redux";
 import WithAuth from "../../auth/WithAuth";
 import useToast from "../NotificationPopup";
 
-const CreateQuizPage = ({ quesData, quizDept, onQuestionSave }) => {
+const CreateQuizPage = ({
+  quizCode,
+  quizDept,
+  quizTitle,
+  quesText,
+  setquesText,
+  corrAns,
+  setcorrAns,
+  optionArr,
+  setoptionArr,
+  saveNewQuestion,
+  currQuesId,
+  editQuestion,
+}) => {
   // console.log("quesData", quesData);
+
   const { contextHolder, showToast } = useToast();
-
-  const [quesText, setquesText] = useState(quesData?.ques || "");
-  const [optionArr, setoptionArr] = useState(quesData?.options || []);
-  const [corrAns, setcorrAns] = useState(quesData?.correctAns || 0);
-  // const quizCode = useSelector((state) => state?.quizData?.quizCode);
-
-  useEffect(() => {
-    setquesText(quesData?.ques || "");
-    setoptionArr(quesData?.options || []);
-    setcorrAns(quesData?.correctAns || 0);
-  }, [quesData]);
 
   const onQuesChange = (e) => {
     setquesText(e.target.value);
@@ -36,8 +35,10 @@ const CreateQuizPage = ({ quesData, quizDept, onQuestionSave }) => {
     setoptionArr(prev);
   };
 
-  const verifySave = async() => {
-    if (quizDept === "") {
+  const verifySave = async () => {
+    if (quizTitle === "") {
+      showToast("error", "Please Enter Quiz title!");
+    } else if (quizDept === "") {
       showToast("error", "Please select a department!");
     } else if (quesText.trim() === "") {
       showToast("error", "Please enter a question!");
@@ -46,16 +47,21 @@ const CreateQuizPage = ({ quesData, quizDept, onQuestionSave }) => {
     } else if (optionArr.findIndex((i) => i.trim() === "") !== -1) {
       showToast("error", "Please enter all options!");
     } else {
-      const resp = await onQuestionSave({
+      const obj = {
         ques: quesText,
         correctAns: corrAns,
         options: optionArr,
-      });
-      console.log("resp", resp);
-      if (resp.status) {
-        showToast("success", resp.message);
+      };
+
+      obj["quizCode"] = "UIDMOP";
+
+      console.log("obj", obj);
+
+      if (currQuesId === 0) {
+        saveNewQuestion(obj);
       } else {
-        showToast("error", resp.message);
+        obj["quesId"] = currQuesId;
+        editQuestion(obj);
       }
     }
   };
@@ -142,18 +148,13 @@ const CreateQuizPage = ({ quesData, quizDept, onQuestionSave }) => {
               Save
             </button>
 
-            {/* {isSaved && existQuesId !== -1 ? ( */}
-            {quesData?.isSaved === false ? null : (
-              <button
-                // onClick={verifyDelete}
-                className="bg-[#04c1cc] w-[70px] p-2 mx-3 rounded-lg font-medium"
-              >
+            {quesText.trim() === "" ||
+            optionArr.length < 4 ||
+            corrAns === 0 ? null : (
+              <button className="bg-[#04c1cc] w-[70px] p-2 mx-3 rounded-lg font-medium">
                 Delete
               </button>
             )}
-            {/* ) : (
-            ""
-          )} */}
           </div>
         </div>
       </div>

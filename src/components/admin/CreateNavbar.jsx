@@ -1,35 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import logo from "../../assets/banner-without-bg.png";
-import { RiEdit2Fill } from "react-icons/ri";
-import AdminContextAPI from "./AdminContextAPI";
 import { PlusOutlined } from "@ant-design/icons";
 import { Divider, Input, Select, Space, Button } from "antd";
 import { FaSave } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { demoActions } from "../../store";
 import axios from "axios";
-import Toastify from "toastify-js";
-import api from "../../database/apiCall";
-import { quizActions } from "../../store/quizReducers";
-import WithAuth from "../../auth/WithAuth";
 import useToast from "../NotificationPopup";
-// import localhost from "../../database/apiCall";
+import WithAuth from "../../auth/WithAuth";
 
 const CreateNavbar = ({
+  code,
   quizTitle,
   setquizTitle,
   quizDept,
   setquizDept,
-  code,
 }) => {
-  // const dispatch = useDispatch();
-  // const { setDeptList, addDept } = quizActions;
   const quizCode = code || "";
   const token = sessionStorage.getItem("token");
   const { contextHolder, showToast } = useToast();
-
-  // const deptList = useSelector((state) => state?.deptList) || [];
   const [deptList, setdeptList] = useState([]);
 
   // fetch department list
@@ -39,12 +26,12 @@ const CreateNavbar = ({
         .post("http://localhost:5000/get-dept-list", { token })
         .then((res) => res.data);
 
-      console.log("fetchData", fetchData.data);
+      // console.log("fetchData", fetchData.data);
       setdeptList(fetchData.data);
     };
 
     fetchDeptList();
-  }, []);
+  }, [quizDept]);
 
   const [name, setName] = useState("");
   const inputRef = useRef(null);
@@ -70,6 +57,8 @@ const CreateNavbar = ({
         token,
       };
 
+      // console.log("finalObj", finalObj);
+
       const api = await axios
         .post("http://localhost:5000/create-quiz", finalObj)
         .then((res) => res.data);
@@ -91,7 +80,7 @@ const CreateNavbar = ({
         token: token,
       });
       const data = res.data;
-      console.log("res", data);
+      // console.log("res", data);
       if (data && data.status === true) {
         showToast("success", data.message);
       } else {
@@ -100,7 +89,7 @@ const CreateNavbar = ({
     } catch (error) {
       showToast("error", error.message);
     }
-
+    setquizDept(name);
     setName("");
     setTimeout(() => {
       inputRef.current?.focus();

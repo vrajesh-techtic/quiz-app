@@ -5,7 +5,7 @@ const WithAuth = (Component) => {
     // let login =
     //   JSON.parse(localStorage.getItem("adminEmail"))?.verified || false;
     const temp = localStorage.getItem("token");
-    console.log("called");
+
     if (temp) {
       localStorage.removeItem("token");
       sessionStorage.setItem("token", temp);

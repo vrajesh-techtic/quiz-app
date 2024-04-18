@@ -20,6 +20,7 @@ import { dataAdmin } from "./components/admin/DataAdmin";
 import { useState } from "react";
 import CreateCustomSider from "./pages/CreateCustomSider";
 import AdminSignUp from "./pages/AdminSignUp";
+import AdminLoginForm from "./pages/AdminLoginForm";
 
 function App() {
   const adminData = dataAdmin;
@@ -51,7 +52,7 @@ function App() {
     },
     {
       path: "/admin/login",
-      element: <AdminLogin />,
+      element: <AdminLoginForm />,
     },
     {
       path: "/admin/signup",

@@ -15,22 +15,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import useToast from "../components/NotificationPopup";
 
-const displayToast = (message, color) => {
-  Toastify({
-    text: message,
-    duration: 1000,
-    close: false,
-    gravity: "top", // `top` or `bottom`
-    position: "center", // `left`, `center` or `right`
-    stopOnFocus: true, // Prevents dismissing of toast on hover
-    style: {
-      background: color,
-      borderRadius: "10px",
-    },
-  }).showToast();
-};
-
-const CreateCustomSider = ({ isEdit }) => {
+const CreateCustomSider = () => {
   const generateQuizCode = () => {
     const quizCodeArr = [];
     for (let i = 0; i < 6; i++) {
@@ -48,94 +33,64 @@ const CreateCustomSider = ({ isEdit }) => {
 
     return quizCode;
   };
-  // console.log("Custom Sider");
-  const dispatch = useDispatch();
-  const { setQuestions, setCurrQuesData, setQuizCode } = quizActions;
-  const [quizTitle, setquizTitle] = useState("");
-  const [quizDept, setquizDept] = useState("");
-  const [currQues, setcurrQues] = useState(1);
-  const [quesData, setQuesData] = useState({
-    ques: "",
-    quizCode: "",
-    options: [],
-    correctAns: 0,
-  });
 
-  const allQues = useSelector((state) => state?.quizData?.questions) || [];
-  let currQuesData = useSelector((state) => state?.currQuesData);
+  const [quizDept, setquizDept] = useState("");
+  const [quizTitle, setquizTitle] = useState("");
+  const [quesList, setquesList] = useState([]);
+  const [currQues, setcurrQues] = useState(1);
+  const [currQuesData, setcurrQuesData] = useState([]);
+  const [quesText, setquesText] = useState("");
+  const [optionArr, setoptionArr] = useState(["", "", "", ""]);
+  const [corrAns, setcorrAns] = useState(0);
   const token = sessionStorage.getItem("token");
   const { contextHolder, showToast } = useToast();
+  const [runEffect, setrunEffect] = useState(false);
   let genquizCode = useMemo(() => generateQuizCode(), []);
-  async function fetchAllQuestions() {
-    const resp = await api.post("/get-all-questions").then((res) => res.data);
 
-    if (resp.status === true) {
-      resp.data.push({
-        ques: "",
-        quizCode: "",
-        options: ["", "", "", ""],
-        correctAns: 0,
-        isSaved: false,
-      });
-      dispatch(setQuestions(resp.data));
-      dispatch(setQuizCode(genquizCode));
-    }
-  }
-
+  // to fetch question list
   useEffect(() => {
-    fetchAllQuestions();
-  }, []);
+    const fetchQuesList = async () => {
+      const api = await axios
+        .post("http://localhost:5000/get-all-questions", {
+          quizCode: "UIDMOP",
+          token,
+        })
+        .then((res) => res.data);
 
-  useEffect(() => {
-    allQues?.length && dispatch(setCurrQuesData(currQues));
-  }, [currQues, allQues]);
+      if (api.status === false) {
+        showToast("error", api.message);
+      } else {
+        api.data.allQuestions.push({
+          ques: "",
+          options: ["", "", "", ""],
+          correctAns: 0,
+          _id: 0,
+        });
+        setquesList(api.data.allQuestions);
+        setcurrQuesData(api.data.allQuestions[currQues - 1]);
+      }
+      // console.log("api", api);
+      // console.log("quesList", quesList);
+    };
 
+    fetchQuesList();
+  }, [runEffect]);
+
+  // console.log("quesList", quesList);
+
+  // to change data that needs to be sent to QuizPage
   useEffect(() => {
-    setQuesData(currQuesData);
+    setquesText(currQuesData?.ques || "");
+    setcorrAns(currQuesData?.correctAns || 0);
+    setoptionArr(currQuesData?.options || ["", "", "", ""]);
   }, [currQuesData]);
 
-  // const onQuestionSave = async (obj) => {
-  //   const findQues = await api
-  //     .post("/find-question", { _id: obj.quesId })
-  //     .then((res) => res.data.status);
+  // to change question data for display
+  useEffect(() => {
+    setcurrQuesData(quesList[currQues - 1]);
+  }, [currQues]);
 
-  //   if (findQues) {
-  //     const updateQues = await api
-  //       .post("/update-question", obj)
-  //       .then((res) => res.data);
-  //     if (updateQues.status) {
-  //       displayToast(
-  //         updateQues.message,
-  //         "linear-gradient(to right, #00b09b, #96c93d)"
-  //       );
-  //       setcurrQues(currQues + 1);
-  //       await fetchAllQuestions();
-  //     } else {
-  //       displayToast(updateQues.message, "red");
-  //     }
-  //   } else {
-  //     const addQues = await api
-  //       .post("/add-question", obj)
-  //       .then((res) => res.data);
-  //     if (addQues.status) {
-  //       displayToast(
-  //         addQues.message,
-  //         "linear-gradient(to right, #00b09b, #96c93d)"
-  //       );
-  //       setcurrQues(currQues + 1);
-  //       await fetchAllQuestions();
-  //     } else {
-  //       displayToast(addQues.message, "red");
-  //     }
-  //   }
-  // };
-
-  const onQuestionSave = async (obj) => {
-    const data = obj;
-    data["quizCode"] = genquizCode;
-
-    console.log("data", data);
-
+  const saveNewQuestion = async (data) => {
     const quesAPI = await axios
       .post("http://localhost:5000/add-question", {
         data,
@@ -143,40 +98,79 @@ const CreateCustomSider = ({ isEdit }) => {
       })
       .then((res) => res.data);
 
-    return quesAPI;
+    console.log("quesAPI", quesAPI);
+
+    if (quesAPI.status) {
+      showToast("success", quesAPI.message);
+      setrunEffect((prev) => !prev);
+    } else {
+      showToast("error", quesAPI.message);
+    }
+  };
+
+  const editQuestion = async (data) => {
+    const quesAPI = await axios
+      .post("http://localhost:5000/update-question", {
+        data,
+        token,
+      })
+      .then((res) => res.data);
+
+    if (quesAPI.status) {
+      showToast("success", quesAPI.message);
+      setrunEffect((prev) => !prev);
+    } else {
+      showToast("error", quesAPI.message);
+    }
+
+    console.log("data", data);
   };
 
   return (
-    <div className="h-screen">
-      <CreateNavbar
-        quizTitle={quizTitle}
-        setquizTitle={setquizTitle}
-        quizDept={quizDept}
-        setquizDept={setquizDept}
-        isEdit={isEdit}
-        code={genquizCode}
-      />
-
-      <div className="flex h-[82%]">
-        <CreateSider
-          currQues={currQues}
-          setCurrQues={setcurrQues}
-          allQues={allQues}
+    <>
+      {contextHolder}
+      <div className="h-screen">
+        <CreateNavbar
+          quizTitle={quizTitle}
+          setquizTitle={setquizTitle}
+          quizDept={quizDept}
+          setquizDept={setquizDept}
+          code={genquizCode}
         />
 
-        <div className=" h-full p-5 w-full">
-          <div className="bg-gray-100 h-full rounded-lg ">
-            <CreateQuizPage
-              quesData={quesData}
-              quizDept={quizDept}
-              onQuestionSave={onQuestionSave}
-            />
+        <div className="flex h-[82%]">
+          <CreateSider
+            currQues={currQues}
+            setCurrQues={setcurrQues}
+            code={genquizCode}
+            quesList={quesList}
+
+            // allQues={allQues}
+          />
+
+          <div className=" h-full p-5 w-full">
+            <div className="bg-gray-100 h-full rounded-lg ">
+              <CreateQuizPage
+                quizCode={genquizCode}
+                quizTitle={quizTitle}
+                quizDept={quizDept}
+                quesText={quesText}
+                setquesText={setquesText}
+                corrAns={corrAns}
+                setcorrAns={setcorrAns}
+                optionArr={optionArr}
+                setoptionArr={setoptionArr}
+                saveNewQuestion={saveNewQuestion}
+                currQuesId={currQuesData?._id}
+                editQuestion={editQuestion}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 };
 

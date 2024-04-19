@@ -9,42 +9,55 @@ import { useNavigate } from "react-router-dom";
 import ParticipantWithoutAuth from "../auth/ParticipantWithoutAuth";
 // import axios from "axios";
 import logo from "../assets/banner-without-bg.png";
+import useToast from "../components/NotificationPopup";
+import axios from "axios";
 
 const UserLogin = () => {
-  const [api, contextHolder] = notification.useNotification();
   const [spinning, setSpinning] = useState(false);
-
-  const openNotificationWithIcon = (type, notifyMessage) => {
-    api[type]({
-      // message: "User already exists!",
-      message: notifyMessage,
-    });
-  };
+  const { contextHolder, showToast } = useToast();
 
   const onFinish = async (values) => {
-    const userEmail = values.email;
-    const userName = values.name;
+    const email = values.email;
+    const name = values.name;
     const quizCode = values.quizCode.toUpperCase();
 
-    const userDetails = {
-      email: userEmail,
-      name: userName,
-      quizCode: quizCode,
-    };
+    if (email.trim() === "") {
+      showToast("error", "Please enter email address!");
+    } else if (name.trim() === "") {
+      showToast("error", "Please enter name!");
+    } else if (quizCode.trim() === "" || quizCode.length < 6) {
+      showToast("error", "Please enter valid quiz code!");
+    } else {
+      const url = `/quiz/${quizCode}`;
+      const userDetails = {
+        email,
+        name,
+        quizCode,
+      };
+      console.log("User details :::: ", userDetails);
 
-    console.log("User details :::: ", userDetails);
-    setSpinning(true);
+      const api = await axios
+        .post("http://localhost:5000/add-user", userDetails)
+        .then((res) => res.data);
 
-    openNotificationWithIcon("success", "Successfully Logged In!");
+      if (api.isAttempted === false) {
+        showToast("success", api.message);
+        setSpinning(true);
+        setTimeout(() => {
+          setSpinning(false);
+          sessionStorage.setItem(
+            "participant",
+            JSON.stringify({ email: email, name: name })
+          );
+          sessionStorage.setItem("token", api.token);
+          navigate(url);
+        }, 1000);
+      } else {
+        showToast("error", api.message);
+      }
+    }
+
     // Trial
-    setTimeout(() => {
-      setSpinning(false);
-      localStorage.setItem(
-        "participantEmail",
-        JSON.stringify({ email: userEmail, verified: true })
-      );
-      navigate("/participant/display-quiz");
-    }, 1000);
 
     // try {
     //   let addUser = await axios.post("http://localhost:5000/add-user", {
@@ -76,14 +89,6 @@ const UserLogin = () => {
     console.log("Failed:", errorInfo);
   };
 
-  let savedName = "";
-  let savedEmail = "";
-
-  if (sessionStorage.length !== 0) {
-    savedEmail = sessionStorage.key(0);
-    savedName = sessionStorage.getItem(savedEmail);
-  }
-
   // const showLoader = () => {
   //   setSpinning(true);
   //   setTimeout(() => {
@@ -109,8 +114,8 @@ const UserLogin = () => {
             className="login-form flex flex-col mx-8  items-center"
             size="large"
             initialValues={{
-              name: savedName,
-              email: savedEmail,
+              name: "",
+              email: "",
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}

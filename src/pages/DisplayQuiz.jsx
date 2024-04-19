@@ -11,7 +11,9 @@ import SubmitModal, {
 import Sider from "antd/es/layout/Sider";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import ContextAPI from "../components/participants/ContextAPI";
-import ParticipantWithAuth from "../auth/ParticipantWithAuth";
+import ParticipantWithoutAuth from "../auth/ParticipantWithoutAuth";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const DisplayQuiz = ({ timer }) => {
   console.log("Display Quiz");
@@ -19,8 +21,34 @@ const DisplayQuiz = ({ timer }) => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [quesNum, setQuesNum] = useState(1);
-  console.log(quesNum);
+  // console.log(quesNum);
+
   const questionList = questionBank;
+  const [quesList, setquesList] = useState([]);
+
+  const params = useParams();
+
+  const quizCode = params.id;
+
+  useEffect(() => {
+    async function fetchQuestion() {
+      const api = await axios
+        .post("http://localhost:5000/get-quiz-data", {
+          quizCode,
+        })
+        .then((res) => res.data);
+
+      console.log("api", api);
+
+      if (api.status) {
+        setquesList(api.data.allQuestions);
+      }
+    }
+
+    fetchQuestion();
+  }, []);
+
+  console.log("quesList", quesList);
 
   // const userData = JSON.parse(localStorage.getItem("user"));
   const userData = { name: "Vraj", email: "vd@gmail.com" };
@@ -180,4 +208,4 @@ const DisplayQuiz = ({ timer }) => {
     </>
   );
 };
-export default ParticipantWithAuth(DisplayQuiz);
+export default ParticipantWithoutAuth(DisplayQuiz);

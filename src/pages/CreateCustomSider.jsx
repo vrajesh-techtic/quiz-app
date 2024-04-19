@@ -11,11 +11,12 @@ import { demoActions } from "../store";
 import CreateQuizPage from "../components/admin/CreateQuizPage";
 import { quizActions } from "../store/quizReducers";
 import WithAuth from "../auth/WithAuth";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import useToast from "../components/NotificationPopup";
+import { Spin } from "antd";
 
-const CreateCustomSider = () => {
+const CreateCustomSider = ({ isNew }) => {
   const generateQuizCode = () => {
     const quizCodeArr = [];
     for (let i = 0; i < 6; i++) {
@@ -33,7 +34,9 @@ const CreateCustomSider = () => {
 
     return quizCode;
   };
-
+  const token = sessionStorage.getItem("token");
+  localStorage.setItem("token", token);
+  const params = useParams();
   const [quizDept, setquizDept] = useState("");
   const [quizTitle, setquizTitle] = useState("");
   const [quesList, setquesList] = useState([]);
@@ -42,12 +45,17 @@ const CreateCustomSider = () => {
   const [quesText, setquesText] = useState("");
   const [optionArr, setoptionArr] = useState(["", "", "", ""]);
   const [corrAns, setcorrAns] = useState(0);
-  const token = sessionStorage.getItem("token");
   const { contextHolder, showToast } = useToast();
   const [runEffect, setrunEffect] = useState(false);
   let genquizCode = useMemo(() => generateQuizCode(), []);
+  const navigate = useNavigate();
+  const [spinning, setSpinning] = useState(false);
 
-  genquizCode = "GYWQLD";
+  if (!isNew) {
+    genquizCode = params.id;
+  }
+
+  // UEXUIC
   // to fetch question list
   useEffect(() => {
     const fetchQuesList = async () => {
@@ -70,14 +78,28 @@ const CreateCustomSider = () => {
         setquesList(api.data.allQuestions);
         setcurrQuesData(api.data.allQuestions[currQues - 1]);
       }
+
       // console.log("api", api);
       // console.log("quesList", quesList);
     };
 
+    const fetchQuizData = async () => {
+      const api = await axios
+        .post("http://localhost:5000/get-quiz", {
+          quizCode: genquizCode,
+          token,
+        })
+        .then((res) => res.data);
+
+      if (api.status) {
+        setquizTitle(() => api.data.quizName);
+        setquizDept(() => api.data.deptName);
+      }
+    };
+
+    fetchQuizData();
     fetchQuesList();
   }, [runEffect]);
-
-  // console.log("quesList", quesList);
 
   // to change data that needs to be sent to QuizPage
   useEffect(() => {
@@ -91,6 +113,23 @@ const CreateCustomSider = () => {
     setcurrQuesData(quesList[currQues - 1]);
   }, [currQues]);
 
+  const saveQuiz = async (finalObj) => {
+    const api = await axios
+      .post("http://localhost:5000/create-quiz", finalObj)
+      .then((res) => res.data);
+
+    if (api.status) {
+      showToast("success", "Quiz saved!");
+      setSpinning(true);
+      setTimeout(() => {
+        setSpinning(false);
+        navigate(`/admin/editQuiz/${genquizCode}`);
+      }, 500);
+    } else {
+      showToast("error", api.message);
+    }
+  };
+
   const saveNewQuestion = async (data) => {
     const quesAPI = await axios
       .post("http://localhost:5000/add-question", {
@@ -103,6 +142,7 @@ const CreateCustomSider = () => {
 
     if (quesAPI.status) {
       showToast("success", quesAPI.message);
+      setcurrQues(currQues + 1);
       setrunEffect((prev) => !prev);
     } else {
       showToast("error", quesAPI.message);
@@ -152,6 +192,8 @@ const CreateCustomSider = () => {
           quizDept={quizDept}
           setquizDept={setquizDept}
           code={genquizCode}
+          isNew={isNew}
+          saveQuiz={saveQuiz}
         />
 
         <div className="flex h-[82%]">
@@ -187,6 +229,7 @@ const CreateCustomSider = () => {
 
         <Footer />
       </div>
+      <Spin spinning={spinning} size="large" tip="Loading ..." fullscreen />
     </>
   );
 };

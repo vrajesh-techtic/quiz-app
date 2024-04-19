@@ -1,6 +1,6 @@
 import { Radio } from "antd";
 import React, { useEffect, useState } from "react";
-import ParticipantWithAuth from "../../auth/ParticipantWithAuth";
+import ParticipantWithoutAuth from "../../auth/ParticipantWithoutAuth";
 
 const OptionsContainer = ({ optionsArr, ansArr, setansArr, quesNo }) => {
   const [selectedAns, setSelectedAns] = useState(ansArr[quesNo]);
@@ -152,4 +152,4 @@ const OptionsContainer = ({ optionsArr, ansArr, setansArr, quesNo }) => {
   );
 };
 
-export default ParticipantWithAuth(OptionsContainer);
+export default ParticipantWithoutAuth(OptionsContainer);

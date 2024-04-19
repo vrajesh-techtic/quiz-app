@@ -10,16 +10,10 @@ const QuizList = () => {
 
   const [deptNo, setdeptNo] = useState(0);
 
-  // const dispatch = useDispatch();
-  // const { setDeptList } = quizActions;
-  // const data = useSelector((state) => state.deptList) || [];
-
   const token = sessionStorage.getItem("token");
 
   const [data, setdata] = useState([]);
   const [QuizList, setQuizList] = useState([]);
-  // const data = dataAdmin["dept-quiz-list"];
-  // console.log("data", data);
 
   useEffect(() => {
     const fetchDeptList = async () => {
@@ -38,8 +32,6 @@ const QuizList = () => {
 
     fetchDeptList();
   }, [addModalOpen, delModalOpen]);
-
-  useEffect(() => {}, [deptNo]);
 
   async function getQuizzesList(index, dept_id) {
     setdeptNo(index);
@@ -118,14 +110,17 @@ const QuizList = () => {
             ) : (
               <div className="quiz-list-container  bg-gray-100  mx-2 rounded-lg p-4 w-[75%]">
                 <ul className=" dept-list flex flex-col px-2 items-center h-full overflow-auto ">
-                  {QuizList?.map((i, index) => (
-                    <li
-                      key={index}
-                      className=" border-gray my-1 bg-[#F7DED0] text-black rounded-lg  text-xl  cursor-pointer w-full py-8 px-4 "
-                    >
-                      {i.quizName}
-                    </li>
-                  ))}
+                  {QuizList?.map((i, index) => {
+                    const url = `/admin/editQuiz/${i.quizCode}`;
+                    return (
+                      <a
+                        href={url}
+                        className=" hover:text-black border-gray my-1 bg-[#F7DED0] text-black rounded-lg  text-xl  cursor-pointer w-full py-8 px-4 "
+                      >
+                        <li key={index}>{i.quizName}</li>
+                      </a>
+                    );
+                  })}
                 </ul>
               </div>
             )}

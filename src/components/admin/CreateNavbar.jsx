@@ -13,12 +13,14 @@ const CreateNavbar = ({
   setquizTitle,
   quizDept,
   setquizDept,
+  isNew,
+  saveQuiz,
 }) => {
   const quizCode = code || "";
   const token = sessionStorage.getItem("token");
   const { contextHolder, showToast } = useToast();
   const [deptList, setdeptList] = useState([]);
-
+  console.log("quizDept", quizDept);
   // fetch department list
   useEffect(() => {
     const fetchDeptList = async () => {
@@ -57,17 +59,8 @@ const CreateNavbar = ({
         token,
       };
 
+      saveQuiz(finalObj);
       // console.log("finalObj", finalObj);
-
-      const api = await axios
-        .post("http://localhost:5000/create-quiz", finalObj)
-        .then((res) => res.data);
-
-      if (api.status) {
-        showToast("success", "Quiz saved!");
-      } else {
-        showToast("error", api.message);
-      }
     }
   };
 
@@ -127,53 +120,59 @@ const CreateNavbar = ({
 
           {/* Department Input  */}
           <div className="flex w-[200px]  justify-center mx-8">
-            <Select
-              style={{
-                width: 300,
-              }}
-              defaultValue={quizDept}
-              onSelect={(e) => setquizDept(e)}
-              showSearch
-              optionFilterProp="children"
-              filterOption={filterOption}
-              placeholder="Select Department"
-              dropdownRender={(menu) => (
-                <>
-                  {menu}
-                  <Divider
-                    style={{
-                      margin: "8px 0",
-                    }}
-                  />
-                  <Space
-                    style={{
-                      padding: "0 8px 4px",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Input
-                      placeholder="Add new department"
-                      ref={inputRef}
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      onKeyDown={(e) => e.stopPropagation()}
+            {isNew ? (
+              <Select
+                style={{
+                  width: 300,
+                }}
+                defaultValue={`${quizDept}`}
+                onSelect={(e) => setquizDept(e)}
+                showSearch
+                optionFilterProp="children"
+                filterOption={filterOption}
+                placeholder="Select Department"
+                dropdownRender={(menu) => (
+                  <>
+                    {menu}
+                    <Divider
+                      style={{
+                        margin: "8px 0",
+                      }}
                     />
-                    <Button
-                      type="text"
-                      icon={<PlusOutlined />}
-                      onClick={addItem}
+                    <Space
+                      style={{
+                        padding: "0 8px 4px",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
                     >
-                      Add
-                    </Button>
-                  </Space>
-                </>
-              )}
-              options={deptList.map((item) => ({
-                label: item.deptName,
-                value: item.deptName,
-              }))}
-            />
+                      <Input
+                        placeholder="Add new department"
+                        ref={inputRef}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        onKeyDown={(e) => e.stopPropagation()}
+                      />
+                      <Button
+                        type="text"
+                        icon={<PlusOutlined />}
+                        onClick={addItem}
+                      >
+                        Add
+                      </Button>
+                    </Space>
+                  </>
+                )}
+                options={deptList.map((item) => ({
+                  label: item.deptName,
+                  value: item.deptName,
+                }))}
+              />
+            ) : (
+              <span className="bg-white p-1 rounded-lg text-center w-[200px]">
+                {quizDept}
+              </span>
+            )}
           </div>
 
           {/* Quiz Code  */}

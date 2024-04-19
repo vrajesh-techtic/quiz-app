@@ -108,14 +108,13 @@ const AdminSideBar = ({ children, selectedKeys = 1 }) => {
             }}
           >
             <div className="flex w-[200px] me-12 items-center justify-between">
-              <button
-                onClick={() => {
-                  navigate("/participant/login");
-                }}
-                className="flex bg-[#e7c6ff] font-medium text-lg text-[#ba60ff] h-[35px] p-3 rounded-md items-center"
+              <a
+                target="_blank"
+                href="/participant/login"
+                className="flex bg-[#e7c6ff] hover:text-[#ba60ff] font-medium text-lg text-[#ba60ff] h-[35px] p-3 rounded-md items-center"
               >
                 Enter Code
-              </button>
+              </a>
               <Box
                 sx={{
                   flexGrow: 0,

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import questionBank from "../../questions/questionBank";
 import OptionsContainer from "./OptionsContainer";
 import ContextAPI from "./ContextAPI";
-import ParticipantWithAuth from "../../auth/ParticipantWithAuth";
+import ParticipantWithoutAuth from "../../auth/ParticipantWithoutAuth";
 const Question = ({
   userAns,
   quesNo,
@@ -55,4 +55,4 @@ const Question = ({
   );
 };
 
-export default ParticipantWithAuth(Question);
+export default ParticipantWithoutAuth(Question);

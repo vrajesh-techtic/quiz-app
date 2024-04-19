@@ -76,11 +76,11 @@ function App() {
     },
     {
       path: "/admin/create-quiz",
-      element: <CreateCustomSider isEdit={false} />,
+      element: <CreateCustomSider isNew={true} />,
     },
     {
-      path: "/admin/edit-quiz/:dept/:quiz",
-      element: <CreateCustomSider isEdit={true} />,
+      path: "/admin/editQuiz/:id",
+      element: <CreateCustomSider isNew={false} />,
     },
 
     {
@@ -89,6 +89,11 @@ function App() {
     },
     {
       path: "/participant/display-quiz",
+      element: <DisplayQuiz timer={timer} />,
+    },
+
+    {
+      path: "/quiz/:id",
       element: <DisplayQuiz timer={timer} />,
     },
     { path: "/participant/result", element: <ResultPage /> },

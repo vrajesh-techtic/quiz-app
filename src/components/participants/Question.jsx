@@ -10,11 +10,9 @@ const Question = ({
   selectedAns,
   setSelectedAns,
   setansArr,
+  quesList,
 }) => {
   // console.log('Question Called!')
-  const [ansArr, questionBank] = useContext(ContextAPI);
-
-  const optionsArr = questionBank[quesNo].options;
 
   return (
     <div className="question-box bg-gray-200 rounded-lg h-[90%]">
@@ -22,7 +20,7 @@ const Question = ({
       <div className="top-container  h-[40%] flex justify-center items-center ">
         <span className="text-4xl ms-5">
           {/* {quesNo}. {ques} */}
-          {quesNo}. {questionBank[quesNo].ques}
+          {quesNo}. {quesList[quesNo - 1]?.ques}
         </span>
       </div>
 
@@ -31,12 +29,13 @@ const Question = ({
         {/* Options Container  */}
 
         <OptionsContainer
-          optionsArr={optionsArr}
+          // optionsArr={optionsArr}
           setansArr={setansArr}
           selectedAns={selectedAns}
           setSelectedAns={setSelectedAns}
           ansArr={userAns}
           quesNo={quesNo}
+          quesList={quesList}
         />
 
         {/* <OptionsContainer

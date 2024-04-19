@@ -2,8 +2,10 @@ import { Radio } from "antd";
 import React, { useEffect, useState } from "react";
 import ParticipantWithoutAuth from "../../auth/ParticipantWithoutAuth";
 
-const OptionsContainer = ({ optionsArr, ansArr, setansArr, quesNo }) => {
+const OptionsContainer = ({ ansArr, setansArr, quesNo, quesList }) => {
   const [selectedAns, setSelectedAns] = useState(ansArr[quesNo]);
+
+  const optionsArr = quesList[quesNo - 1]?.options || ["", "", "", ""];
 
   return (
     <div className="options-container  w-full flex flex-col  justify-center">

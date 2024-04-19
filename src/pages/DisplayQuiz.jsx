@@ -48,10 +48,11 @@ const DisplayQuiz = ({ timer }) => {
     fetchQuestion();
   }, []);
 
-  console.log("quesList", quesList);
-
   // const userData = JSON.parse(localStorage.getItem("user"));
-  const userData = { name: "Vraj", email: "vd@gmail.com" };
+  const userData = JSON.parse(sessionStorage.getItem("participant")) || {
+    name: "Test",
+    email: "test@example.com",
+  };
 
   const [ansArr, setansArr] = useState(userAns);
   const [selectedAns, setSelectedAns] = useState();
@@ -69,8 +70,8 @@ const DisplayQuiz = ({ timer }) => {
     };
   }
 
-  const items = questionBank.map((i, idx) => {
-    if (idx !== questionBank.length - 1) {
+  const items = quesList.map((i, idx) => {
+    if (idx !== quesList.length) {
       return getItem(`Question ${idx + 1}`, idx + 1);
     }
   });
@@ -154,6 +155,7 @@ const DisplayQuiz = ({ timer }) => {
               selectedAns={selectedAns}
               setSelectedAns={setSelectedAns}
               quesNo={quesNum}
+              quesList={quesList}
             />
 
             <div className="control-btn flex items-center justify-end mt-2 h-[10%]">
@@ -163,13 +165,12 @@ const DisplayQuiz = ({ timer }) => {
                   setQuesNum((prev) => {
                     let num = 0;
                     if (prev === 1) {
-                      num = questionList.length - 1;
+                      num = quesList.length;
                     } else {
                       num = prev - 1;
                     }
                     return num;
                   });
-                  console.log(quesNum);
                 }}
               >
                 Previous
@@ -179,15 +180,13 @@ const DisplayQuiz = ({ timer }) => {
                 onClick={() => {
                   setQuesNum((prev) => {
                     let num = 0;
-                    if (prev === questionList.length - 1) {
+                    if (prev === quesList.length) {
                       num = 1;
                     } else {
                       num = prev + 1;
                     }
                     return num;
                   });
-
-                  console.log("Called ===> ", quesNum);
                 }}
               >
                 Next

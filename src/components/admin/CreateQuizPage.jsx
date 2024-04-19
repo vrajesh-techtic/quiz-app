@@ -16,6 +16,7 @@ const CreateQuizPage = ({
   saveNewQuestion,
   currQuesId,
   editQuestion,
+  deleteQuestion,
 }) => {
   // console.log("quesData", quesData);
 
@@ -53,9 +54,7 @@ const CreateQuizPage = ({
         options: optionArr,
       };
 
-      obj["quizCode"] = "UIDMOP";
-
-      console.log("obj", obj);
+      obj["quizCode"] = quizCode;
 
       if (currQuesId === 0) {
         saveNewQuestion(obj);
@@ -63,6 +62,14 @@ const CreateQuizPage = ({
         obj["quesId"] = currQuesId;
         editQuestion(obj);
       }
+    }
+  };
+
+  const verifyDelete = async () => {
+    if (currQuesId === 0) {
+      showToast("error", "Please save the question first!");
+    } else {
+      await deleteQuestion(currQuesId);
     }
   };
 
@@ -151,7 +158,10 @@ const CreateQuizPage = ({
             {quesText.trim() === "" ||
             optionArr.length < 4 ||
             corrAns === 0 ? null : (
-              <button className="bg-[#04c1cc] w-[70px] p-2 mx-3 rounded-lg font-medium">
+              <button
+                onClick={verifyDelete}
+                className="bg-[#04c1cc] w-[70px] p-2 mx-3 rounded-lg font-medium"
+              >
                 Delete
               </button>
             )}

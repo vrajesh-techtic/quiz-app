@@ -19,12 +19,6 @@ const AdminSignUp = () => {
   const [api, contextHolder] = notification.useNotification();
   const [spinning, setSpinning] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const openNotificationWithIcon = (type, notifyMessage) => {
-    api[type]({
-      // message: "User already exists!",
-      message: notifyMessage,
-    });
-  };
 
   const email = JSON.parse(localStorage.getItem("adminEmail"))?.email;
 

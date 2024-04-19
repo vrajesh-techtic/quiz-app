@@ -7,20 +7,21 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const NotVerifiedAdmin = ({ setSpinning, setIsVerified }) => {
-  const prevData = useSelector((state) => state.adminReducers.adminData);
-  const [adminData, setadminData] = useState(prevData || {});
-  const dispatch = useDispatch();
-  const { setAdminData } = adminActions;
+  // const prevData = useSelector((state) => state.adminReducers.adminData);
+  // const [adminData, setadminData] = useState(prevData || {});
+  // const dispatch = useDispatch();
+  // const { setAdminData } = adminActions;
   const navigate = useNavigate();
+  const [isDisable, setIsDisable] = useState(false);
 
-  useEffect(() => {
-    setadminData(prevData);
-  }, [prevData]);
+  // useEffect(() => {
+  //   setadminData(prevData);
+  // }, [prevData]);
 
-  useEffect(() => {
-    if (adminData.isVerified) {
-    }
-  }, [adminData]);
+  // useEffect(() => {
+  //   if (adminData.isVerified) {
+  //   }
+  // }, [adminData]);
 
   const onFinish = async (data) => {
     console.log("onfinish");
@@ -37,11 +38,12 @@ const NotVerifiedAdmin = ({ setSpinning, setIsVerified }) => {
 
     localStorage.setItem("adminEmail", JSON.stringify(obj));
 
-    dispatch(setAdminData(data));
+    // dispatch(setAdminData(data));
     setSpinning(() => true);
+    setIsDisable(true);
     setTimeout(() => {
       setSpinning(false);
-      localStorage.setItem("adminOTP", 1234);
+
       navigate("/admin/authenticate");
     }, 1000);
   };
@@ -81,10 +83,9 @@ const NotVerifiedAdmin = ({ setSpinning, setIsVerified }) => {
           />
         </Form.Item>
 
-
-
         <Form.Item className="flex flex-col">
           <Button
+            disabled={isDisable}
             type="primary"
             htmlType="submit"
             className="login-form-button w-[200px] text-lg flex justify-center items-center bg-blue-500"

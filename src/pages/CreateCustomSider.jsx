@@ -47,12 +47,13 @@ const CreateCustomSider = () => {
   const [runEffect, setrunEffect] = useState(false);
   let genquizCode = useMemo(() => generateQuizCode(), []);
 
+  genquizCode = "GYWQLD";
   // to fetch question list
   useEffect(() => {
     const fetchQuesList = async () => {
       const api = await axios
         .post("http://localhost:5000/get-all-questions", {
-          quizCode: "UIDMOP",
+          quizCode: genquizCode,
           token,
         })
         .then((res) => res.data);
@@ -126,6 +127,21 @@ const CreateCustomSider = () => {
     console.log("data", data);
   };
 
+  const deleteQuestion = async (quesId) => {
+    const quesAPI = await axios
+      .post("http://localhost:5000/delete-question", {
+        quesId,
+        token,
+      })
+      .then((res) => res.data);
+    if (quesAPI.status) {
+      showToast("success", quesAPI.message);
+      setrunEffect((prev) => !prev);
+    } else {
+      showToast("error", quesAPI.message);
+    }
+  };
+
   return (
     <>
       {contextHolder}
@@ -161,8 +177,9 @@ const CreateCustomSider = () => {
                 optionArr={optionArr}
                 setoptionArr={setoptionArr}
                 saveNewQuestion={saveNewQuestion}
-                currQuesId={currQuesData?._id}
+                currQuesId={currQuesData?._id || 0}
                 editQuestion={editQuestion}
+                deleteQuestion={deleteQuestion}
               />
             </div>
           </div>

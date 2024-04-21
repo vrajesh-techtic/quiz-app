@@ -33,10 +33,11 @@ const ResultPage = () => {
 
       if (api.status) {
         setResultData(api?.data);
+        showToast("success", api.message);
       } else {
         showToast("error", api.message);
       }
-      // sessionStorage.removeItem('token')
+      sessionStorage.removeItem("token");
     }
 
     fetchResult();

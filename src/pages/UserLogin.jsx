@@ -29,6 +29,7 @@ const UserLogin = () => {
       showToast("error", "Please enter valid quiz code!");
     } else {
       const url = `/quiz/${quizCode}`;
+      const resultURL = `/participant/result/${quizCode}`;
       const userDetails = {
         email,
         name,
@@ -53,7 +54,17 @@ const UserLogin = () => {
           navigate(url);
         }, 1000);
       } else {
-        showToast("error", api.message);
+        // showToast("error", api.message);
+        setSpinning(true);
+        setTimeout(() => {
+          setSpinning(false);
+          //  sessionStorage.setItem(
+          //    "participant",
+          //    JSON.stringify({ email: email, name: name })
+          //  );
+          sessionStorage.setItem("token", api.token);
+          navigate(resultURL);
+        }, 1000);
       }
     }
 

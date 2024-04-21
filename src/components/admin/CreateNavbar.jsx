@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import logo from "../../assets/banner-without-bg.png";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, TrophyOutlined } from "@ant-design/icons";
 import { Divider, Input, Select, Space, Button } from "antd";
 import { FaSave } from "react-icons/fa";
 import axios from "axios";
 import useToast from "../NotificationPopup";
 import WithAuth from "../../auth/WithAuth";
+import LeaderBoardModal from "./LeaderBoardModal";
 
 const CreateNavbar = ({
   code,
@@ -20,6 +21,8 @@ const CreateNavbar = ({
   const token = sessionStorage.getItem("token");
   const { contextHolder, showToast } = useToast();
   const [deptList, setdeptList] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+
   console.log("quizDept", quizDept);
   // fetch department list
   useEffect(() => {
@@ -96,6 +99,12 @@ const CreateNavbar = ({
   return (
     <>
       {contextHolder}
+      <LeaderBoardModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        quizCode={quizCode}
+        token={token}
+      />
       <div className="navbar flex justify-between items-center bg-[#001529] h-[9%]">
         <div className="flex justify-center items-center">
           {/* logo container  */}
@@ -188,14 +197,25 @@ const CreateNavbar = ({
         <div className="flex me-16 ">
           <button
             // onClick={() => onPublish(quizDept, quizTitle, quizCode)}
+            onClick={() => setModalOpen(true)}
+            style={{
+              boxShadow: "3px 3px 0px #ca89fd",
+            }}
+            className="flex items-center me-6 p-2 w-fit text-white rounded-lg justify-between bg-[#04c1cc]"
+          >
+            <TrophyOutlined />
+            <span className="ms-1"> Leaderboard</span>
+          </button>
+          <button
+            // onClick={() => onPublish(quizDept, quizTitle, quizCode)}
             onClick={onQuizSave}
             style={{
               boxShadow: "3px 3px 0px #04c1cc",
             }}
-            className="flex items-center p-2 w-[105px] text-white rounded-lg justify-between bg-[#ca89fd]"
+            className="flex items-center mx-3 p-2 w-fit text-white rounded-lg justify-between bg-[#ca89fd]"
           >
             <FaSave />
-            Save Quiz
+            <span className="ms-1"> Save Quiz</span>
           </button>
         </div>
       </div>

@@ -1,38 +1,54 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import ContextAPI from "../components/participants/ContextAPI";
 import {
   CircularProgressbarWithChildren,
   buildStyles,
 } from "react-circular-progressbar";
-import ParticipantWithAuth from "../auth/ParticipantWithAuth";
-
-function calculateResult(finalAns, correctAnsArr) {
-  let score = 0;
-  let unAttempted = 0;
-  for (let i = 1; i < correctAnsArr.length; i++) {
-    if (correctAnsArr[i] === finalAns[i]) score++;
-    else if (finalAns[i] === null) unAttempted++;
-  }
-
-  return { score, unAttempted };
-}
+import ParticipantWithoutAuth from "../auth/ParticipantWithoutAuth";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import useToast from "../components/NotificationPopup";
 
 const ResultPage = () => {
-  const finalAns = JSON.parse(localStorage.getItem("userAns"));
-  const [userAns, questionBank] = useContext(ContextAPI);
-  const correctAnsArr = questionBank.map((i) => i.answer);
-  const resultDetails = calculateResult(finalAns, correctAnsArr);
-  const score = resultDetails.score;
-  const totalQues = questionBank.length - 1;
-  const unAttempted = resultDetails.unAttempted;
+  const params = useParams();
+  const [resultData, setResultData] = useState();
+  const { contextHolder, showToast } = useToast();
+  const quizCode = params.id;
+  const user_id = sessionStorage.getItem("token");
 
-  console.log("unAttempted", unAttempted);
-  localStorage.removeItem("participantEmail");
-  const percentage = ((score / (totalQues - unAttempted)) * 100).toFixed(2);
+  const sendResult = () => {
+    if (!resultData) {
+      showToast("error", "No Result found!");
+    } else {
+      showToast("success", "Result sent on your registered email address");
+    }
+  };
+  useEffect(() => {
+    async function fetchResult() {
+      const obj = { user_id, quizCode };
+      const api = await axios
+        .post("http://localhost:5000/get-result", obj)
+        .then((res) => res.data);
+
+      if (api.status) {
+        setResultData(api?.data);
+      } else {
+        showToast("error", api.message);
+      }
+      // sessionStorage.removeItem('token')
+    }
+
+    fetchResult();
+  }, []);
+
+  console.log("resultData", resultData);
+
+  const percentage = (resultData?.accuracy || 0).toFixed(2);
 
   return (
     <>
+      {contextHolder}
       <div className="h-screen flex items-center">
         <div className="result-main-container h-fit mx-auto w-[40%] flex flex-col items-center bg-gray-100 py-8 rounded-xl">
           <span className="text-3xl font-medium">Congratulations!</span>
@@ -42,6 +58,10 @@ const ResultPage = () => {
             className=" w-[70%] mt-4"
           ></div>
           <div className="message w-[80%]  text-center text-xl my-7">
+            Hey,{" "}
+            <span className="font-medium">
+              {resultData ? resultData?.name + ". " : "Unknown. "}
+            </span>
             You've completed the Quiz. It was super fun with you. We hope you've
             enjoyed today!
           </div>
@@ -57,7 +77,9 @@ const ResultPage = () => {
                   trailColor: "#c2f3df",
                 })}
               >
-                <span className=" font-medium text-4xl">{score}</span>
+                <span className=" font-medium text-4xl">
+                  {resultData?.totalScore || 0}
+                </span>
               </CircularProgressbarWithChildren>
             </div>
           </div>
@@ -67,12 +89,14 @@ const ResultPage = () => {
             <div className="">
               <div className="totalQueContainer flex flex-col w-[170px] rounded-lg bg-blue-300  mx-2 text-center py-3 my-5 ">
                 <span>Total Questions</span>
-                <span className="font-medium text-3xl">{totalQues}</span>
+                <span className="font-medium text-3xl">
+                  {resultData?.totalQuizQuestions || 0}
+                </span>
               </div>
               <div className="attemptedContainer flex flex-col w-[170px] rounded-lg bg-green-300 mx-2 text-center py-3 my-5 ">
                 <span>Attempted</span>
                 <span className="font-medium text-3xl">
-                  {totalQues - unAttempted}
+                  {resultData?.totalAttempted || 0}
                 </span>
               </div>
             </div>
@@ -81,7 +105,7 @@ const ResultPage = () => {
               <div className="attemptedContainer flex flex-col w-[170px] rounded-lg bg-yellow-300 mx-2 text-center py-3 my-5 ">
                 <span>Wrong</span>
                 <span className="font-medium text-3xl">
-                  {totalQues - unAttempted - score}
+                  {resultData?.totalAttempted - resultData?.totalScore || 0}
                 </span>
               </div>
               <div className="attemptedContainer flex flex-col w-[170px] rounded-lg bg-violet-300 mx-2 text-center py-3 my-5 ">
@@ -93,7 +117,11 @@ const ResultPage = () => {
             </div>
           </div>
 
-          <button className="email-container bg-black hover:shadow-xl text-white font-medium text-lg p-3 rounded-lg">
+          <button
+            // disabled={ true : false}
+            onClick={sendResult}
+            className="email-container bg-black hover:shadow-xl text-white font-medium text-lg p-3 rounded-lg"
+          >
             Email your Result
           </button>
         </div>
@@ -102,4 +130,4 @@ const ResultPage = () => {
   );
 };
 
-export default ParticipantWithAuth(ResultPage);
+export default ParticipantWithoutAuth(ResultPage);

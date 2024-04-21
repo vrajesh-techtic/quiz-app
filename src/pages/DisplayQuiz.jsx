@@ -11,7 +11,7 @@ import SubmitModal, {
 import Sider from "antd/es/layout/Sider";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import ContextAPI from "../components/participants/ContextAPI";
-import ParticipantWithoutAuth from "../auth/ParticipantWithoutAuth";
+import ParticipantWithAuth from "../auth/ParticipantWithAuth";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
@@ -79,7 +79,11 @@ const DisplayQuiz = ({ timer }) => {
   return (
     <>
       {modalOpen ? (
-        <SubmitModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+        <SubmitModal
+          modalOpen={modalOpen}
+          code={quizCode}
+          setModalOpen={setModalOpen}
+        />
       ) : null}
       <Layout
         style={{
@@ -156,6 +160,7 @@ const DisplayQuiz = ({ timer }) => {
               setSelectedAns={setSelectedAns}
               quesNo={quesNum}
               quesList={quesList}
+              quizCode={quizCode}
             />
 
             <div className="control-btn flex items-center justify-end mt-2 h-[10%]">
@@ -207,4 +212,4 @@ const DisplayQuiz = ({ timer }) => {
     </>
   );
 };
-export default ParticipantWithoutAuth(DisplayQuiz);
+export default ParticipantWithAuth(DisplayQuiz);

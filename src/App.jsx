@@ -96,7 +96,7 @@ function App() {
       path: "/quiz/:id",
       element: <DisplayQuiz timer={timer} />,
     },
-    { path: "/participant/result", element: <ResultPage /> },
+    { path: "/participant/result/:id", element: <ResultPage /> },
   ]);
 
   return (

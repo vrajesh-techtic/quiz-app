@@ -1,9 +1,9 @@
 import { Modal, Spin } from "antd";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import ContextAPI from "./ContextAPI";
-import ParticipantWithoutAuth from "../../auth/ParticipantWithoutAuth";
+import ParticipantWithAuth from "../../auth/ParticipantWithAuth";
 
 function calculateAttempted(userAns) {
   let totalQues = Object.entries(userAns).length - 1;
@@ -20,12 +20,14 @@ function calculateAttempted(userAns) {
   };
 }
 
-const SubmitModal = ({ modalOpen, setModalOpen }) => {
+const SubmitModal = ({ modalOpen, setModalOpen, code }) => {
   const [spinning, setSpinning] = useState(false);
   const navigate = useNavigate();
   const [userAns, questionBank] = useContext(ContextAPI);
 
   const details = calculateAttempted(userAns);
+
+  const resultUrl = `/participant/result/${code}`;
 
   return (
     <>
@@ -43,8 +45,8 @@ const SubmitModal = ({ modalOpen, setModalOpen }) => {
 
           setTimeout(() => {
             setSpinning(() => false);
-            localStorage.setItem("userAns", JSON.stringify(userAns));
-            navigate("/participant/result");
+            // localStorage.setItem("userAns", JSON.stringify(userAns));
+            navigate(resultUrl);
           }, 1000);
         }}
         okButtonProps={{
@@ -56,7 +58,7 @@ const SubmitModal = ({ modalOpen, setModalOpen }) => {
         <span className="font-medium text-2xl mt-5 text-center">
           Do you really want to submit the Quiz?
         </span>
-        <div className="flex my-5">
+        {/* <div className="flex my-5">
           <div className="flex flex-col bg-blue-300 w-[120px] rounded-lg  mx-3 p-2 items-center">
             <span>Total Questions</span>
             <span className="font-medium text-2xl">{details.total}</span>
@@ -69,7 +71,7 @@ const SubmitModal = ({ modalOpen, setModalOpen }) => {
             <span>Not Attempted</span>
             <span className="font-medium text-2xl">{details.unAttempted}</span>
           </div>
-        </div>
+        </div> */}
       </Modal>
       <Spin
         spinning={spinning}
@@ -82,4 +84,4 @@ const SubmitModal = ({ modalOpen, setModalOpen }) => {
   );
 };
 
-export default ParticipantWithoutAuth(SubmitModal);
+export default ParticipantWithAuth(SubmitModal);

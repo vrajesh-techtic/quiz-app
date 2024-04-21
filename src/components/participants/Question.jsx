@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import questionBank from "../../questions/questionBank";
 import OptionsContainer from "./OptionsContainer";
 import ContextAPI from "./ContextAPI";
-import ParticipantWithoutAuth from "../../auth/ParticipantWithoutAuth";
+import ParticipantWithAuth from "../../auth/ParticipantWithAuth";
 const Question = ({
   userAns,
   quesNo,
@@ -11,6 +11,7 @@ const Question = ({
   setSelectedAns,
   setansArr,
   quesList,
+  quizCode,
 }) => {
   // console.log('Question Called!')
 
@@ -30,6 +31,7 @@ const Question = ({
 
         <OptionsContainer
           // optionsArr={optionsArr}
+          code={quizCode}
           setansArr={setansArr}
           selectedAns={selectedAns}
           setSelectedAns={setSelectedAns}
@@ -54,4 +56,4 @@ const Question = ({
   );
 };
 
-export default ParticipantWithoutAuth(Question);
+export default ParticipantWithAuth(Question);

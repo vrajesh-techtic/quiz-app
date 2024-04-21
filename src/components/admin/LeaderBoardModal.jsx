@@ -27,7 +27,7 @@ const LeaderBoardModal = ({ modalOpen, setModalOpen, quizCode, token }) => {
     };
 
     fetchList();
-  }, []);
+  }, [modalOpen]);
 
   return (
     <>

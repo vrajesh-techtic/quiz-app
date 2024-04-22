@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import logo from "../../assets/banner-without-bg.png";
 
 import OTPInput from "./OTPInput";
 import { useNavigate } from "react-router-dom";
 import { Spin } from "antd";
 import axios from "axios";
-import ContextAPI from "../participants/ContextAPI";
+
 import WithoutAuth from "../../auth/WithoutAuth";
 
 const OTPPage = () => {
@@ -14,32 +14,7 @@ const OTPPage = () => {
   let email = obj?.email || "";
   const navigate = useNavigate();
 
-  // if (obj?.verified) {
-  //   navigate("/admin/dashboard");
-  // }
-
-  // useEffect(() => {
-  //   async function isUserValid() {
-  //     const api = await axios
-  //       .post("http://localhost:5000/verify-otp", {
-  //         otp: "4567",
-  //         email,
-  //       })
-  //       .then((res) => res.data);
-
-  //     console.log("api", api);
-
-  //     if (api.status) {
-  //       obj.verified = true;
-  //       localStorage.setItem("adminEmail", JSON.stringify(obj));
-  //     }
-  //   }
-
-  //   isUserValid();
-  // }, []);
-
   const [spinning, setSpinning] = useState(false);
-  // const { isUserAuth, setisUserAuth } = useContext(ContextAPI);
 
   const showLoader = () => {
     setSpinning(true);
@@ -48,8 +23,6 @@ const OTPPage = () => {
       navigate("/admin/signup");
     }, 2000);
   };
-
-  // let userEmail = Object.keys(sessionStorage)[0];
 
   async function verifyOTP(enteredOTP) {
     try {
@@ -62,8 +35,6 @@ const OTPPage = () => {
 
       console.log("verificationAPI", verificationAPI.data);
       if (verificationAPI.data.status) {
-        // obj.verified = true;
-        // localStorage.setItem("adminEmail", JSON.stringify(obj));
       }
 
       return verificationAPI.data;

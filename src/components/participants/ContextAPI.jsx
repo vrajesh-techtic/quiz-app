@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import questionBank from "../../questions/questionBank";
 
 const ContextAPI = createContext({

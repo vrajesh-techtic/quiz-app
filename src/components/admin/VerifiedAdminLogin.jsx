@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Button, Checkbox, Form, Input, Spin, notification } from "antd";
-import { MailOutlined, UserOutlined } from "@ant-design/icons";
+import React from "react";
+import { Button, Form, Input, notification } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { BiRename } from "react-icons/bi";
-// import { Formik, Field, ErrorMessage } from "formik";
-
 import { RiLockPasswordLine } from "react-icons/ri";
 import axios from "axios";
 
@@ -40,10 +38,6 @@ const VerifiedAdminLogin = ({ setSpinning }) => {
         setSpinning(false);
       }, 1000);
     }
-
-    // localStorage.setItem("adminEmail", JSON.stringify(obj));
-
-    // navigate("/admin/dashboard");
   };
 
   const onFinishFailed = () => {

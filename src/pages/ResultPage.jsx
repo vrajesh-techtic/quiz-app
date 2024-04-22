@@ -1,6 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-
-import ContextAPI from "../components/participants/ContextAPI";
+import React, { useEffect, useState } from "react";
 import {
   CircularProgressbarWithChildren,
   buildStyles,
@@ -42,8 +40,6 @@ const ResultPage = () => {
 
     fetchResult();
   }, []);
-
-  console.log("resultData", resultData);
 
   const percentage = (resultData?.accuracy || 0).toFixed(2);
 
@@ -119,7 +115,6 @@ const ResultPage = () => {
           </div>
 
           <button
-            // disabled={ true : false}
             onClick={sendResult}
             className="email-container bg-black hover:shadow-xl text-white font-medium text-lg p-3 rounded-lg"
           >

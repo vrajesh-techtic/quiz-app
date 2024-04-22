@@ -1,20 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Button, Checkbox, Form, Input, Spin, notification } from "antd";
-import { MailOutlined, UserOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
+import { Button, Form, Input, Spin } from "antd";
+import { MailOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { BiRename } from "react-icons/bi";
-// import { Formik, Field, ErrorMessage } from "formik";
-
 import { RiLockPasswordLine } from "react-icons/ri";
 import logo from "../assets/banner-without-bg.png";
-import VerifiedAdminLogin from "../components/admin/VerifiedAdminLogin";
-import NotVerifiedAdmin from "../components/admin/NotVerifiedAdmin";
-import WithAuth from "../auth/WithAuth";
 import WithoutAuth from "../auth/WithoutAuth";
 import axios from "axios";
 import useToast from "../components/NotificationPopup";
-
-// import main from '../server/mailer';
 
 const AdminLogin = () => {
   const { contextHolder, showToast } = useToast();
@@ -23,8 +15,6 @@ const AdminLogin = () => {
   const navigate = useNavigate();
 
   const onFinish = async (data) => {
-    console.log("onfinish");
-
     const api = await axios
       .post("http://localhost:5000/login-admin", data)
       .then((res) => res.data);
@@ -121,18 +111,6 @@ const AdminLogin = () => {
           >
             Not a user? Register
           </button>
-
-          {/* <Form.Item name="remember">
-              <Checkbox
-                className="text-xl"
-                defaultChecked={remember}
-                onChange={() => {
-                  setRemember((prev) => !prev);
-                }}
-              >
-                Remember me
-              </Checkbox>
-            </Form.Item> */}
         </div>
         <Spin spinning={spinning} size="large" tip="Loading ..." fullscreen />
       </div>

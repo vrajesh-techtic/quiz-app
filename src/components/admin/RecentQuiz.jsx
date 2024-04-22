@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
-import timerIcon from "../../assets/deadline.png";
-import QuizList from "./QuizList";
-import { ClockCircleOutlined, FieldTimeOutlined } from "@ant-design/icons";
-import { Col, Row, Statistic } from "antd";
+import { ClockCircleOutlined } from "@ant-design/icons";
+import { Statistic } from "antd";
 import AdminContextAPI from "./AdminContextAPI";
 const { Countdown } = Statistic;
 

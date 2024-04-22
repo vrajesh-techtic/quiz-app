@@ -1,15 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-
+import React, { useEffect, useMemo, useState } from "react";
 import CreateNavbar from "../components/admin/CreateNavbar";
 import CreateSider from "../components/admin/CreateSider";
 import Footer from "../components/admin/Footer";
-import Toastify from "toastify-js";
-
-import { useDispatch, useSelector } from "react-redux";
-import api from "../database/apiCall";
-import { demoActions } from "../store";
 import CreateQuizPage from "../components/admin/CreateQuizPage";
-import { quizActions } from "../store/quizReducers";
 import WithAuth from "../auth/WithAuth";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -39,6 +32,7 @@ const CreateCustomSider = ({ isNew }) => {
   const params = useParams();
   const [quizDept, setquizDept] = useState("");
   const [quizTitle, setquizTitle] = useState("");
+  const [quizTime, setquizTime] = useState(0);
   const [quesList, setquesList] = useState([]);
   const [currQues, setcurrQues] = useState(1);
   const [currQuesData, setcurrQuesData] = useState([]);
@@ -55,7 +49,6 @@ const CreateCustomSider = ({ isNew }) => {
     genquizCode = params.id;
   }
 
-  // UEXUIC
   // to fetch question list
   useEffect(() => {
     const fetchQuesList = async () => {
@@ -78,9 +71,6 @@ const CreateCustomSider = ({ isNew }) => {
         setquesList(api.data.allQuestions);
         setcurrQuesData(api.data.allQuestions[currQues - 1]);
       }
-
-      // console.log("api", api);
-      // console.log("quesList", quesList);
     };
 
     const fetchQuizData = async () => {
@@ -94,6 +84,8 @@ const CreateCustomSider = ({ isNew }) => {
       if (api.status) {
         setquizTitle(() => api.data.quizName);
         setquizDept(() => api.data.deptName);
+        setquizTime(() => api.data.quizTime);
+        console.log("api", api);
       }
     };
 
@@ -138,8 +130,6 @@ const CreateCustomSider = ({ isNew }) => {
       })
       .then((res) => res.data);
 
-    console.log("quesAPI", quesAPI);
-
     if (quesAPI.status) {
       showToast("success", quesAPI.message);
       setcurrQues(currQues + 1);
@@ -163,8 +153,6 @@ const CreateCustomSider = ({ isNew }) => {
     } else {
       showToast("error", quesAPI.message);
     }
-
-    console.log("data", data);
   };
 
   const deleteQuestion = async (quesId) => {
@@ -194,6 +182,8 @@ const CreateCustomSider = ({ isNew }) => {
           code={genquizCode}
           isNew={isNew}
           saveQuiz={saveQuiz}
+          quizTime={quizTime}
+          setquizTime={setquizTime}
         />
 
         <div className="flex h-[82%]">
@@ -202,8 +192,6 @@ const CreateCustomSider = ({ isNew }) => {
             setCurrQues={setcurrQues}
             code={genquizCode}
             quesList={quesList}
-
-            // allQues={allQues}
           />
 
           <div className=" h-full p-5 w-full">

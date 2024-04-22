@@ -1,5 +1,4 @@
 import React from "react";
-
 import MainNavBar from "../components/MainNavBar";
 import HomeBanner from "../components/HomeBanner";
 

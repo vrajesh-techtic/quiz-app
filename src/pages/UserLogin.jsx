@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Spin, notification } from "antd";
+import { Button, Form, Input, Spin } from "antd";
 import {
   MailOutlined,
   UserOutlined,
@@ -7,7 +7,6 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import ParticipantWithoutAuth from "../auth/ParticipantWithoutAuth";
-// import axios from "axios";
 import logo from "../assets/banner-without-bg.png";
 import useToast from "../components/NotificationPopup";
 import axios from "axios";
@@ -35,7 +34,6 @@ const UserLogin = () => {
         name,
         quizCode,
       };
-      console.log("User details :::: ", userDetails);
 
       const api = await axios
         .post("http://localhost:5000/add-user", userDetails)
@@ -53,60 +51,22 @@ const UserLogin = () => {
           sessionStorage.setItem("token", api.token);
           navigate(url);
         }, 1000);
+      } else if (api.status === false && api.message === "Quiz not exists") {
+        showToast("error", api.message);
       } else {
-        // showToast("error", api.message);
         setSpinning(true);
         setTimeout(() => {
           setSpinning(false);
-          //  sessionStorage.setItem(
-          //    "participant",
-          //    JSON.stringify({ email: email, name: name })
-          //  );
           sessionStorage.setItem("token", api.token);
           navigate(resultURL);
         }, 1000);
       }
     }
-
-    // Trial
-
-    // try {
-    //   let addUser = await axios.post("http://localhost:5000/add-user", {
-    //     userName,
-    //     userEmail,
-    //   });
-
-    //   console.log(addUser.data);
-    //   if (addUser.data.statusCode === 200) {
-    //     setSpinning(true);
-    //     setTimeout(() => {
-    //       setSpinning(false);
-    //       navigate("/authenticate");
-    //     }, 2000);
-    //   } else if (addUser.data.statusCode === 11000) {
-    //     openNotificationWithIcon("error", addUser.data.message);
-    //   }
-
-    //   setSpinning(() => false);
-    // } catch (error) {
-    //   setSpinning(() => false);
-
-    //   if (error.message === "Network Error")
-    //     openNotificationWithIcon("error", "Server Down!");
-    // }
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
-  // const showLoader = () => {
-  //   setSpinning(true);
-  //   setTimeout(() => {
-  //     setSpinning(false);
-  //     navigate("/authenticate/display-quiz");
-  //   }, 2000);
-  // };
 
   const navigate = useNavigate();
 

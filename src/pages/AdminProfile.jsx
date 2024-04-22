@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import AdminSideBar from "../components/admin/AdminSideBar";
-
 import { useNavigate } from "react-router-dom";
 import { DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useContext } from "react";
 import AdminContextAPI from "../components/admin/AdminContextAPI";
 import WithAuth from "../auth/WithAuth";
 import axios from "axios";
-import { Form, Spin } from "antd";
+import { Spin } from "antd";
 import useToast from "../components/NotificationPopup";
 
 const AdminProfile = () => {
@@ -25,7 +24,6 @@ const AdminProfile = () => {
   async function deleteAccount() {
     let res = window.confirm("Do you want to delete your account permanently?");
     if (res) {
-      // window.alert("Account deleted Successfully!");
       localStorage.removeItem("admin");
       const resp = await axios
         .post("http://localhost:5000/delete-admin", { token })
@@ -59,16 +57,12 @@ const AdminProfile = () => {
   }, []);
 
   const onEditChange = (e, key) => {
-    // let obj = editData;
-    // obj[key] = e;
-
     setAdminData((prev) => {
       let obj = prev;
       obj[key] = e;
 
       return prev;
     });
-    // console.log("obj", obj);
   };
 
   const editProfile = async () => {
@@ -94,7 +88,6 @@ const AdminProfile = () => {
     }
   };
 
-  // console.log("adminData", adminData);
   return (
     <>
       {contextHolder}

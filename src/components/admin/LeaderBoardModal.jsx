@@ -5,7 +5,6 @@ import useToast from "../NotificationPopup";
 import { TrophyOutlined } from "@ant-design/icons";
 
 const LeaderBoardModal = ({ modalOpen, setModalOpen, quizCode, token }) => {
-  //   const [modalOpen, setModalOpen] = useState(false);
   const { contextHolder, showToast } = useToast();
 
   const [leaderboard, setleaderboard] = useState([]);

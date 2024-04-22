@@ -1,8 +1,4 @@
-import {
-  DeleteOutlined,
-  EditOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -14,7 +10,6 @@ const DepartmentModal = ({
   delModalOpen,
   addModalOpen,
 }) => {
-  const demoList = ["Dept - 1", "Dept - 1", "Dept - 1", "Dept - 1"];
   const { contextHolder, showToast } = useToast();
   const [deptList, setdeptList] = useState([]);
   const [Name, setName] = useState("");
@@ -53,8 +48,6 @@ const DepartmentModal = ({
       } else {
         showToast("error", resp.message);
       }
-
-      console.log("resp", resp);
     }
   };
 
@@ -83,7 +76,6 @@ const DepartmentModal = ({
     <>
       {contextHolder}
       <Modal
-        // title="Add Department"
         centered
         open={addModalOpen}
         onOk={() => setaddModalOpen(false)}

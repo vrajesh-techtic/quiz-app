@@ -18,7 +18,6 @@ const CreateSider = ({ currQues, setCurrQues, quesList }) => {
                 style={{
                   backgroundColor: "#ca89fd",
                 }}
-                // onClick={() => setCurrQues(key + 1)}
                 className="cursor-pointer rounded-lg  my-2 p-2 text-center w-full"
               >
                 Create Question

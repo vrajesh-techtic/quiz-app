@@ -7,38 +7,19 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const NotVerifiedAdmin = ({ setSpinning, setIsVerified }) => {
-  // const prevData = useSelector((state) => state.adminReducers.adminData);
-  // const [adminData, setadminData] = useState(prevData || {});
-  // const dispatch = useDispatch();
-  // const { setAdminData } = adminActions;
   const navigate = useNavigate();
   const [isDisable, setIsDisable] = useState(false);
-
-  // useEffect(() => {
-  //   setadminData(prevData);
-  // }, [prevData]);
-
-  // useEffect(() => {
-  //   if (adminData.isVerified) {
-  //   }
-  // }, [adminData]);
-
   const onFinish = async (data) => {
-    console.log("onfinish");
-
     const api = await axios
       .post("http://localhost:5000/send-otp", {
         email: data.email,
       })
       .then((res) => res);
 
-    console.log("api", api);
-
     const obj = { email: data.email, verified: false };
 
     localStorage.setItem("adminEmail", JSON.stringify(obj));
 
-    // dispatch(setAdminData(data));
     setSpinning(() => true);
     setIsDisable(true);
     setTimeout(() => {

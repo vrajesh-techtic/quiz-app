@@ -16,7 +16,6 @@ import axios from "axios";
 // import main from '../server/mailer';
 
 const AdminSignUp = () => {
-  const [api, contextHolder] = notification.useNotification();
   const [spinning, setSpinning] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
@@ -38,19 +37,10 @@ const AdminSignUp = () => {
     fetchAPI();
   }, []);
 
-  // const showLoader = () => {
-  //   setSpinning(true);
-  //   setTimeout(() => {
-  //     setSpinning(false);
-  //     navigate("/authenticate/display-quiz");
-  //   }, 2000);
-  // };
-
   const navigate = useNavigate();
 
   return (
     <>
-      {contextHolder}
       <div className="flex flex-col w-full h-screen bg-gray-800 items-center ">
         <div className=" auth-logo w-[300px]">
           <img src={logo} style={{ width: "100%" }} alt="" />
@@ -73,18 +63,6 @@ const AdminSignUp = () => {
           >
             Already a user? Login
           </button>
-
-          {/* <Form.Item name="remember">
-              <Checkbox
-                className="text-xl"
-                defaultChecked={remember}
-                onChange={() => {
-                  setRemember((prev) => !prev);
-                }}
-              >
-                Remember me
-              </Checkbox>
-            </Form.Item> */}
         </div>
         <Spin spinning={spinning} size="large" tip="Loading ..." fullscreen />
       </div>

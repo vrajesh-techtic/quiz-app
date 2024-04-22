@@ -1,54 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
-
+import React, { useContext, useState } from "react";
 import Question from "../components/participants/Question";
-import questionBank from "../questions/questionBank";
-
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu, Spin, theme } from "antd";
 import logo from "../assets/banner-without-bg.png";
-import SubmitModal, {
-  showPromiseConfirm,
-} from "../components/participants/SubmitModal";
+import SubmitModal from "../components/participants/SubmitModal";
 import Sider from "antd/es/layout/Sider";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import ContextAPI from "../components/participants/ContextAPI";
 import ParticipantWithAuth from "../auth/ParticipantWithAuth";
-import axios from "axios";
-import { useParams } from "react-router-dom";
 
-const DisplayQuiz = ({ timer }) => {
+const DisplayQuiz = ({ timer, quesList, quizCode, spinning }) => {
   console.log("Display Quiz");
   const [userAns, questionBank] = useContext(ContextAPI);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [quesNum, setQuesNum] = useState(1);
-  // console.log(quesNum);
 
-  const questionList = questionBank;
-  const [quesList, setquesList] = useState([]);
-
-  const params = useParams();
-
-  const quizCode = params.id;
-
-  useEffect(() => {
-    async function fetchQuestion() {
-      const api = await axios
-        .post("http://localhost:5000/get-quiz-data", {
-          quizCode,
-        })
-        .then((res) => res.data);
-
-      console.log("api", api);
-
-      if (api.status) {
-        setquesList(api.data.allQuestions);
-      }
-    }
-
-    fetchQuestion();
-  }, []);
-
-  // const userData = JSON.parse(localStorage.getItem("user"));
   const userData = JSON.parse(sessionStorage.getItem("participant")) || {
     name: "Test",
     email: "test@example.com",
@@ -85,6 +51,7 @@ const DisplayQuiz = ({ timer }) => {
           setModalOpen={setModalOpen}
         />
       ) : null}
+
       <Layout
         style={{
           minHeight: "100vh",
@@ -209,6 +176,13 @@ const DisplayQuiz = ({ timer }) => {
           </Footer>
         </Layout>
       </Layout>
+      <Spin
+        spinning={spinning}
+        style={{ zIndex: "2" }}
+        size="large"
+        tip="Loading ..."
+        fullscreen
+      />
     </>
   );
 };

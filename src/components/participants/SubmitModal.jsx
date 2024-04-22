@@ -1,5 +1,5 @@
 import { Modal, Spin } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import ContextAPI from "./ContextAPI";
@@ -23,9 +23,6 @@ function calculateAttempted(userAns) {
 const SubmitModal = ({ modalOpen, setModalOpen, code }) => {
   const [spinning, setSpinning] = useState(false);
   const navigate = useNavigate();
-  const [userAns, questionBank] = useContext(ContextAPI);
-
-  const details = calculateAttempted(userAns);
 
   const resultUrl = `/participant/result/${code}`;
 
@@ -45,7 +42,6 @@ const SubmitModal = ({ modalOpen, setModalOpen, code }) => {
 
           setTimeout(() => {
             setSpinning(() => false);
-            // localStorage.setItem("userAns", JSON.stringify(userAns));
             navigate(resultUrl);
           }, 1000);
         }}
@@ -58,20 +54,6 @@ const SubmitModal = ({ modalOpen, setModalOpen, code }) => {
         <span className="font-medium text-2xl mt-5 text-center">
           Do you really want to submit the Quiz?
         </span>
-        {/* <div className="flex my-5">
-          <div className="flex flex-col bg-blue-300 w-[120px] rounded-lg  mx-3 p-2 items-center">
-            <span>Total Questions</span>
-            <span className="font-medium text-2xl">{details.total}</span>
-          </div>
-          <div className="flex flex-col bg-green-300 w-[120px] rounded-lg  mx-3 p-2 items-center">
-            <span>Attempted</span>
-            <span className="font-medium text-2xl">{details.attempted}</span>
-          </div>
-          <div className="flex flex-col bg-red-300 w-[120px] rounded-lg  mx-3 p-2 items-center">
-            <span>Not Attempted</span>
-            <span className="font-medium text-2xl">{details.unAttempted}</span>
-          </div>
-        </div> */}
       </Modal>
       <Spin
         spinning={spinning}

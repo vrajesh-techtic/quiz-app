@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Radio } from "antd";
 import WithAuth from "../../auth/WithAuth";
 import useToast from "../NotificationPopup";
@@ -18,8 +18,6 @@ const CreateQuizPage = ({
   editQuestion,
   deleteQuestion,
 }) => {
-  // console.log("quesData", quesData);
-
   const { contextHolder, showToast } = useToast();
 
   const onQuesChange = (e) => {

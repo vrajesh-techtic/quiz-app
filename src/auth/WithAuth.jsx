@@ -2,8 +2,6 @@ import React from "react";
 
 const WithAuth = (Component) => {
   const Auth = (props) => {
-    // let login =
-    //   JSON.parse(localStorage.getItem("adminEmail"))?.verified || false;
     const temp = localStorage.getItem("token");
 
     if (temp) {
@@ -15,7 +13,6 @@ const WithAuth = (Component) => {
     if (!token) {
       return (window.location = "/admin/signup");
     } else {
-      //   navigate("/");
       return <Component {...props} />;
     }
   };

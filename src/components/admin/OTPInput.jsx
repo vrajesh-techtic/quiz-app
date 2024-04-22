@@ -1,14 +1,12 @@
 // OtpInput.jsx
 
-import { Spin, message, notification } from "antd";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useToast from "../NotificationPopup";
 
 const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
   console.log("OTP Input");
   const [otp, setOtp] = useState(new Array(length).fill(""));
-  const navigate = useNavigate();
+
   const inputRefs = useRef([]);
 
   const [displayMsg, setDisplayMsg] = useState(true);
@@ -17,24 +15,6 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
 
   const { contextHolder, showToast } = useToast();
 
-  // const openNotificationWithIcon = (type) => {
-  //   if (type === "success")
-  //     api[type]({
-  //       message: "OTP Verified Successfully!",
-  //       style: {
-  //         width: 200,
-  //       },
-  //     });
-  //   else if (type === "error") {
-  //     api[type]({
-  //       message: "Invalid OTP!",
-  //       style: {
-  //         width: 200,
-  //       },
-  //     });
-  //   }
-  // };
-
   let combinedOtp = "";
 
   useEffect(() => {
@@ -42,17 +22,6 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
       inputRefs.current[0].focus();
     }
   }, []);
-
-  // useEffect(() => {
-  //   return () => {
-  //     if (isVerified?.status) {
-  //       openNotificationWithIcon("success");
-  //       showLoader();
-  //     } else {
-  //       openNotificationWithIcon("error");
-  //     }
-  //   };
-  // }, [isVerified]);
 
   const handleChange = async (index, e) => {
     const value = e.target.value;
@@ -132,10 +101,6 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
           Please Check your e-mail address. You have might received an OTP for
           Verification.
         </span>
-        {/* {displayMsg ? (
-        ) : isVerified?.status === false ? (
-          <span className="text-center">Please Enter correct OTP !</span>
-        ) : null} */}
       </div>
     </>
   );

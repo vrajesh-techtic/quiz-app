@@ -7,6 +7,10 @@ import axios from "axios";
 import useToast from "../NotificationPopup";
 import WithAuth from "../../auth/WithAuth";
 import LeaderBoardModal from "./LeaderBoardModal";
+import { TimePicker } from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 
 const CreateNavbar = ({
   code,
@@ -16,6 +20,8 @@ const CreateNavbar = ({
   setquizDept,
   isNew,
   saveQuiz,
+  quizTime,
+  setquizTime,
 }) => {
   const quizCode = code || "";
   const token = sessionStorage.getItem("token");
@@ -23,7 +29,6 @@ const CreateNavbar = ({
   const [deptList, setdeptList] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
 
-  console.log("quizDept", quizDept);
   // fetch department list
   useEffect(() => {
     const fetchDeptList = async () => {
@@ -31,7 +36,6 @@ const CreateNavbar = ({
         .post("http://localhost:5000/get-dept-list", { token })
         .then((res) => res.data);
 
-      // console.log("fetchData", fetchData.data);
       setdeptList(fetchData.data);
     };
 
@@ -47,6 +51,8 @@ const CreateNavbar = ({
       showToast("error", "Please Enter Quiz title!");
     } else if (quizDept === "") {
       showToast("error", "Please select a department!");
+    } else if (quizTime === 0) {
+      showToast("error", "Quiz time cannot be Zero!");
     } else {
       const deptId = deptList.find((i) => i.deptName === quizDept)._id;
 
@@ -54,6 +60,7 @@ const CreateNavbar = ({
         quizName: quizTitle,
         deptName: quizDept,
         quizCode,
+        quizTime,
       };
 
       const finalObj = {
@@ -63,7 +70,6 @@ const CreateNavbar = ({
       };
 
       saveQuiz(finalObj);
-      // console.log("finalObj", finalObj);
     }
   };
 
@@ -90,6 +96,19 @@ const CreateNavbar = ({
     setTimeout(() => {
       inputRef.current?.focus();
     }, 0);
+  };
+
+  const onChange = (time, timeString) => {
+    const temp = timeString.split(":");
+
+    const finalTime =
+      temp.length !== 1
+        ? parseInt(temp[0]) * 3600 +
+          parseInt(temp[1]) * 60 +
+          parseInt(temp[2]) * 1
+        : 0;
+
+    setquizTime(finalTime);
   };
 
   // Filter `option.label` match the user type `input`
@@ -120,7 +139,6 @@ const CreateNavbar = ({
               ref={titleRef}
               value={quizTitle}
               onChange={(e) => setquizTitle(e.target.value)}
-              // disabled={titleEdit ? false : true}
               className="p-1 text-center rounded-lg mx-3"
               type="text"
               placeholder="Quiz Title"
@@ -193,10 +211,26 @@ const CreateNavbar = ({
           </div>
         </div>
 
+        <div>
+          <TimePicker
+            onChange={onChange}
+            placeholder="Set Quiz Timer"
+            size="large"
+            className="text-lg bg-white"
+            changeOnScroll
+            showNow={false}
+            needConfirm={false}
+            value={dayjs()
+              .set("hours", quizTime / 3600)
+              .set("minutes", quizTime / 60)
+              .set("seconds", quizTime % 60)}
+            variant="borderless"
+          />
+        </div>
+
         {/* Save Button  */}
         <div className="flex me-16 ">
           <button
-            // onClick={() => onPublish(quizDept, quizTitle, quizCode)}
             onClick={() => setModalOpen(true)}
             style={{
               boxShadow: "3px 3px 0px #ca89fd",
@@ -207,7 +241,6 @@ const CreateNavbar = ({
             <span className="ms-1"> Leaderboard</span>
           </button>
           <button
-            // onClick={() => onPublish(quizDept, quizTitle, quizCode)}
             onClick={onQuizSave}
             style={{
               boxShadow: "3px 3px 0px #04c1cc",

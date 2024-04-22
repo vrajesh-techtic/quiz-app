@@ -12,6 +12,8 @@ const QuizTimer = () => {
 
   // const [modalOpen, setModalOpen] = useState(false);
 
+  console.log("Quiz Timer");
+
   // Change timer function
   const onChange = (val) => {
     // if (typeof val === "number" && 4.95 * 1000 < val && val < 5 * 1000) {

@@ -1,8 +1,26 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AdminContextAPI from "./AdminContextAPI";
+import axios from "axios";
 
 const StatisticDashboard = () => {
   const data = useContext(AdminContextAPI);
+
+  const [insights, setinsights] = useState();
+  const token = sessionStorage.getItem("token");
+
+  useEffect(() => {
+    async function fetchInsights() {
+      const api = await axios
+        .post("http://localhost:5000/insights", { token })
+        .then((res) => res.data);
+
+      if (api.status) {
+        setinsights(api.data);
+      }
+    }
+
+    fetchInsights();
+  }, []);
 
   return (
     <>
@@ -22,7 +40,7 @@ const StatisticDashboard = () => {
           className="stats-card bg-yellow-200 "
         >
           <span className="stats-card-title">Total Quizzes</span>
-          <span className="stats-card-data">{data["total-quizzes"]}</span>
+          <span className="stats-card-data">{insights?.totalQuizzes || 0}</span>
         </div>
 
         {/* Total Departments Card  */}
@@ -31,7 +49,9 @@ const StatisticDashboard = () => {
           className="stats-card bg-blue-200 "
         >
           <span className="stats-card-title">Total Departments</span>
-          <span className="stats-card-data">{data["total-dept"]}</span>
+          <span className="stats-card-data">
+            {insights?.totalDepartments || 0}
+          </span>
         </div>
 
         {/* Total Participant Card  */}
@@ -41,7 +61,7 @@ const StatisticDashboard = () => {
         >
           <span className="stats-card-title">Total Participants</span>
           <span className="stats-card-data">
-            {data["total-all-participants"]}
+            {insights?.totalParticipants || 0}
           </span>
         </div>
 

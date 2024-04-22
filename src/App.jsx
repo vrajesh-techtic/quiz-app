@@ -2,17 +2,14 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 import OTPPage from "./components/admin/OTPPage";
 import ContextAPI from "./components/participants/ContextAPI";
-import DisplayQuiz from "./pages/DisplayQuiz";
 import ResultPage from "./pages/ResultPage";
 import QuizTimer from "./components/QuizTimer";
 import questionBank from "./questions/questionBank";
 import UserLogin from "./pages/UserLogin";
-import AdminLogin from "./pages/AdminLoginForm";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminProfile from "./pages/AdminProfile";
 import HomePage from "./pages/HomePage";
 import AdminLibrary from "./pages/AdminLibrary";
-import CreateQuizPage from "./components/admin/CreateQuizPage";
 import AdminContextAPI, {
   QuestionContextAPI,
 } from "./components/admin/AdminContextAPI";
@@ -21,6 +18,7 @@ import { useState } from "react";
 import CreateCustomSider from "./pages/CreateCustomSider";
 import AdminSignUp from "./pages/AdminSignUp";
 import AdminLoginForm from "./pages/AdminLoginForm";
+import LiveQuizPage from "./pages/LiveQuizPage";
 
 function App() {
   const adminData = dataAdmin;
@@ -42,8 +40,6 @@ function App() {
   for (let i = 0; i < questionBank.length; i++) {
     newArr[i] = null;
   }
-
-  console.log("App");
 
   const router = createBrowserRouter([
     {
@@ -87,28 +83,22 @@ function App() {
       path: "/participant/login",
       element: <UserLogin />,
     },
-    {
-      path: "/participant/display-quiz",
-      element: <DisplayQuiz timer={timer} />,
-    },
 
     {
       path: "/quiz/:id",
-      element: <DisplayQuiz timer={timer} />,
+      element: <LiveQuizPage timer={timer} />,
     },
     { path: "/participant/result/:id", element: <ResultPage /> },
   ]);
 
   return (
-    <QuestionContextAPI.Provider value={{ quesList, setquesList }}>
-      <AdminContextAPI.Provider value={adminData}>
-        <ContextAPI.Provider value={[newArr, questionBank]}>
-          <div className="App">
-            <RouterProvider router={router} />
-          </div>
-        </ContextAPI.Provider>
-      </AdminContextAPI.Provider>
-    </QuestionContextAPI.Provider>
+    <AdminContextAPI.Provider value={adminData}>
+      <ContextAPI.Provider value={[newArr, questionBank]}>
+        <div className="App">
+          <RouterProvider router={router} />
+        </div>
+      </ContextAPI.Provider>
+    </AdminContextAPI.Provider>
   );
 }
 

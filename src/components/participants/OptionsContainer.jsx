@@ -1,5 +1,5 @@
 import { Radio } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ParticipantWithAuth from "../../auth/ParticipantWithAuth";
 import axios from "axios";
 import useToast from "../NotificationPopup";
@@ -28,8 +28,6 @@ const OptionsContainer = ({ ansArr, setansArr, quesNo, quesList, code }) => {
       quesId,
     };
 
-    console.log("obj", obj);
-
     const attemptQues = await axios
       .post("http://localhost:5000/attempt-question", obj)
       .then((res) => res.data);
@@ -40,8 +38,6 @@ const OptionsContainer = ({ ansArr, setansArr, quesNo, quesList, code }) => {
       showToast("error", attemptQues.message);
     }
   };
-
-  // console.log("selectedAns", selectedAns);
 
   return (
     <>

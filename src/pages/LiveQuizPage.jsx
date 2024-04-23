@@ -3,11 +3,14 @@ import DisplayQuiz from "./DisplayQuiz";
 import LiveTimer from "../components/participants/LiveTimer";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import InstructionsModal from "../components/participants/InstructionsModal";
+import ParticipantWithAuth from "../auth/ParticipantWithAuth";
 
 const LiveQuizPage = () => {
   const [quesList, setquesList] = useState([]);
   const [spinning, setSpinning] = useState(false);
   const [quizTime, setquizTime] = useState(0);
+  const [instructModal, setinstructModal] = useState(true);
 
   const params = useParams();
 
@@ -29,17 +32,26 @@ const LiveQuizPage = () => {
     fetchQuestion();
   }, []);
 
-  const timer = (
+  const timer = instructModal ? null : (
     <LiveTimer timer={quizTime} quizCode={quizCode} setSpinning={setSpinning} />
   );
   return (
-    <DisplayQuiz
-      timer={timer}
-      quesList={quesList}
-      quizCode={quizCode}
-      spinning={spinning}
-    />
+    <>
+      {instructModal ? (
+        <InstructionsModal
+          modalOpen={instructModal}
+          setModalOpen={setinstructModal}
+        />
+      ) : (
+        <DisplayQuiz
+          timer={timer}
+          quesList={quesList}
+          quizCode={quizCode}
+          spinning={spinning}
+        />
+      )}
+    </>
   );
 };
 
-export default LiveQuizPage;
+export default ParticipantWithAuth(LiveQuizPage);

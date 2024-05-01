@@ -19,9 +19,9 @@ const LeaderBoardModal = ({ modalOpen, setModalOpen, quizCode, token }) => {
         .then((res) => res.data);
 
       if (list.status) {
-        setleaderboard(list.list);
+        setleaderboard(list?.list);
       } else {
-        showToast("error", list.message);
+        showToast("error", list?.message);
       }
     };
 

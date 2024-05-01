@@ -1,26 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
-
-import Question from "./Question";
-import questionBank from "../../questions/questionBank";
-
-import { Layout, Menu, theme } from "antd";
-import logo from "../../assets/banner-without-bg.png";
-import SubmitModal, { showPromiseConfirm } from "./SubmitModal";
+import React, { useContext, useState } from "react";
+import Question from "../components/participants/Question";
+import { Layout, Menu, Spin, theme } from "antd";
+import logo from "../assets/banner-without-bg.png";
+import SubmitModal from "../components/participants/SubmitModal";
 import Sider from "antd/es/layout/Sider";
 import { Content, Footer, Header } from "antd/es/layout/layout";
-import ContextAPI from "./ContextAPI";
+import ContextAPI from "../components/participants/ContextAPI";
+import ParticipantWithAuth from "../auth/ParticipantWithAuth";
 
-const DisplayQuiz = ({ timer }) => {
+const DisplayQuiz = ({ timer, quesList, quizCode, spinning }) => {
   console.log("Display Quiz");
   const [userAns, questionBank] = useContext(ContextAPI);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [quesNum, setQuesNum] = useState(1);
-  console.log(quesNum);
-  const questionList = questionBank;
 
-  // const userData = JSON.parse(localStorage.getItem("user"));
-  const userData = { name: "Vraj", email: "vd@gmail.com" };
+  const userData = JSON.parse(sessionStorage.getItem("participant")) || {
+    name: "Test",
+    email: "test@example.com",
+  };
 
   const [ansArr, setansArr] = useState(userAns);
   const [selectedAns, setSelectedAns] = useState();
@@ -38,8 +36,8 @@ const DisplayQuiz = ({ timer }) => {
     };
   }
 
-  const items = questionBank.map((i, idx) => {
-    if (idx !== questionBank.length - 1) {
+  const items = quesList.map((i, idx) => {
+    if (idx !== quesList.length) {
       return getItem(`Question ${idx + 1}`, idx + 1);
     }
   });
@@ -47,8 +45,13 @@ const DisplayQuiz = ({ timer }) => {
   return (
     <>
       {modalOpen ? (
-        <SubmitModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+        <SubmitModal
+          modalOpen={modalOpen}
+          code={quizCode}
+          setModalOpen={setModalOpen}
+        />
       ) : null}
+
       <Layout
         style={{
           minHeight: "100vh",
@@ -123,6 +126,8 @@ const DisplayQuiz = ({ timer }) => {
               selectedAns={selectedAns}
               setSelectedAns={setSelectedAns}
               quesNo={quesNum}
+              quesList={quesList}
+              quizCode={quizCode}
             />
 
             <div className="control-btn flex items-center justify-end mt-2 h-[10%]">
@@ -132,13 +137,12 @@ const DisplayQuiz = ({ timer }) => {
                   setQuesNum((prev) => {
                     let num = 0;
                     if (prev === 1) {
-                      num = questionList.length - 1;
+                      num = quesList.length;
                     } else {
                       num = prev - 1;
                     }
                     return num;
                   });
-                  console.log(quesNum);
                 }}
               >
                 Previous
@@ -148,15 +152,13 @@ const DisplayQuiz = ({ timer }) => {
                 onClick={() => {
                   setQuesNum((prev) => {
                     let num = 0;
-                    if (prev === questionList.length - 1) {
+                    if (prev === quesList.length) {
                       num = 1;
                     } else {
                       num = prev + 1;
                     }
                     return num;
                   });
-
-                  console.log("Called ===> ", quesNum);
                 }}
               >
                 Next
@@ -174,7 +176,14 @@ const DisplayQuiz = ({ timer }) => {
           </Footer>
         </Layout>
       </Layout>
+      <Spin
+        spinning={spinning}
+        style={{ zIndex: "2" }}
+        size="large"
+        tip="Loading ..."
+        fullscreen
+      />
     </>
   );
 };
-export default DisplayQuiz;
+export default ParticipantWithAuth(DisplayQuiz);

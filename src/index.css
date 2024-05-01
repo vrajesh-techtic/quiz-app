@@ -8,8 +8,232 @@
 }
 
 .form-container {
-  background: url("../src//assets/question-bg.jpg");
+  /* background: url("../src//assets/question-bg.jpg"); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+/* Homepage CSS  */
+
+.home-banner {
+  height: 609px;
+  display: flex;
+  align-items: center;
+}
+
+.left-quote-container {
+  width: 760px;
+}
+
+.right-gif-container {
+  height: 500px;
+}
+
+.quote {
+  font-size: 60px;
+}
+.tagline {
+  font-size: 36px;
+  line-height: 40px;
+}
+.user-btns {
+  width: 150px;
+}
+
+@media (max-width: 1024px) {
+  .right-gif-container {
+    height: 400px;
+  }
+  .left-quote-container {
+    width: 760px;
+  }
+  .user-btns {
+    width: 130px;
+  }
+  .quote {
+    font-size: 50px;
+  }
+  .tagline {
+    font-size: 30px;
+    line-height: 36px;
+  }
+}
+
+@media (max-width: 810px) {
+  .home-banner {
+    flex-direction: column;
+    height: fit-content;
+  }
+  .left-quote-container {
+    width: 420px;
+  }
+  .right-gif-container {
+    height: 300px;
+    margin: 20px auto;
+  }
+  .quote {
+    font-size: 35px;
+  }
+  .tagline {
+    font-size: 25px;
+    line-height: 30px;
+  }
+  .banner {
+    text-align: center;
+  }
+  .user-btn-container {
+    justify-content: center;
+    margin: 10px auto;
+  }
+  .user-btns {
+    width: 100px;
+    font-size: 18px;
+    padding: 5px 0px;
+  }
+}
+
+@media (max-width: 375px) {
+  .left-quote-container {
+    width: 315px;
+  }
+  .quote {
+    font-size: 30px;
+  }
+  .tagline {
+    font-size: 20px;
+    line-height: 25px;
+  }
+  .home-footer {
+    font-size: 12px;
+  }
+}
+
+/* Signup Container CSS  */
+
+.auth-form-container {
+  padding: 32px 80px;
+}
+.form-title {
+  font-size: 30px;
+  line-height: 36px;
+}
+
+@media (max-width: 768px) {
+  .auth-logo {
+    width: 300px;
+  }
+  .auth-form-container {
+    padding: 32px 50px;
+  }
+  .form-inputs {
+    width: 250px;
+  }
+  .login-form-button {
+    width: 100px;
+  }
+}
+
+@media (max-width: 425px) {
+  .auth-logo {
+    width: 200px;
+  }
+  .auth-form-container {
+    padding: 25px 30px;
+  }
+  .form-title {
+    font-size: 22px;
+    line-height: 32px;
+  }
+  .form-inputs {
+    width: 200px;
+  }
+  .login-form-button {
+    /* width: 70px; */
+
+    font-size: 14px;
+  }
+}
+
+/* OTP Container CSS  */
+
+@media (max-width: 768px) {
+  .otp-container {
+    padding: 36px 20px;
+  }
+  .otp-title {
+    font-size: 32px;
+  }
+
+  .otpInput {
+    height: 50px;
+    width: 50px;
+    font-size: 24px;
+  }
+
+  .otp-msg-container {
+    width: 300px;
+    height: fit-content;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 425px) {
+  .otp-container {
+    padding: 20px 12px;
+  }
+  .otp-title {
+    font-size: 20px;
+  }
+  .otpInput {
+    height: 30px;
+    width: 30px;
+    font-size: 16px;
+    margin: 0px 12px;
+  }
+  .otp-msg-container {
+    width: 200px;
+    height: fit-content;
+    font-size: 12px;
+    padding: 5px;
+    background-color: transparent;
+    color: black;
+    margin-top: 20px;
+  }
+}
+
+
+/* Admin Dashboard CSS  */
+
+.stats-card {
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 24px;
+  height: 100px;
+}
+
+.stats-card-title {
+  font-size: 18px;
+}
+
+.stats-card-data {
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 40px;
+}
+
+@media (max-width: 1024px) {
+  .stats-card-data {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-card {
+    height: 80px;
+    justify-content: center;
+  }
 }

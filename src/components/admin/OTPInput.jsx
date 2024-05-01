@@ -1,7 +1,7 @@
 // OtpInput.jsx
 
-import { Spin, notification } from "antd";
 import { useEffect, useRef, useState } from "react";
+import useToast from "../NotificationPopup";
 
 const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
   console.log("OTP Input");
@@ -13,19 +13,7 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
 
   const [isVerified, setisVerified] = useState({ status: false, message: "" });
 
-  const [api, contextHolder] = notification.useNotification();
-
-  const openNotificationWithIcon = (type) => {
-    if (type === "success")
-      api[type]({
-        message: "OTP Verified Successfully!",
-      });
-    else if (type === "error") {
-      api[type]({
-        message: "Invalid OTP!",
-      });
-    }
-  };
+  const { contextHolder, showToast } = useToast();
 
   let combinedOtp = "";
 
@@ -34,13 +22,6 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
       inputRefs.current[0].focus();
     }
   }, []);
-
-  useEffect(() => {
-    if (isVerified.status) {
-      openNotificationWithIcon("success");
-      showLoader();
-    }
-  }, [isVerified]);
 
   const handleChange = async (index, e) => {
     const value = e.target.value;
@@ -55,6 +36,15 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
     combinedOtp = newOtp.join("");
     if (combinedOtp.length === length) {
       const apiData = await onOtpSubmit(combinedOtp);
+
+      if (apiData.status) {
+        showToast("success", "OTP Verified Successfully!");
+
+        showLoader();
+      } else {
+        showToast("error", "Invalid OTP!");
+      }
+
       setisVerified(() => apiData);
     }
 
@@ -89,7 +79,6 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
   return (
     <>
       {contextHolder}
-
       <div>
         {otp.map((value, index) => {
           return (
@@ -107,15 +96,11 @@ const OTPInput = ({ length = 4, onOtpSubmit, showLoader }) => {
         })}
       </div>
 
-      <div className=" bg-white  py-2 rounded-lg w-[500px] h-[70px] flex items-center justify-center text-red-400  mt-8 text-xl ">
-        {displayMsg ? (
-          <span className="text-center">
-            Please Check your e-mail address. You have might received an OTP for
-            Verification.
-          </span>
-        ) : isVerified.status === false ? (
-          <span className="text-center">Please Enter correct OTP !</span>
-        ) : null}
+      <div className=" bg-white otp-msg-container  py-2 rounded-lg w-[500px] h-[70px] flex items-center justify-center text-red-400  mt-8 text-xl ">
+        <span className="text-center">
+          Please Check your e-mail address. You have might received an OTP for
+          Verification.
+        </span>
       </div>
     </>
   );

@@ -1,73 +1,49 @@
-import React, { useState } from "react";
+import React from "react";
 
-const quesList = [
-  {
-    id: 1,
-    content: "What is Capital of India ?",
-    options: ["Gujarat", "Rajasthan", "New Delhi", "Mumbai"],
-    correctAns: "New Delhi",
-  },
-  {
-    id: 2,
-    content: "What is Capital of Pakistan ?",
-    options: ["Islamabad", "Karachi", "Kargil", "Lahore"],
-    correctAns: "Islamabad",
-  },
-  {
-    id: 3,
-    content: "What is Capital of China ?",
-    options: ["Beijing", "Shanghai", "Wuhan", "Korea"],
-    correctAns: "Beijing",
-  },
-  {
-    id: 4,
-    content: "What is Capital of USA ?",
-    options: ["Washington DC", "Toronto", "Chicago", "Texas"],
-    correctAns: "Washington DC",
-  },
-];
+import WithAuth from "../../auth/WithAuth";
 
-const CreateSider = ({ quesList, currQues, setCurrQues }) => {
-  console.log("Sider");
-  console.log("quesList", quesList);
-
+const CreateSider = ({ currQues, setCurrQues, quesList }) => {
   return (
-    <div className="w-[230px] flex flex-col items-center bg-gray-100 h-full">
-      <div className="mt-4">
-        <span className="text-2xl my-3 font-medium">Question List</span>
-      </div>
+    <>
+      <div className="w-[230px] flex flex-col items-center bg-gray-100 h-full">
+        <div className="mt-4">
+          <span className="text-2xl my-3 font-medium">Question List</span>
+        </div>
 
-      {/* Question List  */}
-      <div className="flex flex-col items-center mt-5 w-full">
-        <ul className="w-[90%] mx-3 ">
-          {quesList.length === 0 ? (
-            <li
-              style={{
-                backgroundColor: "#ca89fd",
-              }}
-              // onClick={() => setCurrQues(key + 1)}
-              className="cursor-pointer rounded-lg  my-2 p-2 text-center w-full"
-            >
-              Question 1
-            </li>
-          ) : (
-            quesList.map((i, key) => (
+        {/* Question List  */}
+        <div className="create-ques-list  overflow-auto flex flex-col items-center  mt-5 w-full">
+          <ul className="w-[80%] h-full mx-3 ">
+            {quesList?.length === 0 ? (
               <li
-                key={key}
                 style={{
-                  backgroundColor: currQues === key + 1 ? "#ca89fd" : "#04c1cc",
+                  backgroundColor: "#ca89fd",
                 }}
-                onClick={() => setCurrQues(key + 1)}
                 className="cursor-pointer rounded-lg  my-2 p-2 text-center w-full"
               >
-                Question {key + 1}{" "}
+                Create Question
               </li>
-            ))
-          )}
-        </ul>
+            ) : (
+              quesList?.map((i, key) => (
+                <li
+                  key={key}
+                  style={{
+                    backgroundColor:
+                      currQues === key + 1 ? "#ca89fd" : "#04c1cc",
+                  }}
+                  onClick={() => setCurrQues(key + 1)}
+                  className="cursor-pointer rounded-lg  my-2 p-2 text-center w-full"
+                >
+                  {key < quesList?.length - 1
+                    ? `Question ${key + 1}`
+                    : "Create Question"}
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default CreateSider;
+export default WithAuth(CreateSider);

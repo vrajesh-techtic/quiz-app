@@ -1,7 +1,8 @@
 import React from "react";
-import AdminSideBar from "./AdminSideBar";
-import RecentQuiz from "./RecentQuiz";
-import StatisticDashboard from "./StatisticDashboard";
+import AdminSideBar from "../components/admin/AdminSideBar";
+import RecentQuiz from "../components/admin/RecentQuiz";
+import StatisticDashboard from "../components/admin/StatisticDashboard";
+import WithAuth from "../auth/WithAuth";
 
 const AdminDashboard = () => {
   return (
@@ -19,4 +20,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default WithAuth(AdminDashboard);

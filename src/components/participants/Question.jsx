@@ -1,27 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
-
-import questionBank from "../../questions/questionBank";
+import React from "react";
 import OptionsContainer from "./OptionsContainer";
-import ContextAPI from "./ContextAPI";
+import ParticipantWithAuth from "../../auth/ParticipantWithAuth";
 const Question = ({
   userAns,
   quesNo,
   selectedAns,
   setSelectedAns,
   setansArr,
+  quesList,
+  quizCode,
 }) => {
-  // console.log('Question Called!')
-  const [ansArr, questionBank] = useContext(ContextAPI);
-
-  const optionsArr = questionBank[quesNo].options;
-
   return (
     <div className="question-box bg-gray-200 rounded-lg h-[90%]">
       {/* Question Container  */}
       <div className="top-container  h-[40%] flex justify-center items-center ">
         <span className="text-4xl ms-5">
-          {/* {quesNo}. {ques} */}
-          {quesNo}. {questionBank[quesNo].ques}
+          {quesNo}. {quesList[quesNo - 1]?.ques}
         </span>
       </div>
 
@@ -30,28 +24,17 @@ const Question = ({
         {/* Options Container  */}
 
         <OptionsContainer
-          optionsArr={optionsArr}
+          code={quizCode}
           setansArr={setansArr}
           selectedAns={selectedAns}
           setSelectedAns={setSelectedAns}
           ansArr={userAns}
           quesNo={quesNo}
+          quesList={quesList}
         />
-
-        {/* <OptionsContainer
-          optionsArr={optionsArr}
-          questionObj={questionObj}
-          setQuestionObj={setQuestionObj}
-          selectedAns={selectedAns}
-          setselectedAns={setselectedAns}
-          quesNo={quesNo}
-          btnDisable={btnDisable}
-          userAns={userAns}
-          correctAns={correctAns}
-        /> */}
       </div>
     </div>
   );
 };
 
-export default Question;
+export default ParticipantWithAuth(Question);

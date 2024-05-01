@@ -1,21 +1,14 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { quizReducers } from "./quizReducers";
+import { adminReducers } from "./adminReducers";
 
-const demoSlice = createSlice({
-  name: "demo",
-  initialState: { email: "", name: "" },
-  reducers: {
-    setUser(state, action) {
-      state.email = action.payload.email;
-      state.name = action.payload.name;
-    },
-    
-  },
+const rootReducer = combineReducers({
+  adminReducers,
+  quizReducers,
 });
 
 const store = configureStore({
-  reducer: demoSlice.reducer,
+  reducer: rootReducer,
 });
-
-export const demoActions = demoSlice.actions;
 
 export default store;

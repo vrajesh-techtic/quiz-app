@@ -1,32 +1,35 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
-
 import OTPPage from "./components/admin/OTPPage";
 import ContextAPI from "./components/participants/ContextAPI";
-import DisplayQuiz from "./components/participants/DisplayQuiz";
-import ResultPage from "./components/participants/ResultPage";
-import QuizTimer from "./components/participants/QuizTimer";
+import ResultPage from "./pages/ResultPage";
+import QuizTimer from "./components/QuizTimer";
 import questionBank from "./questions/questionBank";
-import UserLogin from "./components/participants/UserLogin";
-import ProtectedRoute from "./components/participants/ParticipantsProtectedRoute";
-import AdminProtectedRoute from "./components/admin/AdminProtectedRoute";
-import AdminLogin from "./components/admin/AdminLoginForm";
-import AdminDashboard from "./components/admin/AdminDashboard";
-import AdminProfile from "./components/admin/AdminProfile";
-import HomePage from "./components/HomePage";
-import AdminLibrary from "./components/admin/AdminLibrary";
-import CreateQuizPage from "./components/admin/CreateQuizPage";
-import AdminContextAPI, {
-  QuestionContextAPI,
-} from "./components/admin/AdminContextAPI";
+import UserLogin from "./pages/UserLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminProfile from "./pages/AdminProfile";
+import HomePage from "./pages/HomePage";
+import AdminLibrary from "./pages/AdminLibrary";
+import AdminContextAPI from "./components/admin/AdminContextAPI";
 import { dataAdmin } from "./components/admin/DataAdmin";
-import { useState } from "react";
-import CreateCustomSider from "./components/admin/CreateCustomSider";
+import { useEffect, useState } from "react";
+import CreateCustomSider from "./pages/CreateCustomSider";
+import AdminSignUp from "./pages/AdminSignUp";
+import AdminLoginForm from "./pages/AdminLoginForm";
+import LiveQuizPage from "./pages/LiveQuizPage";
 
 function App() {
   const adminData = dataAdmin;
 
-  const [quesList, setquesList] = useState([]);
+  const [quesList, setquesList] = useState([
+    {
+      quesId: -1,
+      ques: "",
+      options: ["", "", "", ""],
+      isSaved: false,
+      answer: 0,
+    },
+  ]);
 
   const timer = <QuizTimer />;
 
@@ -36,59 +39,64 @@ function App() {
     newArr[i] = null;
   }
 
-  console.log("App");
-
   const router = createBrowserRouter([
     {
       path: "/",
       element: <HomePage />,
     },
     {
-      path: "/admin",
-      element: <AdminLogin />,
+      path: "/admin/login",
+      element: <AdminLoginForm />,
+    },
+    {
+      path: "/admin/signup",
+      element: <AdminSignUp />,
     },
     {
       path: "/admin/authenticate",
-      element: <AdminProtectedRoute Component={<OTPPage />} />,
+      element: <OTPPage />,
     },
     {
       path: "/admin/dashboard",
-      element: <AdminProtectedRoute Component={<AdminDashboard />} />,
+      element: <AdminDashboard />,
     },
     {
       path: "/admin/library",
-      element: <AdminProtectedRoute Component={<AdminLibrary />} />,
+      element: <AdminLibrary />,
     },
     {
       path: "/admin/profile",
-      element: <AdminProtectedRoute Component={<AdminProfile />} />,
+      element: <AdminProfile />,
     },
     {
       path: "/admin/create-quiz",
-      element: <AdminProtectedRoute Component={<CreateCustomSider />} />,
+      element: <CreateCustomSider isNew={true} />,
+    },
+    {
+      path: "/admin/editQuiz/:id",
+      element: <CreateCustomSider isNew={false} />,
     },
 
     {
-      path: "/participant",
+      path: "/participant/login",
       element: <UserLogin />,
     },
+
     {
-      path: "/participant/display-quiz",
-      element: <ProtectedRoute Component={<DisplayQuiz timer={timer} />} />,
+      path: "/quiz/:id",
+      element: <LiveQuizPage timer={timer} />,
     },
-    { path: "/participant/result", element: <ResultPage /> },
+    { path: "/participant/result/:id", element: <ResultPage /> },
   ]);
 
   return (
-    <QuestionContextAPI.Provider value={{ quesList, setquesList }}>
-      <AdminContextAPI.Provider value={adminData}>
-        <ContextAPI.Provider value={[newArr, questionBank]}>
-          <div className="App">
-            <RouterProvider router={router} />
-          </div>
-        </ContextAPI.Provider>
-      </AdminContextAPI.Provider>
-    </QuestionContextAPI.Provider>
+    <AdminContextAPI.Provider value={adminData}>
+      <ContextAPI.Provider value={[newArr, questionBank]}>
+        <div className="App">
+          <RouterProvider router={router} />
+        </div>
+      </ContextAPI.Provider>
+    </AdminContextAPI.Provider>
   );
 }
 

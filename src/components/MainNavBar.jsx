@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
@@ -39,9 +38,10 @@ function MainNavBar() {
   };
 
   return (
-    <AppBar position="static" className="h-[13%]">
-      <Container maxWidth="xl" className="bg-black">
-        <Toolbar disableGutters>
+    <AppBar position="static" className="">
+      <Container maxWidth="xl" className="bg-black flex justify-between">
+        <Toolbar className="flex justify-between" disableGutters>
+          {/* Quizify Logo  */}
           <Typography
             variant="h6"
             noWrap
@@ -116,7 +116,9 @@ function MainNavBar() {
           >
             <img src={logo} alt="quizify-logo" className="h-full" />
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+
+          {/* About, Documentation, help  */}
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "none" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
@@ -137,18 +139,32 @@ function MainNavBar() {
           <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
             <div className="flex">
               <button
-                className=" bg-[#ca89fd] flex font-medium mx-2 p-2 rounded-md items-center"
-                onClick={() => navigate("/participant")}
-              >
-                <TrophyOutlined />
-                <span className="ms-1">Participant</span>
-              </button>
-              <button
-                className=" bg-[#04c1cc] flex font-medium mx-2 p-2 rounded-md items-center"
-                onClick={() => navigate("/admin")}
+                className="  bg-[#ca89fd] flex font-medium mx-2 p-2 rounded-md items-center"
+                onClick={() => {
+                  const isLogin =
+                    JSON.parse(localStorage.getItem("adminEmail"))?.verified ||
+                    false;
+
+                  if (isLogin) navigate("/admin/dashboard");
+                  else navigate("/admin/signup");
+                }}
               >
                 <UserOutlined />
                 <span className="ms-1">Admin</span>
+              </button>
+              <button
+                className=" bg-[#04c1cc] flex font-medium mx-2 p-2 rounded-md items-center"
+                onClick={() => {
+                  const isLogin =
+                    JSON.parse(localStorage.getItem("participantEmail"))
+                      ?.verified || false;
+
+                  if (isLogin) navigate("/participant/display-quiz");
+                  else navigate("/participant/login");
+                }}
+              >
+                <TrophyOutlined />
+                <span className="ms-1">Participant</span>
               </button>
             </div>
           </Box>

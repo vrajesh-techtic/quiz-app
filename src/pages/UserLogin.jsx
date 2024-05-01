@@ -1,101 +1,83 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Spin, notification } from "antd";
+import { Button, Form, Input, Spin } from "antd";
 import {
   MailOutlined,
   UserOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios";
-
-// import main from '../server/mailer';
+import ParticipantWithoutAuth from "../auth/ParticipantWithoutAuth";
+import logo from "../assets/banner-without-bg.png";
+import useToast from "../components/NotificationPopup";
+import axios from "axios";
 
 const UserLogin = () => {
-  const [api, contextHolder] = notification.useNotification();
   const [spinning, setSpinning] = useState(false);
-
-  const openNotificationWithIcon = (type, notifyMessage) => {
-    api[type]({
-      // message: "User already exists!",
-      message: notifyMessage,
-    });
-  };
+  const { contextHolder, showToast } = useToast();
 
   const onFinish = async (values) => {
-    const userEmail = values.email;
-    const userName = values.name;
+    const email = values.email;
+    const name = values.name;
     const quizCode = values.quizCode.toUpperCase();
 
-    const userDetails = {
-      email: userEmail,
-      name: userName,
-      quizCode: quizCode,
-    };
+    if (email.trim() === "") {
+      showToast("error", "Please enter email address!");
+    } else if (name.trim() === "") {
+      showToast("error", "Please enter name!");
+    } else if (quizCode.trim() === "" || quizCode.length < 6) {
+      showToast("error", "Please enter valid quiz code!");
+    } else {
+      const url = `/quiz/${quizCode}`;
+      const resultURL = `/participant/result/${quizCode}`;
+      const userDetails = {
+        email,
+        name,
+        quizCode,
+      };
 
-    console.log("User details :::: ", userDetails);
-    setSpinning(true);
+      const api = await axios
+        .post("http://localhost:5000/add-user", userDetails)
+        .then((res) => res.data);
 
-    openNotificationWithIcon("success", "Successfully Logged In!");
-    // Trial
-    setTimeout(() => {
-      setSpinning(false);
-      localStorage.setItem("login", true);
-      navigate("/participant/display-quiz");
-    }, 1000);
-
-    // try {
-    //   let addUser = await axios.post("http://localhost:5000/add-user", {
-    //     userName,
-    //     userEmail,
-    //   });
-
-    //   console.log(addUser.data);
-    //   if (addUser.data.statusCode === 200) {
-    //     setSpinning(true);
-    //     setTimeout(() => {
-    //       setSpinning(false);
-    //       navigate("/authenticate");
-    //     }, 2000);
-    //   } else if (addUser.data.statusCode === 11000) {
-    //     openNotificationWithIcon("error", addUser.data.message);
-    //   }
-
-    //   setSpinning(() => false);
-    // } catch (error) {
-    //   setSpinning(() => false);
-
-    //   if (error.message === "Network Error")
-    //     openNotificationWithIcon("error", "Server Down!");
-    // }
+      if (api.isAttempted === false) {
+        showToast("success", api.message);
+        setSpinning(true);
+        setTimeout(() => {
+          setSpinning(false);
+          sessionStorage.setItem(
+            "participant",
+            JSON.stringify({ email: email, name: name })
+          );
+          sessionStorage.setItem("token", api.token);
+          navigate(url);
+        }, 1000);
+      } else if (api.status === false && api.message === "Quiz not exists") {
+        showToast("error", api.message);
+      } else {
+        setSpinning(true);
+        setTimeout(() => {
+          setSpinning(false);
+          sessionStorage.setItem("token", api.token);
+          navigate(resultURL);
+        }, 1000);
+      }
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
-  let savedName = "";
-  let savedEmail = "";
-
-  if (sessionStorage.length !== 0) {
-    savedEmail = sessionStorage.key(0);
-    savedName = sessionStorage.getItem(savedEmail);
-  }
-
-  // const showLoader = () => {
-  //   setSpinning(true);
-  //   setTimeout(() => {
-  //     setSpinning(false);
-  //     navigate("/authenticate/display-quiz");
-  //   }, 2000);
-  // };
-
   const navigate = useNavigate();
 
   return (
     <>
       {contextHolder}
-      <div className="flex w-full h-screen bg-blue-300 items-center justify-center ">
-        <div className=" backdrop-blur-xl hover:shadow-xl bg-green-300	rounded-2xl flex flex-col items-center px-20 py-12">
+      <div className="flex flex-col w-full h-screen bg-gray-800 items-center ">
+        <div className="  w-[300px]">
+          <img src={logo} style={{ width: "100%" }} alt="" />
+        </div>
+        <div className=" backdrop-blur-xl hover:shadow-xl bg-[#ca89fd]	rounded-2xl flex flex-col items-center px-20 py-12">
           <p className="mb-8 mt-2 text-5xl">Participant Login</p>
 
           <Form
@@ -103,8 +85,8 @@ const UserLogin = () => {
             className="login-form flex flex-col mx-8  items-center"
             size="large"
             initialValues={{
-              name: savedName,
-              email: savedEmail,
+              name: "",
+              email: "",
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -164,18 +146,6 @@ const UserLogin = () => {
               />
             </Form.Item>
 
-            {/* <Form.Item name="remember">
-              <Checkbox
-                className="text-xl"
-                defaultChecked={remember}
-                onChange={() => {
-                  setRemember((prev) => !prev);
-                }}
-              >
-                Remember me
-              </Checkbox>
-            </Form.Item> */}
-
             <Form.Item className="flex flex-col">
               <Button
                 type="primary"
@@ -193,4 +163,4 @@ const UserLogin = () => {
   );
 };
 
-export default UserLogin;
+export default ParticipantWithoutAuth(UserLogin);

@@ -1,7 +1,6 @@
 import React from "react";
-
-import MainNavBar from "./MainNavBar";
-import HomeBanner from "./HomeBanner";
+import MainNavBar from "../components/MainNavBar";
+import HomeBanner from "../components/HomeBanner";
 
 function ResponsiveAppBar() {
   return (
@@ -10,7 +9,7 @@ function ResponsiveAppBar() {
         <MainNavBar />
         <HomeBanner />
 
-        <div className="bg-gray-100 h-[10%] flex items-center justify-center font-medium ">
+        <div className="home-footer bg-gray-100 py-5 flex items-center justify-center font-medium ">
           Quizify ©{new Date().getFullYear()} Created by
           <span className="mx-1 underline text-[#ca89fd]">
             <a href="/" target="_blank">
